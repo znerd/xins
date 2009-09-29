@@ -18,6 +18,8 @@ The most important changes compared to the mainstream XINS branch are:
 - API documentation improvements
 - upgraded to XSLT 2.0
 
+For details, see the file: CHANGES-3.0.txt
+
 If you want to file a bug report or a feature request, please do so here:
 
    http://github.com/znerd/xins/issues
