@@ -1,92 +1,90 @@
 This file contains a detailed explanation of the changes between individual
-versions of XINS, for the XINS 3-branch.
+versions of XINS, for the XINS 3.0-branch.
 
-$Id$
+XINS project file:
+* Attribute apisDir on root element indicates which directory contains the
+  APIs, default is "apis" (which is backwards compatible).
 
-* XINS project file:
-  * Attribute apisDir on root element indicates which directory contains the
-    APIs, default is "apis" (which is backwards compatible).
+Logdoc:
+* Added support for parameter value filtering.
 
-* Logdoc:
-  - Added support for parameter value filtering.
+XINS/Java Common Library:
+* Added various logXXX methods to the Utils class.
+* Added a package 'logging' with a class LoggingThread. This class can be
+  derived from by thread implementation classes that perform Log4J logging.
+  The Log4J diagnostic context identifier is set and unset on the thread
+  automatically.
+* Created org.xins.common.service.AbstractCallExecutor, that can be derived
+  from by service caller implementations to execute the actual call in a
+  separate thread, keeping track of duration, total time-out, etc.
+  This class derives from LoggingThread. The CallExecutor class within the
+  HTTPServiceCaller now derives from AbstractCallExecutor.
+* Added interface org.xins.common.xml.ToXML with a single toXML() method.
+* Added improved getLocalHost method to class IPAddressUtils.
+* HostnameTask now uses new getLocalHost method in class IPAddressUtils.
+  As a side-effect, some of the logging now goes to Log4J instead of Ant.
+* AbstractPropertyReader now implements ToXML.
+* Added various utility methods to class PropertyReaderUtils.
+* Added interface org.xins.common.collections.ToPropertyReader with a
+  single toPropertyReader() method.
+* Added Use enum with values OPTIONAL and REQUIRED.
+* Type "_dir": printing absolute path when directory cannot be found/read.
+* Removed thread safety checking from ElementSerializer class.
+* Added getOptionalChildElement methods to the Element class.
+* Added class PropertyException to 'collections' package.
+* InvalidPropertyValueException now extends from PropertyException.
+* InvalidPropertyValueException adds new constructors.
+* MissingRequiredPropertyException now extends from PropertyException.
+* Added copyUnmodifiable(PropertyReader) to PropertyReaderUtils class.
+* Implemented toString() method in AbstractPropertyReader class.
+* Added methods to TextUtils: hash, hashToString and nullIfEmpty.
+* PropertyReaderUtils.parsePropertyReader supports XML.
+* Added names() method to PropertyReader interface that allows the use of
+  the Java 5 foreach-operator. It returns a Collection<String>.
+* Deprecated PropertyReader.getNames() in favour of the names() method.
+* Added ElementUtils class in org.xins.common.xml.
+* Removed FastStringBuffer and FastStringWriter classes, marked deprecated
+  since XINS 2.0.
+* Removed PropertyReaderUtils method that accepts a FastStringBuffer
+  argument. The method was deprecated since XINS 2.0:
+  serialize(PropertyReader, FastStringBuffer, String)
+* Removed all HexConverter.toHexString methods that accept a
+  FastStringBuffer argument. They were deprecated since XINS 2.0.
+* Added HexConverter.parseHexByte(String,int).
+* HexConverter.toHexString(byte[]) now allows 0-length byte array input.
+* Fixed example in class description (Javadoc) of DateConverter.
+* Added TextUtils.toUTF8(String).
+* Added TextUtils.getEnumItem(Class,String,boolean).
+* Added PropertyReaderUtils.createPropertyReader(String,String).
+* Logdoc: Enabled parameter value filtering for messages 1100-1110.
+* Improved exception handling in ElementParser.parse(File).
+* CallConfig class now abstract and has a protected constructor.
+* Replaced Element.addChild(Element) with add(Element).
+* Replaced Element.addText(String) with add(String).
 
-* XINS/Java Common Library:
-  - Added various logXXX methods to the Utils class.
-  - Added a package 'logging' with a class LoggingThread. This class can be
-    derived from by thread implementation classes that perform Log4J logging.
-    The Log4J diagnostic context identifier is set and unset on the thread
-    automatically.
-  - Created org.xins.common.service.AbstractCallExecutor, that can be derived
-    from by service caller implementations to execute the actual call in a
-    separate thread, keeping track of duration, total time-out, etc.
-    This class derives from LoggingThread. The CallExecutor class within the
-    HTTPServiceCaller now derives from AbstractCallExecutor.
-  - Added interface org.xins.common.xml.ToXML with a single toXML() method.
-  - Added improved getLocalHost method to class IPAddressUtils.
-  - HostnameTask now uses new getLocalHost method in class IPAddressUtils.
-    As a side-effect, some of the logging now goes to Log4J instead of Ant.
-  - AbstractPropertyReader now implements ToXML.
-  - Added various utility methods to class PropertyReaderUtils.
-  - Added interface org.xins.common.collections.ToPropertyReader with a
-    single toPropertyReader() method.
-  - Added Use enum with values OPTIONAL and REQUIRED.
-  - Type "_dir": printing absolute path when directory cannot be found/read.
-  - Removed thread safety checking from ElementSerializer class.
-  - Added getOptionalChildElement methods to the Element class.
-  - Added class PropertyException to 'collections' package.
-  - InvalidPropertyValueException now extends from PropertyException.
-  - InvalidPropertyValueException adds new constructors.
-  - MissingRequiredPropertyException now extends from PropertyException.
-  - Added copyUnmodifiable(PropertyReader) to PropertyReaderUtils class.
-  - Implemented toString() method in AbstractPropertyReader class.
-  - Added methods to TextUtils: hash, hashToString and nullIfEmpty.
-  - PropertyReaderUtils.parsePropertyReader supports XML.
-  - Added names() method to PropertyReader interface that allows the use of
-    the Java 5 foreach-operator. It returns a Collection<String>.
-  - Deprecated PropertyReader.getNames() in favour of the names() method.
-  - Added ElementUtils class in org.xins.common.xml.
-  - Removed FastStringBuffer and FastStringWriter classes, marked deprecated
-    since XINS 2.0.
-  - Removed PropertyReaderUtils method that accepts a FastStringBuffer
-    argument. The method was deprecated since XINS 2.0:
-    . serialize(PropertyReader, FastStringBuffer, String)
-  - Removed all HexConverter.toHexString methods that accept a
-    FastStringBuffer argument. They were deprecated since XINS 2.0.
-  - Added HexConverter.parseHexByte(String,int).
-  - HexConverter.toHexString(byte[]) now allows 0-length byte array input.
-  - Fixed example in class description (Javadoc) of DateConverter.
-  - Added TextUtils.toUTF8(String).
-  - Added TextUtils.getEnumItem(Class,String,boolean).
-  - Added PropertyReaderUtils.createPropertyReader(String,String).
-  - Logdoc: Enabled parameter value filtering for messages 1100-1110.
-  - Improved exception handling in ElementParser.parse(File).
-  - CallConfig class now abstract and has a protected constructor.
-  - Replaced Element.addChild(Element) with add(Element).
-  - Replaced Element.addText(String) with add(String).
+XINS/Java Client Framework:
+* Client: Enabled parameter value filtering for messages 2100-2115.
 
-* XINS/Java Client Framework:
-  - Client: Enabled parameter value filtering for messages 2100-2115.
+XINS/Java Server Framework:
+* Logged the time taken by the initialization.
+* Minor improvements to Javadoc documentation for generated getters.
+* Calling convention provides original FunctionRequest to convertResultImpl.
+* Changed signature of SOAPCallingConvention.setDataElementAttribute.
+* Enabled parameter value filtering for messages 3520-3523, 3540.
 
-* XINS/Java Server Framework:
-  - Logged the time taken by the initialization.
-  - Minor improvements to Javadoc documentation for generated getters.
-  - Calling convention provides original FunctionRequest to convertResultImpl.
-  - Changed signature of SOAPCallingConvention.setDataElementAttribute.
-  - Enabled parameter value filtering for messages 3520-3523, 3540.
+Libraries:
+* Upgraded to Juxy 0.8.
+* Apache Commons HttpClient 2.x is no longer supported, 3.x is required.
+* Added Apache Commons IO 1.4.
+* Upgraded Cobertura from version 1.8 to 1.9.1. 
+* Upgraded Jaxen (used by PMD) from version 1.1-beta7 to 1.1.1.
+* Upgraded ASM (used by PMD and Cobertura) to version 3.1 (now also
+  includes asm-tree.jar file, needed by Cobertura).
+* Upgraded JUnit to version 4.5.
+* Upgraded to Saxon HE (Home Edition) 9.2.0.2.
+* Upgraded Xerces from 2.6.2 to 2.9.1.
 
-* Libraries:
-  - Upgraded to Juxy 0.8.
-  - Apache Commons HttpClient 2.x is no longer supported, 3.x is required.
-  - Added Apache Commons IO 1.4.
-  - Upgraded Cobertura from version 1.8 to 1.9.1. 
-  - Upgraded Jaxen (used by PMD) from version 1.1-beta7 to 1.1.1.
-  - Upgraded ASM (used by PMD and Cobertura) to version 3.1 (now also
-    includes asm-tree.jar file, needed by Cobertura).
-  - Upgraded JUnit to version 4.5.
-  - Upgraded to Saxon HE (Home Edition) 9.2.0.2.
-  - Upgraded Xerces from 2.6.2 to 2.9.1.
-
-* Other:
-  - Added DTDs for XINS 3.0.
-  - Simplied 'xins' shell script and 'xins.bat' batch file.
-  - Marked all XSLT stylesheets as XSLT version 2.0 (instead of 1.0).
+Other:
+* Added DTDs for XINS 3.0.
+* Simplied 'xins' shell script and 'xins.bat' batch file.
+* Marked all XSLT stylesheets as XSLT version 2.0 (instead of 1.0).
