@@ -1,0 +1,79 @@
+<!--
+ XINS Function DTD. This DTD should be added to all function files created of
+ the project by adding the following lines at the top of the .fnc file :
+<!DOCTYPE function PUBLIC "-//XINS//DTD Function 1.2//EN" "http://www.xins.org/dtd/function_1_2.dtd">
+-->
+<!ELEMENT function (description, input?, output?, example*)>
+<!ATTLIST function
+          name           NMTOKEN #REQUIRED
+          rcsversion     CDATA #IMPLIED
+          rcsdate        CDATA #IMPLIED
+>
+<!ELEMENT description (#PCDATA|em)*>
+<!ELEMENT em (#PCDATA)>
+<!ELEMENT input (param*, param-combo*, data?)>
+<!ELEMENT param (description, deprecated?)>
+<!ATTLIST param
+          name       NMTOKEN #REQUIRED
+          required   (true|false) #REQUIRED
+          type       NMTOKEN #IMPLIED
+>
+<!ELEMENT deprecated (#PCDATA|em)*>
+<!ELEMENT param-combo (param-ref, param-ref+)>
+<!ATTLIST param-combo
+          type       (exclusive-or|inclusive-or|all-or-none) #REQUIRED
+>
+<!ELEMENT param-ref EMPTY>
+<!ATTLIST param-ref
+          name       NMTOKEN #REQUIRED
+>
+<!ELEMENT output (resultcode-ref*, param*, param-combo*, data?)>
+<!ELEMENT resultcode-ref EMPTY>
+<!ATTLIST resultcode-ref
+          name       NMTOKEN #REQUIRED
+>
+<!ELEMENT data (contains?, element+)>
+<!ATTLIST data
+          contains   CDATA #IMPLIED
+>
+<!ELEMENT element (description, deprecated?, contains?, attribute*)>
+<!ATTLIST element
+          name       NMTOKEN #REQUIRED
+>
+<!ELEMENT contains (pcdata | contained*)>
+<!ELEMENT pcdata EMPTY>
+<!ELEMENT contained EMPTY>
+<!ATTLIST contained
+          element    NMTOKEN #REQUIRED
+>
+<!ELEMENT attribute (description, deprecated?)>
+<!ATTLIST attribute
+          name       NMTOKEN #REQUIRED
+          required   (true | false) #IMPLIED
+          type       NMTOKEN #IMPLIED
+>
+<!ELEMENT example (description, input-example*, input-data-example?, output-example*, (output-data-example | data-example)?)>
+<!ATTLIST example
+          num         NMTOKEN #IMPLIED
+          resultcode  NMTOKEN #IMPLIED
+>
+<!ELEMENT input-example (#PCDATA)>
+<!ATTLIST input-example
+          name        NMTOKEN #REQUIRED
+>
+<!ELEMENT input-data-example (element-example+)>
+<!ELEMENT output-example (#PCDATA)>
+<!ATTLIST output-example
+          name        NMTOKEN #REQUIRED
+>
+<!ELEMENT output-data-example (element-example+)>
+<!ELEMENT data-example (element-example+)>
+<!ELEMENT element-example (attribute-example*, element-example*, pcdata-example?)>
+<!ELEMENT pcdata-example (#PCDATA)>
+<!ATTLIST element-example
+          name        NMTOKEN #REQUIRED
+>
+<!ELEMENT attribute-example (#PCDATA)>
+<!ATTLIST attribute-example
+          name        NMTOKEN #REQUIRED
+>

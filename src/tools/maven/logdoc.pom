@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.xins</groupId>
+	<artifactId>logdoc</artifactId>
+	<version>2.1</version>
+	<packaging>jar</packaging>
+	<name>XINS logdoc library</name>
+	<url>http://www.xins.org</url>
+	<description>The XINS logdoc library</description>
+	<licenses>
+		<license>
+			<name>The BSD License</name>
+			<url>http://xins.sourceforge.net/COPYRIGHT</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<url>http://xins.cvs.sourceforge.net/xins/</url>
+	</scm>
+	<dependencies>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.15</version>
+		</dependency>
+	</dependencies>
+</project>

@@ -1,0 +1,1233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="xins-apis" basedir=".">
+
+	<target name="-load-properties" depends="-load-xins-properties,-load-dtds">
+		<property file="${project_home}/build.properties" />
+		<property name="project_file"	value="${project_home}/xins-project.xml" />
+		<property name="xmlenc_version"	value="0.52" />
+		<property name="reload.stylesheet" value="false" />
+	</target>
+
+	<target name="clean" depends="-load-xins-properties" unless="no.clean" description="Removes all generated files">
+		<delete dir="${builddir}" />
+		<ant antfile="${xins_home}/src/ant/make-build.xml" inheritAll="false">
+			<property name="xins_home" value="${xins_home}" />
+			<property name="user.dir" value="${project_home}" />
+		</ant>
+	</target>
+
+	<target name="check-version" depends="-load-properties">
+		<condition property="no.clean">
+			<equals arg1="${xins.current.version}" arg2="${xins_version}" />
+		</condition>
+		<antcall target="clean" />
+	</target>
+
+	<target name="version" depends="-load-properties" description="Prints current versions of Java, Ant and XINS">
+		<ant
+		antfile="build.xml"
+		dir="${xins_home}"
+		target="version"
+		inheritall="false" />
+		<echo>This build file was generated with XINS ${xins_version}</echo>
+	</target>
+
+	<target name="help" depends="version" description="Shows the supported commands.">
+		<echo><![CDATA[Generic targets:
+- version             Prints the version of XINS.
+- help                Prints this message.
+- all                 Generates everything.
+- clean               Removes all generated files.
+- specdocs            Generates all specification docs.
+- javadoc-apis        Generates all APIs Javadoc.
+- wars                Generates all WAR files.
+- capis               Generates all CAPI JAR files.
+- javadoc-capis       Generates all CAPI Javadoc.
+- tests               Runs the unit tests of the APIs.
+- help-tools          Display the help for the tools commands.
+
+The following commands assist in authoring specifications:
+- create-api          Generates a new api specification file.
+- create-function     Generates a new function specification file.
+- create-rcd          Generates a new error code specification file
+- create-type         Generates a new type specification file.
+- create-example      Generates a new example for a function.
+- create-logdoc       Generates the basic logdoc files for an API.
+
+The following commands can be used to run a tool on an API:
+download-tools, java2html, pmd, checkstyle, coverage, emma,
+findbugs, lint4j, jdepend, cvschangelog, jmeter, run-jmeter,
+maven, eclipse, smd, xsd-to-types, wsdl-to-api, webstart, glean.
+More information is available using the 'help-tools' target.
+
+The following targets are specific for a single API,
+replace <api> with the name of an existing API:
+- run-<api>           Runs the WAR file for the API.
+- war-<api>           Creates the WAR file for the API.
+- specdocs-<api>      Generates all specification docs for the API.
+- javadoc-api-<api>   Generates Javadoc for the server API
+                      implementation.
+- server-<api>        Generates the WAR file, the API Javadoc for
+                      the server side and the specdocs for the API.
+- jar-<api>           Generates and compiles the CAPI classes.
+- javadoc-capi-<api>  Generates the Javadoc for the CAPI classes.
+- client-<api>        Generates the CAPI JAR file and the
+                      corresponding Javadoc.
+- clean-<api>         Cleans everything for the API.
+- rebuild-<api>       Regenerates everything for the API.
+- all-<api>           Generates everything for the API.
+- wsdl-<api>          Generates the WSDL for the API.
+- stub-<api>          Generates the stub for the API.
+- test-<api>          Generates (if needed) and runs the tests.
+- javadoc-test-<api>  Generates the Javadoc of the unit tests.
+- opendoc-<api>       Generates the specification in Opendoc format
+
+APIs in this project are:
+${apis.list}]]></echo>
+	</target>
+    
+	<target name="ask" depends="-load-properties" description="Asks for the command and API to execute.">
+		<input addproperty="command"
+		       message="Command "
+		       validargs="run,war,specdocs,javadoc-api,jar,javadoc-capi,all,clean,client,server,wsdl,stub,test" />
+		<input addproperty="api.name"
+		       message="API "
+		       validargs="${apis.list}">
+		</input>
+		<property name="api.name" value="" />
+		<xins target="${command}" api="${api.name}" />
+	</target>
+
+	<target name="-load-dtds">
+		<xmlcatalog id="all-dtds">
+			<classpath>
+				<pathelement path="${xins_home}/src/dtd"/>
+			</classpath>
+			<dtd publicId="-//XINS//DTD XINS Project 1.0//EN"            location="xins-project_1_0.dtd" />
+			<dtd publicId="-//XINS//DTD XINS API 1.0//EN"                location="api_1_0.dtd" />
+			<dtd publicId="-//XINS//DTD Function 1.0//EN"                location="function_1_0.dtd" />
+			<dtd publicId="-//XINS//DTD Type 1.0//EN"                    location="type_1_0.dtd" />
+			<dtd publicId="-//XINS//DTD Result Code 1.0//EN"             location="resultcode_1_0.dtd" />
+			<dtd publicId="-//XINS//DTD Implementation 1.0//EN"          location="impl_1_0.dtd" />
+			<dtd publicId="-//XINS//DTD Environments 1.0//EN"            location="environments_1_0.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Logdoc 1.0//EN"             location="log_1_0.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.0//EN" location="translation-bundle_1_0.dtd" />
+
+			<dtd publicId="-//XINS//DTD XINS Project 1.1//EN"            location="xins-project_1_1.dtd" />
+			<dtd publicId="-//XINS//DTD XINS API 1.1//EN"                location="api_1_1.dtd" />
+			<dtd publicId="-//XINS//DTD Function 1.1//EN"                location="function_1_1.dtd" />
+			<dtd publicId="-//XINS//DTD Type 1.1//EN"                    location="type_1_1.dtd" />
+			<dtd publicId="-//XINS//DTD Result Code 1.1//EN"             location="resultcode_1_1.dtd" />
+			<dtd publicId="-//XINS//DTD Implementation 1.1//EN"          location="impl_1_1.dtd" />
+			<dtd publicId="-//XINS//DTD Environments 1.1//EN"            location="environments_1_1.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Logdoc 1.1//EN"             location="log_1_1.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.1//EN" location="translation-bundle_1_1.dtd" />
+
+			<dtd publicId="-//XINS//DTD XINS Project 1.2//EN"            location="xins-project_1_2.dtd" />
+			<dtd publicId="-//XINS//DTD XINS API 1.2//EN"                location="api_1_2.dtd" />
+			<dtd publicId="-//XINS//DTD Function 1.2//EN"                location="function_1_2.dtd" />
+			<dtd publicId="-//XINS//DTD Type 1.2//EN"                    location="type_1_2.dtd" />
+			<dtd publicId="-//XINS//DTD Result Code 1.2//EN"             location="resultcode_1_2.dtd" />
+			<dtd publicId="-//XINS//DTD Implementation 1.2//EN"          location="impl_1_2.dtd" />
+			<dtd publicId="-//XINS//DTD Environments 1.2//EN"            location="environments_1_2.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Logdoc 1.2//EN"             location="log_1_2.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.2//EN" location="translation-bundle_1_2.dtd" />
+
+			<dtd publicId="-//XINS//DTD XINS Project 1.3//EN"            location="xins-project_1_3.dtd" />
+			<dtd publicId="-//XINS//DTD XINS API 1.3//EN"                location="api_1_3.dtd" />
+			<dtd publicId="-//XINS//DTD Function 1.3//EN"                location="function_1_3.dtd" />
+			<dtd publicId="-//XINS//DTD Category 1.3//EN"                location="category_1_3.dtd" />
+			<dtd publicId="-//XINS//DTD Type 1.3//EN"                    location="type_1_3.dtd" />
+			<dtd publicId="-//XINS//DTD Result Code 1.3//EN"             location="resultcode_1_3.dtd" />
+			<dtd publicId="-//XINS//DTD Implementation 1.3//EN"          location="impl_1_3.dtd" />
+			<dtd publicId="-//XINS//DTD Environments 1.3//EN"            location="environments_1_3.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Logdoc 1.3//EN"             location="log_1_3.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.3//EN" location="translation-bundle_1_3.dtd" />
+
+			<dtd publicId="-//XINS//DTD XINS Project 1.4//EN"            location="xins-project_1_4.dtd" />
+			<dtd publicId="-//XINS//DTD XINS API 1.4//EN"                location="api_1_4.dtd" />
+			<dtd publicId="-//XINS//DTD Function 1.4//EN"                location="function_1_4.dtd" />
+			<dtd publicId="-//XINS//DTD Category 1.4//EN"                location="category_1_4.dtd" />
+			<dtd publicId="-//XINS//DTD Type 1.4//EN"                    location="type_1_4.dtd" />
+			<dtd publicId="-//XINS//DTD Result Code 1.4//EN"             location="resultcode_1_4.dtd" />
+			<dtd publicId="-//XINS//DTD Implementation 1.4//EN"          location="impl_1_4.dtd" />
+			<dtd publicId="-//XINS//DTD Environments 1.4//EN"            location="environments_1_4.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Logdoc 1.4//EN"             location="log_1_4.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.4//EN" location="translation-bundle_1_4.dtd" />
+
+			<dtd publicId="-//XINS//DTD XINS Project 1.5//EN"            location="xins-project_1_5.dtd" />
+			<dtd publicId="-//XINS//DTD XINS API 1.5//EN"                location="api_1_5.dtd" />
+			<dtd publicId="-//XINS//DTD Function 1.5//EN"                location="function_1_5.dtd" />
+			<dtd publicId="-//XINS//DTD Category 1.5//EN"                location="category_1_5.dtd" />
+			<dtd publicId="-//XINS//DTD Type 1.5//EN"                    location="type_1_5.dtd" />
+			<dtd publicId="-//XINS//DTD Result Code 1.5//EN"             location="resultcode_1_5.dtd" />
+			<dtd publicId="-//XINS//DTD Implementation 1.5//EN"          location="impl_1_5.dtd" />
+			<dtd publicId="-//XINS//DTD Environments 1.5//EN"            location="environments_1_5.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Logdoc 1.5//EN"             location="log_1_5.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.5//EN" location="translation-bundle_1_5.dtd" />
+
+			<dtd publicId="-//XINS//DTD XINS Project 2.0//EN"            location="xins-project_2_0.dtd" />
+			<dtd publicId="-//XINS//DTD XINS API 2.0//EN"                location="api_2_0.dtd" />
+			<dtd publicId="-//XINS//DTD Function 2.0//EN"                location="function_2_0.dtd" />
+			<dtd publicId="-//XINS//DTD Category 2.0//EN"                location="category_2_0.dtd" />
+			<dtd publicId="-//XINS//DTD Type 2.0//EN"                    location="type_2_0.dtd" />
+			<dtd publicId="-//XINS//DTD Result Code 2.0//EN"             location="resultcode_2_0.dtd" />
+			<dtd publicId="-//XINS//DTD Implementation 2.0//EN"          location="impl_2_0.dtd" />
+			<dtd publicId="-//XINS//DTD Environments 2.0//EN"            location="environments_2_0.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Logdoc 2.0//EN"             location="log_2_0.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Translation Bundle 2.0//EN" location="translation-bundle_2_0.dtd" />
+
+			<dtd publicId="-//XINS//DTD XINS Project 2.1//EN"            location="xins-project_2_1.dtd" />
+			<dtd publicId="-//XINS//DTD XINS API 2.1//EN"                location="api_2_1.dtd" />
+			<dtd publicId="-//XINS//DTD Function 2.1//EN"                location="function_2_1.dtd" />
+			<dtd publicId="-//XINS//DTD Category 2.1//EN"                location="category_2_1.dtd" />
+			<dtd publicId="-//XINS//DTD Type 2.1//EN"                    location="type_2_1.dtd" />
+			<dtd publicId="-//XINS//DTD Result Code 2.1//EN"             location="resultcode_2_1.dtd" />
+			<dtd publicId="-//XINS//DTD Implementation 2.1//EN"          location="impl_2_1.dtd" />
+			<dtd publicId="-//XINS//DTD Environments 2.1//EN"            location="environments_2_1.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Logdoc 2.1//EN"             location="log_2_1.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Translation Bundle 2.1//EN" location="translation-bundle_2_1.dtd" />
+
+			<dtd publicId="-//XINS//DTD XINS Project 2.2//EN"            location="xins-project_2_2.dtd" />
+			<dtd publicId="-//XINS//DTD XINS API 2.2//EN"                location="api_2_2.dtd" />
+			<dtd publicId="-//XINS//DTD Function 2.2//EN"                location="function_2_2.dtd" />
+			<dtd publicId="-//XINS//DTD Category 2.2//EN"                location="category_2_2.dtd" />
+			<dtd publicId="-//XINS//DTD Type 2.2//EN"                    location="type_2_2.dtd" />
+			<dtd publicId="-//XINS//DTD Result Code 2.2//EN"             location="resultcode_2_2.dtd" />
+			<dtd publicId="-//XINS//DTD Implementation 2.2//EN"          location="impl_2_2.dtd" />
+			<dtd publicId="-//XINS//DTD Environments 2.2//EN"            location="environments_2_2.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Logdoc 2.2//EN"             location="log_2_2.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Translation Bundle 2.2//EN" location="translation-bundle_2_2.dtd" />
+
+			<dtd publicId="-//XINS//DTD XINS Project 3.0//EN"            location="xins-project_3_0.dtd" />
+			<dtd publicId="-//XINS//DTD XINS API 3.0//EN"                location="api_3_0.dtd" />
+			<dtd publicId="-//XINS//DTD Function 3.0//EN"                location="function_3_0.dtd" />
+			<dtd publicId="-//XINS//DTD Category 3.0//EN"                location="category_3_0.dtd" />
+			<dtd publicId="-//XINS//DTD Type 3.0//EN"                    location="type_3_0.dtd" />
+			<dtd publicId="-//XINS//DTD Result Code 3.0//EN"             location="resultcode_3_0.dtd" />
+			<dtd publicId="-//XINS//DTD Implementation 3.0//EN"          location="impl_3_0.dtd" />
+			<dtd publicId="-//XINS//DTD Environments 3.0//EN"            location="environments_3_0.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Logdoc 3.0//EN"             location="log_3_0.dtd" />
+			<dtd publicId="-//XINS//DTD XINS Translation Bundle 3.0//EN" location="translation-bundle_3_0.dtd" />
+		</xmlcatalog>
+	</target>
+
+	<target name="index-specdocs" depends="-load-properties" description="Generates the API index">
+		<mkdir dir="${builddir}/specdocs" />
+		<xmlvalidate file="${project_file}" warn="false">
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xslt
+		in="${project_file}"
+		out="${builddir}/specdocs/index.html"
+		style="${xins_home}/src/xslt/specdocs/xins-project_to_index.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="xins_version" expression="${xins_version}" />
+			<param name="project_home" expression="${project_home}" />
+			<param name="project_file" expression="${project_file}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+		</xslt>
+		<copy todir="${builddir}/specdocs" file="${xins_home}/src/css/specdocs/style.css" />
+		<copy tofile="${builddir}/specdocs/favicon.ico" file="${xins_home}/xins.ico" />
+	</target>
+
+	<target name="-load-version" depends="-load-properties">
+
+		<!-- Try to load the API specific .version.properties -->
+		<property prefix="api." file="${apis_dir}/${api}/.version.properties" />
+		<condition property="api.version" value="${api.version.major}.${api.version.middle}.${api.version.minor}${api.version.suffix}">
+			<isset property="api.version.middle" />
+		</condition>
+		<condition property="api.version" value="${api.version.major}.${api.version.minor}">
+			<isset property="api.version.major" />
+		</condition>
+
+		<!-- Load from the generic .version.properties -->
+		<property prefix="api." file="${project_home}/.version.properties" />
+		<condition property="api.version" value="${api.version.major}.${api.version.middle}.${api.version.minor}${api.version.suffix}">
+			<isset property="api.version.middle" />
+		</condition>
+		<condition property="api.version" value="${api.version.major}.${api.version.minor}">
+			<isset property="api.version.major" />
+		</condition>
+		<property name="api.version" value="Not specified" />
+	</target>
+
+	<target name="-prepare-classes" depends="-load-properties,-load-dtds">
+		<!-- If not set by the user set the default properties. -->
+		<property name="build.deprecation" value="true" />
+		<property name="build.java.version" value="${ant.java.version}" />
+		<condition property="build.generics">
+			<and>
+				<not>
+					<equals arg1="${build.java.version}" arg2="1.3" />
+				</not>
+				<not>
+					<equals arg1="${build.java.version}" arg2="1.4" />
+				</not>
+			</and>
+		</condition>
+		<path id="xins.classpath">
+			<pathelement path="${xins_home}/build/logdoc.jar" />
+			<pathelement path="${xins_home}/build/xins-common.jar" />
+			<pathelement path="${xins_home}/build/xins-server.jar" />
+			<pathelement path="${xins_home}/build/xins-client.jar" />
+			<fileset dir="${xins_home}/lib" includes="**/*.jar" />
+		</path>
+	</target>
+
+	<target name="-clean" depends="-load-properties">
+		<delete dir="${builddir}/capis/${api}-capi.jar" />
+		<delete dir="${builddir}/classes-api/${api}" />
+		<delete dir="${builddir}/classes-capi/${api}" />
+		<delete dir="${builddir}/classes-types/${api}" />
+		<delete dir="${builddir}/classes-tests/${api}" />
+		<delete dir="${builddir}/java-capi/${api}" />
+		<delete dir="${builddir}/java-fundament/${api}" />
+		<delete dir="${builddir}/java-types/${api}" />
+		<delete dir="${builddir}/javadoc-api/${api}" />
+		<delete dir="${builddir}/javadoc-capi/${api}" />
+		<delete dir="${builddir}/logdoc/${api}" />
+		<delete dir="${builddir}/specdocs/${api}" />
+		<delete dir="${builddir}/types/${api}" />
+		<delete dir="${builddir}/webapps/${api}" />
+		<delete file="${builddir}/wsdl/${api}.wsdl" />
+		<delete file="${builddir}/build.xml" />
+		<ant antfile="${xins_home}/src/ant/make-build.xml" inheritAll="false">
+			<property name="xins_home" value="${xins_home}" />
+			<property name="user.dir" value="${project_home}" />
+		</ant>
+	</target>
+
+	<target name="-clean-impl" depends="-load-properties">
+		<delete dir="${builddir}/classes-api/${api}-${impl}" />
+		<delete dir="${builddir}/java-fundament/${api}-${impl}" />
+		<delete dir="${builddir}/javadoc-api/${api}-${impl}" />
+		<delete dir="${builddir}/logdoc/${api}-${impl}" />
+		<delete dir="${builddir}/webapps/${api}-${impl}" />
+		<delete dir="${builddir}/logdoc/${api}-${impl}" />
+	</target>
+
+	<target name="-client" depends="-load-properties">
+		<zip destfile="${builddir}/specdocs/${api}/${api}-client.zip">
+			<fileset dir="${builddir}/capis" includes="${api}-capi.jar" />
+			<zipfileset dir="${builddir}/javadoc-capi/${api}" prefix="javadoc" />
+			<zipfileset dir="${builddir}/specdocs/${api}" excludes="${api}-client.zip" prefix="specdocs" />
+			<fileset dir="${builddir}/opendoc/${api}" includes="${api}-specs.odt" />
+			<fileset dir="${builddir}/wsdl" includes="${api}.wsdl" />
+		</zip>
+	</target>
+
+	<target name="-javadoc-capi" depends="-prepare-classes,-stubs-capi">
+		<mkdir dir="${builddir}/javadoc-capi/${api}" />
+		<javadoc
+		sourcepathref="javadoc.capi.packages"
+		packagenames="*"
+		destdir="${builddir}/javadoc-capi/${api}"
+		version="yes"
+		use="yes"
+		author="yes"
+		access="public"
+		windowtitle="Call interface for ${api} API"
+		doctitle="Call interface for ${api} API">
+			<link
+			href="http://www.xins.org/javadoc/${xins_version}/"
+			offline="true"
+			packagelistloc="${xins_home}/docs/javadoc/" />
+			<link
+			href="http://java.sun.com/j2se/1.4.2/docs/api"
+			offline="true"
+			packagelistloc="${xins_home}/src/package-lists/j2se/" />
+			<link
+			href="http://jakarta.apache.org/log4j/docs/api/"
+			offline="true"
+			packagelistloc="${xins_home}/src/package-lists/log4j/" />
+			<link
+			href="http://xmlenc.sourceforge.net/javadoc/${xmlenc_version}/"
+			offline="true"
+			packagelistloc="${xins_home}/src/package-lists/xmlenc/" />
+			<classpath>
+				<path refid="xins.classpath" />
+			</classpath>
+		</javadoc>
+		<copy
+		file="${xins_home}/src/css/javadoc/style.css"
+		tofile="${builddir}/javadoc-capi/${api}/stylesheet.css"
+		overwrite="true" />
+	</target>
+
+	<target name="-run">
+		<property name="org.xins.server.config" value="" />
+		<property name="servlet.port" value="8080" />
+		<java classname="org.xins.common.servlet.container.HTTPServletStarter"
+					fork="true">
+			<jvmarg value="-Dorg.xins.server.config=${org.xins.server.config}" />
+			<jvmarg value="-Dcom.sun.management.jmxremote" />
+			<jvmarg value="-Dcom.sun.management.jmxremote.port=1090"/>
+			<jvmarg value="-Dcom.sun.management.jmxremote.authenticate=false"/>
+			<jvmarg value="-Dcom.sun.management.jmxremote.ssl=false"/>
+			<arg path="${builddir}/webapps/${api}${implName2}/${api}${implName2}.war" />
+			<arg value="${servlet.port}" />
+			<classpath>
+				<path refid="xins.classpath" />
+				<path refid="run.classpath" />
+			</classpath>
+		</java>
+	</target>
+
+	<target name="-javadoc-test" depends="-load-properties, -prepare-classes">
+		<property name="javaTestDir" value="${apis_dir}/${api}/test" />
+		<javadoc
+		destdir="${builddir}/javadoc-test/${api}"
+		version="yes"
+		use="yes"
+		author="yes"
+		access="package"
+		windowtitle="Unit tests of the ${api} API"
+		doctitle="Unit tests of the ${api} API">
+			<packageset dir="${javaTestDir}" />
+			<link
+			href="http://www.xins.org/javadoc/${xins_version}/"
+			offline="true"
+			packagelistloc="${xins_home}/docs/javadoc/" />
+			<link
+			href="http://java.sun.com/j2se/1.4.2/docs/api"
+			offline="true"
+			packagelistloc="${xins_home}/src/package-lists/j2se/" />
+			<link
+			href="http://junit.sourceforge.net/javadoc/"
+			offline="true"
+			packagelistloc="${xins_home}/src/package-lists/junit/" />
+			<link
+			href="http://jakarta.apache.org/log4j/docs/api/"
+			offline="true"
+			packagelistloc="${xins_home}/src/package-lists/log4j/" />
+			<link
+			href="http://xmlenc.sourceforge.net/javadoc/${xmlenc_version}/"
+			offline="true"
+			packagelistloc="${xins_home}/src/package-lists/xmlenc/" />
+			<classpath>
+				<path refid="xins.classpath" />
+				<path refid="javadoc.test.classpath" />
+				<pathelement path="${builddir}/capis/${api}-capi.jar" />
+				<pathelement path="${classes.api.dir}" />
+				<pathelement path="${builddir}/classes-tests/${api}" />
+				<fileset dir="${apis_dir}/${api}/test" includes="**/*.jar" />
+			</classpath>
+		</javadoc>
+		<copy
+		file="${xins_home}/src/css/javadoc/style.css"
+		tofile="${builddir}/javadoc-test/${api}/stylesheet.css"
+		overwrite="true" />
+	</target>
+
+	<target name="-opendoc">
+		<property name="dependset.destination" value="opendoc/${api}/content.xml" />
+		<antcall target="-dependset-file-${api}" />
+		<mkdir dir="${builddir}/opendoc/${api}" />
+		<xslt
+		in="${api_specsdir}/api.xml"
+		out="${builddir}/opendoc/${api}/content.xml"
+		style="${xins_home}/src/xslt/opendoc/api_to_content.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="project_home" expression="${project_home}" />
+			<param name="project_file" expression="${project_file}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}" />
+			<param name="api"          expression="${api}"          />
+		</xslt>
+		<copy file="${xins_home}/src/opendoc/meta.xml" tofile="${builddir}/opendoc/${api}/meta.xml" />
+		<tstamp>
+			<format property="timestamp" pattern="yyyy-MM-dd'T'HH:mm:ss" />
+		</tstamp>
+		<replace file="${builddir}/opendoc/${api}/meta.xml">
+			<replacefilter token="#version#" value="${xins_version}" />
+			<replacefilter token="#date#" value="${timestamp}" />
+		</replace>
+		<zip destfile="${builddir}/opendoc/${api}/${api}-specs.odt">
+			<fileset dir="${builddir}/opendoc/${api}" includes="content.xml meta.xml" />
+			<fileset dir="${xins_home}/src/opendoc" includes="mimetype styles.xml" />
+			<zipfileset dir="${xins_home}/src/opendoc" includes="manifest.xml" prefix="META-INF" />
+		</zip>
+	</target>
+
+	<target name="-javadoc-api">
+		<property file="${xins_home}/.version.properties" />
+		<condition property="dot.version.minor" value="${version.minor}">
+			<or>
+				<equals arg1="${version.minor}" arg2="-alpha" />
+				<equals arg1="${version.minor}" arg2="-beta" />
+				<equals arg1="${version.minor}" arg2="-rc" />
+				<equals arg1="${version.minor}" arg2="" />
+			</or>
+		</condition>
+		<property name="dot.version.minor" value=".${version.minor}" />
+		<mkdir dir="${builddir}/javadoc-api/${api}${implName2}" />
+		<javadoc
+		sourcepathref="javadoc.api.packageset"
+		packagenames="*"
+		destdir="${builddir}/javadoc-api/${api}${implName2}"
+		version="yes"
+		use="yes"
+		author="yes"
+		access="package"
+		windowtitle="Implementation of ${api} API"
+		doctitle="Implementation of ${api} API">
+			<link
+			href="http://www.xins.org/javadoc/${version.major}.${version.middle}${dot.version.minor}${version.build}/"
+			offline="true"
+			packagelistloc="${xins_home}/docs/javadoc/" />
+			<link
+			href="http://java.sun.com/j2se/1.4.2/docs/api"
+			offline="true"
+			packagelistloc="${xins_home}/src/package-lists/j2se/" />
+			<link
+			href="http://jakarta.apache.org/log4j/docs/api/"
+			offline="true"
+			packagelistloc="${xins_home}/src/package-lists/log4j/" />
+			<link
+			href="http://xmlenc.sourceforge.net/javadoc/${xmlenc_version}/"
+			offline="true"
+			packagelistloc="${xins_home}/src/package-lists/xmlenc/" />
+			<classpath refid="classes.api.classpath" />
+		</javadoc>
+		<copy
+		file="${xins_home}/src/css/javadoc/style.css"
+		tofile="${builddir}/javadoc-api/${api}/stylesheet.css"
+		overwrite="true" />
+	</target>
+
+	<target name="-wsdl" depends="-load-dtds">
+		<property name="dependset.destination" value="wsdl/${api}.wsdl" />
+		<antcall target="-dependset-file-${api}" />
+		<property name="wsdl.endpoint" value="" />
+		<mkdir dir="${builddir}/wsdl" />
+		<tstamp>
+			<format property="timestamp" pattern="yyyy.MM.dd HH:mm:ss.SS" />
+		</tstamp>
+		<xslt
+		in="${api_specsdir}/api.xml"
+		out="${builddir}/wsdl/${api}.wsdl"
+		style="${xins_home}/src/xslt/webapp/api_to_wsdl.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="project_home" expression="${project_home}" />
+			<param name="project_file" expression="${project_file}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}" />
+			<param name="endpoint"     expression="${wsdl.endpoint}" />
+			<param name="xins_version" expression="${xins_version}" />
+			<param name="timestamp"    expression="${timestamp}"  />
+		</xslt>
+		<replace file="${builddir}/wsdl/${api}.wsdl">
+			<replacefilter token="urn:apiname" value="urn:${api}" />
+			<replacefilter token="//?_convention=_xins-soap" value="/?_convention=_xins-soap" />
+		</replace>
+	</target>
+
+	<target name="-stub">
+		<property name="javaImplDir" value="${apis_dir}/${api}/impl${implName2}/${packageAsDir}" />
+		<xmlvalidate warn="false">
+			<xmlcatalog refid="all-dtds" />
+			<fileset dir="${api_specsdir}" includes="${functionIncludes}" />
+		</xmlvalidate>
+		<available file="${api_specsdir}/../impl${implName2}/impl.xml" property="impl.exists" />
+		<antcall target="-create-impl" />
+		<input message="Are you sure you want to generate the stub files in the ${javaImplDir} directory? Previous files will be overwritten."
+		addproperty="stub.overwrite" defaultvalue="y" validargs="y,n" />
+		<condition property="stub.notoverwrite">
+			<equals arg1="${stub.overwrite}" arg2="n" />
+		</condition>
+		<fail message="Stopped the generation of the stub files in order not to overwrite the current files." if="stub.notoverwrite" />
+		<xslt basedir="${api_specsdir}"
+		includes="${functionIncludes}"
+		destdir="${javaImplDir}"
+		extension="Impl.java"
+		style="${xins_home}/src/xslt/java-server-framework/function_to_stub.xslt"
+		reloadstylesheet="${reload.stylesheet}">
+			<xmlcatalog refid="all-dtds" />
+			<param name="xins_version" expression="${xins_version}" />
+			<param name="project_home" expression="${project_home}" />
+			<param name="project_file" expression="${project_file}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}" />
+			<param name="api"          expression="${api}"          />
+			<param name="api_file"     expression="${api_file}"     />
+			<param name="package"      expression="${package}"      />
+		</xslt>
+	</target>
+
+	<target name="-create-impl" unless="impl.exists">
+		<mkdir dir="${api_specsdir}/../impl${implName2}" />
+		<echo file="${api_specsdir}/../impl${implName2}/impl.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE impl PUBLIC "-//XINS//DTD Implementation 3.0//EN" "http://www.xins.org/dtd/impl_3_0.dtd">
+<!-- The order of the elements is logdoc, bootstrap-properties, runtime-properties, content, dependency, calling-convention, instance. -->
+<impl>
+</impl>]]></echo>
+	</target>
+
+	<target name="-war" depends="-load-version">
+		<mkdir dir="${builddir}/webapps/${api}${implName2}" />
+		<taskdef name="hostname" classname="org.xins.common.ant.HostnameTask" classpath="${xins_home}/build/xins-common.jar" />
+		<hostname />
+		<delete file="${builddir}/webapps/${api}${implName2}/web.xml" />
+		<xmlvalidate file="${api_file}" warn="false">
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xslt
+		in="${api_file}"
+		out="${builddir}/webapps/${api}${implName2}/web.xml"
+		style="${xins_home}/src/xslt/webapp/api_to_webxml.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="xins_version" expression="${xins_version}"  />
+			<param name="project_home" expression="${project_home}"  />
+			<param name="project_file" expression="${project_file}"  />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="api"          expression="${api}"           />
+			<param name="api_file"     expression="${api_file}"      />
+			<param name="api_version"  expression="${api.version}" />
+			<param name="java_version" expression="${build.java.version}" />
+			<param name="hostname"     expression="${hostname}"    />
+			<param name="timestamp"    expression="${timestamp}"   />
+		</xslt>
+		<fixcrlf srcdir="${builddir}/webapps/${api}${implName2}" includes="web.xml" eol="unix" />
+		<manifest file="${builddir}/webapps/${api}${implName2}/MANIFEST.MF">
+			<attribute name="Main-Class" value="org.xins.common.servlet.container.HTTPServletStarter" />
+			<attribute name="XINS-Version" value="${xins_version}" />
+			<attribute name="API-Version" value="${api.version}" />
+		</manifest>
+		<unjar dest="${builddir}/webapps/${api}${implName2}"
+		src="${xins_home}/build/xins-common.jar">
+			<patternset>
+				<include name="org/xins/common/servlet/container/HTTPServletStarter*.class" />
+				<include name="org/xins/common/servlet/container/ServletClassLoader*.class" />
+				<include name="org/xins/common/servlet/container/ConsoleGUI*.class" />
+				<include name="org/xins/common/servlet/container/CommandLineArguments.class" />
+				<include name="org/xins/common/servlet/container/xins.gif" />
+			</patternset>
+		</unjar>
+	</target>
+
+	<target name="-test" depends="-prepare-classes">
+		<antcall target="jar-${api}">
+			<reference refid="all-dtds" />
+		</antcall>
+		<available property="test.generated" file="${apis_dir}/${api}/test" type="dir" />
+		<antcall target="generatetests-${api}">
+			<reference refid="all-dtds" />
+		</antcall>
+		<property name="test.environment" value="" />
+		<property name="test.start.server" value="false" />
+		<property name="org.xins.server.config" value="" />
+		<property name="servlet.port" value="8080" />
+		<property name="classes.api.dir" value="${builddir}/classes-api/${api}" />
+		<mkdir dir="${builddir}/classes-tests/${api}" />
+		<javac
+		destdir="${builddir}/classes-tests/${api}"
+		debug="true"
+		deprecation="${build.deprecation}"
+		source="${build.java.version}"
+		target="${build.java.version}">
+			<src path="${apis_dir}/${api}/test" />
+			<classpath>
+				<path refid="xins.classpath" />
+				<path refid="test.classpath" />
+				<pathelement path="${classes.api.dir}" />
+				<fileset dir="${apis_dir}/${api}/test" includes="**/*.jar" />
+			</classpath>
+		</javac>
+		<condition property="no-war-${api}">
+			<isfalse value="${test.start.server}" />
+		</condition>
+		<antcall target="war-${api}">
+			<reference refid="all-dtds" />
+		</antcall>
+		<mkdir dir="${builddir}/testresults/xml" />
+		<junit fork="true" showoutput="true" dir="${project_home}" printsummary="true" failureproperty="tests.failed">
+			<sysproperty key="user.dir" value="${project_home}" />
+			<sysproperty key="test.environment" value="${test.environment}" />
+			<sysproperty key="test.start.server" value="${test.start.server}" />
+			<sysproperty key="org.xins.server.config" value="${org.xins.server.config}" />
+			<sysproperty key="servlet.port" value="${servlet.port}" />
+			<!--sysproperty key="net.sourceforge.cobertura.datafile"	file="${builddir}/coverage/${api}/cobertura.ser" /-->
+			<sysproperty key="emma.coverage.out.file"	file="${builddir}/emma/${api}/coverage.emma" />
+			<formatter usefile="false" type="brief"/>
+			<formatter type="xml" />
+			<test name="${packageTests}.APITests" todir="${builddir}/testresults/xml" outfile="testresults-${api}"/>
+			<classpath>
+				<path refid="xins.classpath" />
+				<pathelement path="${builddir}/classes-tests/${api}" />
+				<pathelement path="${classes.api.dir}" />
+				<path refid="test.classpath" />
+				<fileset dir="${apis_dir}/${api}/test" includes="**/*.jar" />
+			</classpath>
+		</junit>
+		<mkdir dir="${builddir}/testresults/html" />
+		<xslt
+		in="${builddir}/testresults/xml/testresults-${api}.xml"
+		out="${builddir}/testresults/html/testresults-${api}.html"
+		style="${xins_home}/src/xslt/tests/index.xslt" />
+		<copy
+		file="${xins_home}/src/css/tests/stylesheet.css"
+		todir="${builddir}/testresults/html" />
+	</target>
+
+	<target name="-generatetests">
+		<property name="javaTestDir" value="${apis_dir}/${api}/test/${packageTestsAsDir}" />
+
+		<xmlvalidate warn="false">
+			<xmlcatalog refid="all-dtds" />
+			<fileset dir="${api_specsdir}" includes="api.xml" />
+		</xmlvalidate>
+		<xslt
+		in="${api_file}"
+		out="${javaTestDir}/APITests.java"
+		style="${xins_home}/src/xslt/tests/api_to_test.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="package"      expression="${packageTests}"      />
+		</xslt>
+		<xmlvalidate warn="false">
+			<xmlcatalog refid="all-dtds" />
+			<fileset dir="${api_specsdir}" includes="${functionIncludes}" />
+		</xmlvalidate>
+		<xslt basedir="${api_specsdir}"
+		includes="${functionIncludes}"
+		destdir="${javaTestDir}"
+		extension="Tests.java"
+		style="${xins_home}/src/xslt/tests/function_to_test.xslt"
+		reloadstylesheet="${reload.stylesheet}">
+			<xmlcatalog refid="all-dtds" />
+			<param name="api"          expression="${api}"          />
+			<param name="package"      expression="${packageTests}" />
+		</xslt>
+	</target>
+
+	<target name="-jar" depends="-load-version, -prepare-classes, -stubs-capi">
+		<mkdir dir="${builddir}/classes-capi/${api}" />
+		<javac
+		srcdir="${builddir}/java-capi/${api}/"
+		destdir="${builddir}/classes-capi/${api}"
+		debug="true"
+		deprecation="${build.deprecation}"
+		source="${build.java.version}"
+		target="${build.java.version}">
+			<classpath refid="jar.classpath" />
+		</javac>
+		<mkdir dir="${builddir}/capis/" />
+		<manifest file="${builddir}/capis/${api}-MANIFEST.MF">
+			<attribute name="XINS-Version" value="${xins_version}" />
+			<attribute name="API-Version" value="${api.version}" />
+		</manifest>
+	</target>
+
+	<target name="-stubs-capi">
+		<property name="dependset.destination" value="java-capi/${api}/${clientPackageAsDir}/CAPI.java" />
+		<antcall target="-dependset-file-${api}" />
+		<xmlvalidate file="${api_file}" warn="false">
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xslt
+		in="${api_file}"
+		out="${builddir}/java-capi/${api}/${clientPackageAsDir}/CAPI.java"
+		style="${xins_home}/src/xslt/java-capi/api_to_java.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="project_file" expression="${project_file}"  />
+			<param name="project_home" expression="${project_home}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}"  />
+			<param name="package"      expression="${clientPackage}" />
+			<param name="api"          expression="${api}"           />
+			<param name="xins_version" expression="${xins_version}"  />
+		</xslt>
+		<xslt
+		in="${api_file}"
+		out="${builddir}/java-capi/${api}/${clientPackageAsDir}/package.html"
+		style="${xins_home}/src/xslt/java-capi/api_to_packagehtml.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="api" expression="${api}" />
+		</xslt>
+		<xmlvalidate warn="false">
+			<fileset dir="${api_specsdir}" includes="${functionIncludes}"/>
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xslt
+		basedir="${api_specsdir}"
+		destdir="${builddir}/java-capi/${api}/${clientPackageAsDir}"
+		style="${xins_home}/src/xslt/java-capi/function_to_result_java.xslt"
+		extension="Result.java"
+		includes="${functionIncludes}"
+		reloadstylesheet="${reload.stylesheet}">
+			<xmlcatalog refid="all-dtds" />
+			<param name="xins_version" expression="${xins_version}"     />
+			<param name="project_home" expression="${project_home}"     />
+			<param name="project_file" expression="${project_file}"     />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}"     />
+			<param name="api"          expression="${api}"              />
+			<param name="api_file"     expression="${api_file}"         />
+			<param name="package"      expression="${clientPackage}"    />
+			<param name="generics"     expression="${build.generics}" />
+		</xslt>
+		<xslt
+		basedir="${api_specsdir}"
+		destdir="${builddir}/java-capi/${api}/${clientPackageAsDir}"
+		style="${xins_home}/src/xslt/java-capi/function_to_request_java.xslt"
+		extension="Request.java"
+		includes="${functionIncludes}"
+		reloadstylesheet="${reload.stylesheet}">
+			<xmlcatalog refid="all-dtds" />
+			<param name="project_file" expression="${project_file}"  />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}"  />
+			<param name="package"      expression="${clientPackage}" />
+			<param name="api"          expression="${api}"           />
+		</xslt>
+		<antcall target="-stubs-capi-resultcodes">
+			<reference refid="all-dtds" />
+		</antcall>
+	</target>
+
+	<target name="-stubs-capi-resultcodes" if="resultcodeIncludesAll">
+		<xmlvalidate warn="false">
+			<fileset dir="${apis_dir}" includes="${resultcodeIncludesAll}"/>
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xslt
+		basedir="${apis_dir}"
+		destdir="${builddir}/java-capi/${api}/${clientPackageAsDir}"
+		style="${xins_home}/src/xslt/java-capi/resultcode_to_java.xslt"
+		includes="${resultcodeIncludesAll}"
+		reloadstylesheet="${reload.stylesheet}">
+			<xmlcatalog refid="all-dtds" />
+			<mapper>
+				<chainedmapper>
+					<flattenmapper />
+					<globmapper from="*.rcd" to="*Exception.java" />
+				</chainedmapper>
+			</mapper>
+			<param name="specsdir"     expression="${api_specsdir}"  />
+			<param name="package"      expression="${clientPackage}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="api"          expression="${api}"           />
+			<param name="api_file"     expression="${api_file}"      />
+		</xslt>
+	</target>
+
+	<target name="-specdocs">
+		<property name="dependset.destination" value="specdocs/${api}/index.html" />
+		<antcall target="-dependset-file-${api}" />
+		<dependset>
+			<srcfilelist dir="${api_specsdir}" files="api.xml" />
+			<targetfileset dir="${builddir}/specdocs/${api}" includes="*.html" />
+		</dependset>
+		<copy todir="${builddir}/specdocs/${api}" file="${xins_home}/src/css/specdocs/style.css" />
+		<copy todir="${builddir}/specdocs/${api}" file="${xins_home}/src/xslt/testforms/testforms.js" />
+		<copy tofile="${builddir}/specdocs/${api}/favicon.ico" file="${xins_home}/xins.ico" />
+		<xmlvalidate file="${api_file}" warn="false">
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xslt
+		in="${api_file}"
+		out="${builddir}/specdocs/${api}/index.html"
+		style="${xins_home}/src/xslt/specdocs/api_to_html.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="xins_version" expression="${xins_version}" />
+			<param name="project_home" expression="${project_home}" />
+			<param name="project_file" expression="${project_file}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}" />
+			<param name="api"          expression="${api}"          />
+		</xslt>
+		<xmlvalidate warn="false">
+			<fileset dir="${api_specsdir}" includes="${functionIncludes}"/>
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xslt
+		basedir="${api_specsdir}"
+		destdir="${builddir}/specdocs/${api}"
+		style="${xins_home}/src/xslt/specdocs/function_to_html.xslt"
+		includes="${functionIncludes}"
+		reloadstylesheet="${reload.stylesheet}">
+			<xmlcatalog refid="all-dtds" />
+			<param name="xins_version" expression="${xins_version}" />
+			<param name="project_home" expression="${project_home}" />
+			<param name="project_file" expression="${project_file}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}" />
+			<param name="api"          expression="${api}"          />
+			<param name="api_file"     expression="${api_file}"     />
+		</xslt>
+		<antcall target="-specdocs-type">
+			<reference refid="all-dtds" />
+		</antcall>
+		<antcall target="-specdocs-resultcode">
+			<reference refid="all-dtds" />
+		</antcall>
+		<antcall target="-specdocs-category">
+			<reference refid="all-dtds" />
+		</antcall>
+		<xslt
+		basedir="${api_specsdir}"
+		destdir="${builddir}/specdocs/${api}"
+		style="${xins_home}/src/xslt/testforms/function_to_html.xslt"
+		includes="${functionIncludes}"
+		extension="-testform.html"
+		reloadstylesheet="${reload.stylesheet}">
+			<xmlcatalog refid="all-dtds" />
+			<param name="xins_version" expression="${xins_version}" />
+			<param name="project_home" expression="${project_home}" />
+			<param name="project_file" expression="${project_file}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}" />
+			<param name="api"          expression="${api}"          />
+			<param name="api_file"     expression="${api_file}"     />
+		</xslt>
+	</target>
+
+	<target name="-specdocs-type" if="typeIncludesAll">
+		<xmlvalidate warn="false">
+			<fileset dir="${apis_dir}" includes="${typeIncludesAll}"/>
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xslt
+		basedir="${apis_dir}"
+		destdir="${builddir}/specdocs/${api}"
+		style="${xins_home}/src/xslt/specdocs/type_to_html.xslt"
+		includes="${typeIncludesAll}"
+		reloadstylesheet="${reload.stylesheet}">
+			<xmlcatalog refid="all-dtds" />
+			<mapper>
+				<chainedmapper>
+					<flattenmapper />
+					<globmapper from="*.typ" to="*.html" />
+				</chainedmapper>
+			</mapper>
+			<param name="xins_version" expression="${xins_version}" />
+			<param name="project_home" expression="${project_home}" />
+			<param name="project_file" expression="${project_file}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}" />
+			<param name="api"          expression="${api}"          />
+			<param name="api_file"     expression="${api_file}"     />
+		</xslt>
+	</target>
+
+	<target name="-specdocs-resultcode" if="resultcodeIncludesAll">
+		<xmlvalidate warn="false">
+			<fileset dir="${apis_dir}" includes="${resultcodeIncludesAll}"/>
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xslt
+		basedir="${apis_dir}"
+		destdir="${builddir}/specdocs/${api}"
+		style="${xins_home}/src/xslt/specdocs/resultcode_to_html.xslt"
+		includes="${resultcodeIncludesAll}"
+		reloadstylesheet="${reload.stylesheet}">
+			<xmlcatalog refid="all-dtds" />
+			<mapper>
+				<chainedmapper>
+					<flattenmapper />
+					<globmapper from="*.rcd" to="*.html" />
+				</chainedmapper>
+			</mapper>
+			<param name="xins_version" expression="${xins_version}" />
+			<param name="project_home" expression="${project_home}" />
+			<param name="project_file" expression="${project_file}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}" />
+			<param name="api"          expression="${api}"          />
+			<param name="api_file"     expression="${api_file}"     />
+		</xslt>
+	</target>
+
+	<target name="-specdocs-category" if="categoryIncludes">
+		<xmlvalidate warn="false">
+			<fileset dir="${api_specsdir}" includes="${categoryIncludes}"/>
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xslt
+		basedir="${api_specsdir}"
+		destdir="${builddir}/specdocs/${api}"
+		style="${xins_home}/src/xslt/specdocs/category_to_html.xslt"
+		includes="${categoryIncludes}">
+			<xmlcatalog refid="all-dtds" />
+			<param name="xins_version" expression="${xins_version}" />
+			<param name="specsdir"     expression="${api_specsdir}" />
+			<param name="api"          expression="${api}"          />
+		</xslt>
+	</target>
+
+	<target name="-specdocs-impl-runtime">
+		<property name="impl_file" value="${apis_dir}/${api}/impl${implName2}/impl.xml" />
+		<xmlvalidate file="${impl_file}" warn="false">
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xslt
+		in="${impl_file}"
+		out="${builddir}/specdocs/${api}/properties${implName2}.html"
+		style="${xins_home}/src/xslt/specdocs/impl_to_html.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="project_home" expression="${project_home}" />
+			<param name="project_file" expression="${project_file}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}"     />
+			<param name="xins_version" expression="${xins_version}" />
+			<param name="api"          expression="${api}"          />
+		</xslt>
+	</target>
+
+	<target name="-specdocs-impl-logdoc">
+		<property name="impl_dir" value="${apis_dir}/${api}/impl${implName2}" />
+		<property name="javaDestFileDir" value="${builddir}/java-fundament/${api}${implName2}/${packageAsDir}" />
+		<echo message="Generating the logdoc for ${api}${implName2}" />
+		<mkdir dir="${builddir}/logdoc/${api}${implName2}" />
+		<xmlvalidate file="${impl_dir}/log.xml" warn="false">
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xslt
+		in="${impl_dir}/log.xml"
+		out="${builddir}/logdoc/${api}${implName2}/build.xml"
+		style="${xins_home}/src/xslt/logdoc/log_to_build.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="xins_home"       expression="${xins_home}" />
+			<param name="logdoc_xslt_dir" expression="${xins_home}/src/xslt/logdoc" />
+			<param name="sourcedir"       expression="${impl_dir}" />
+			<param name="html_destdir"    expression="${builddir}/specdocs/${api}/logdoc${implName2}" />
+			<param name="java_destdir"    expression="${javaDestFileDir}" />
+			<param name="package_name"    expression="${package}" />
+		</xslt>
+		<copy file="${xins_home}/src/css/logdoc/style.css" todir="${builddir}/specdocs/${api}/logdoc${implName2}" />
+		<ant dir="${builddir}/logdoc/${api}${implName2}" target="html" inheritall="false" />
+	</target>
+
+	<target name="-classes-types" depends="-prepare-classes" if="typeIncludesAll">
+		<property name="javaDestDir" value="${builddir}/java-types/${api}" />
+		<property name="copiedTypesDir" value="${builddir}/types/${api}" />
+		<property name="typeClassesDir" value="${builddir}/classes-types/${api}" />
+
+		<copy todir="${copiedTypesDir}">
+			<fileset dir="${apis_dir}" includes="${typeIncludesAll}" />
+			<mapper>
+				<chainedmapper>
+				  	<flattenmapper />
+				  	<mapper classname="org.xins.common.ant.HungarianMapper" classpath="${xins_home}/build/xins-common.jar" />
+			  	</chainedmapper>
+			</mapper>
+		</copy>
+
+		<xmlvalidate file="${api_file}" warn="false">
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xslt
+		in="${api_file}"
+		out="${javaDestDir}/${typePackageAsDir}/package.html"
+		style="${xins_home}/src/xslt/java-types/api_to_packagehtml.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="api" expression="${api}" />
+		</xslt>
+		<xmlvalidate warn="false">
+			<fileset dir="${copiedTypesDir}" includes="*.typ"/>
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xslt
+		basedir="${copiedTypesDir}"
+		destdir="${javaDestDir}/${typePackageAsDir}/"
+		style="${xins_home}/src/xslt/java-types/type_to_java.xslt"
+		extension=".java"
+		reloadstylesheet="${reload.stylesheet}">
+			<xmlcatalog refid="all-dtds" />
+			<param name="project_file" expression="${project_file}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}" />
+			<param name="package"      expression="${typePackage}"  />
+			<param name="api"          expression="${api}"          />
+		</xslt>
+
+		<mkdir dir="${typeClassesDir}" />
+		<javac
+		srcdir="${javaDestDir}"
+		destdir="${typeClassesDir}"
+		debug="true"
+		deprecation="${build.deprecation}"
+		source="${build.java.version}"
+		target="${build.java.version}">
+			<classpath>
+				<pathelement path="${xins_home}/build/logdoc.jar" />
+				<pathelement path="${xins_home}/build/xins-common.jar" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="-classes-api" depends="-prepare-classes, -load-dtds">
+		<property name="javaImplDir" value="${apis_dir}/${api}/impl${implName2}" />
+		<property name="javaDestDir" value="${builddir}/java-fundament/${api}${implName2}" />
+		<property name="classesDestDir" value="${builddir}/classes-api/${api}${implName2}" />
+		<property name="javaDestFileDir" value="${javaDestDir}/${packageAsDir}" />
+		<property name="impl_dir" value="${apis_dir}/${api}/impl${implName2}" />
+		<property name="impl_file" value="${impl_dir}/impl.xml" />
+
+		<xmlvalidate file="${impl_file}" warn="false">
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xmlvalidate file="${api_file}" warn="false">
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xmlvalidate warn="false">
+			<fileset dir="${api_specsdir}" includes="${functionIncludes}"/>
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<taskdef name="xslt-plus" classname="org.xins.common.ant.XsltPlusTask" classpath="${xins_home}/build/xins-common.jar" />
+		<xslt-plus
+		basedir="${api_specsdir}"
+		includes="${functionIncludes}"
+		destdir="${javaImplDir}/${packageAsDir}"
+		style="${xins_home}/src/xslt/java-server-framework/function_to_impl_java.xslt"
+		neveroverwrite="true">
+			<xmlcatalog refid="all-dtds" />
+			<mapper>
+				<globmapper from="*.fnc" to="*Impl.java" />
+			</mapper>
+			<param name="xins_version" expression="${xins_version}" />
+			<param name="project_home" expression="${project_home}" />
+			<param name="project_file" expression="${project_file}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}" />
+			<param name="api"          expression="${api}"          />
+			<param name="api_file"     expression="${api_file}"     />
+			<param name="package"      expression="${package}"      />
+		</xslt-plus>
+		<xslt
+		in="${api_file}"
+		out="${javaDestDir}/${packageAsDir}/APIImpl.java"
+		style="${xins_home}/src/xslt/java-server-framework/api_to_java.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="xins_version" expression="${xins_version}" />
+			<param name="project_home" expression="${project_home}" />
+			<param name="project_file" expression="${project_file}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}" />
+			<param name="api"          expression="${api}"          />
+			<param name="impl_file"    expression="${impl_file}"    />
+			<param name="package"      expression="${package}"      />
+		</xslt>
+		<xslt
+		in="${api_file}"
+		out="${javaDestDir}/${packageAsDir}/package.html"
+		style="${xins_home}/src/xslt/java-server-framework/api_to_packagehtml.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="api" expression="${api}" />
+		</xslt>
+		<xslt
+		in="${impl_file}"
+		out="${javaDestDir}/${packageAsDir}/RuntimeProperties.java"
+		style="${xins_home}/src/xslt/java-server-framework/impl_to_java.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="project_file" expression="${project_file}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}" />
+			<param name="package"      expression="${package}"      />
+			<param name="api"          expression="${api}"          />
+		</xslt>
+
+		<xslt
+		basedir="${api_specsdir}"
+		destdir="${javaDestDir}/${packageAsDir}"
+		style="${xins_home}/src/xslt/java-server-framework/function_to_java.xslt"
+		extension=".java"
+		includes="${functionIncludes}"
+		reloadstylesheet="${reload.stylesheet}">
+			<xmlcatalog refid="all-dtds" />
+			<param name="xins_version" expression="${xins_version}"     />
+			<param name="project_home" expression="${project_home}"     />
+			<param name="project_file" expression="${project_file}"     />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}"     />
+			<param name="package"      expression="${package}"          />
+			<param name="api"          expression="${api}"              />
+			<param name="api_file"     expression="${api_file}"         />
+			<param name="impl_file"    expression="${impl_file}"        />
+			<param name="generics"     expression="${build.generics}" />
+		</xslt>
+
+		<antcall target="-classes-api-resultcode">
+			<reference refid="all-dtds" />
+		</antcall>
+		<antcall target="-classes-api-logdoc">
+			<reference refid="all-dtds" />
+		</antcall>
+
+		<!-- Compile all classes -->
+		<mkdir dir="${classesDestDir}" />
+		<javac
+		destdir="${classesDestDir}"
+		debug="true"
+		deprecation="${build.deprecation}"
+		source="${build.java.version}"
+		target="${build.java.version}">
+			<src path="${javaDestDir}" />
+			<src path="${javaImplDir}" />
+			<classpath refid="classes.api.classpath" />
+		</javac>
+	</target>
+
+	<target name="-classes-api-resultcode" if="resultcodeIncludesAll">
+		<!-- Generation of the result code files. -->
+		<!-- If have added a resultcode-ref in your function the java file should be regenerated. -->
+		<!-- An intermediate file containing all the functions/result codes is created for performance reasons. -->
+		<xslt
+		in="${api_file}"
+		out="${javaDestDir}/resultcodes.xml"
+		style="${xins_home}/src/xslt/java-server-framework/api_to_resultcodes.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="specsdir"     expression="${api_specsdir}" />
+		</xslt>
+		<xmlvalidate warn="false">
+			<fileset dir="${apis_dir}" includes="${resultcodeIncludesAll}"/>
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xslt
+		basedir="${apis_dir}"
+		destdir="${javaDestDir}/${packageAsDir}"
+		style="${xins_home}/src/xslt/java-server-framework/resultcode_to_java.xslt"
+		includes="${resultcodeIncludesAll}"
+		reloadstylesheet="${reload.stylesheet}">
+			<xmlcatalog refid="all-dtds" />
+			<mapper>
+				<chainedmapper>
+					<flattenmapper />
+					<globmapper from="*.rcd" to="*Result.java" />
+				</chainedmapper>
+			</mapper>
+			<param name="xins_version" expression="${xins_version}" />
+			<param name="project_home" expression="${project_home}" />
+			<param name="project_file" expression="${project_file}" />
+			<param name="apis_dir"     expression="${apis_dir}"     />
+			<param name="specsdir"     expression="${api_specsdir}" />
+			<param name="package"      expression="${package}"      />
+			<param name="api"          expression="${api}${implName2}" />
+			<param name="api_file"     expression="${api_file}"     />
+		</xslt>
+	</target>
+
+	<target name="-classes-api-logdoc" if="logdoc_file">
+		<echo message="Generating the logdoc for ${api}${implName2}" />
+		<mkdir dir="${builddir}/logdoc/${api}${implName2}" />
+		<xmlvalidate file="${impl_dir}/log.xml" warn="false">
+			<xmlcatalog refid="all-dtds" />
+		</xmlvalidate>
+		<xslt
+		in="${impl_dir}/log.xml"
+		out="${builddir}/logdoc/${api}${implName2}/build.xml"
+		style="${xins_home}/src/xslt/logdoc/log_to_build.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="xins_home"       expression="${xins_home}" />
+			<param name="logdoc_xslt_dir" expression="${xins_home}/src/xslt/logdoc" />
+			<param name="sourcedir"       expression="${impl_dir}" />
+			<param name="html_destdir"    expression="${builddir}/specdocs/${api}/logdoc${implName2}" />
+			<param name="java_destdir"    expression="${javaDestFileDir}" />
+			<param name="package_name"    expression="${package}" />
+		</xslt>
+		<ant antfile="${builddir}/logdoc/${api}${implName2}/build.xml" target="java">
+			<property name="accesslevel" value="${accesslevel}" />
+		</ant>
+	</target>
+</project>

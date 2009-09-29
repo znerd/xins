@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!-- $Id: build.xml,v 1.447 2007/09/05 09:11:13 agoubard Exp $ -->
+
+<project name="xins" default="all">
+
+	<!-- import the extra build file that contains targets that does not
+	     work in the release -->
+	<import file="build-dev.xml" optional="true" />
+
+	<!--
+	Determines the current XINS version by reading this information from
+	the version file.
+
+	By default the version file is '.version.properties'. This can be
+	overridden by setting the property 'version.file' to the file to read
+	from instead.
+
+	This target fails if the required properties are not set in the file.
+	-->
+	<target name="-load-version">
+		<property name="version.file" value=".version.properties" />
+		<property file="${version.file}" />
+		<condition property="version.isset">
+			<and>
+				<isset property="version.major" />
+				<isset property="version.middle" />
+			</and>
+		</condition>
+		<fail unless="version.isset">
+Properties 'version.major' and 'version.middle'.
+These are normally read from the version properties file.
+
+Please do either of the following:
+1) add the missing properties to the file;
+2) specify what file to read from instead by setting the 'version.file'
+   property on the command line;
+3) specify the missing properties manually, on the command line.
+
+The current version properties file used is:
+${version.file}</fail>
+		<condition property="dot.version.minor" value="${version.minor}">
+			<or>
+				<equals arg1="${version.minor}" arg2="-alpha" />
+				<equals arg1="${version.minor}" arg2="-beta" />
+				<equals arg1="${version.minor}" arg2="-rc" />
+				<equals arg1="${version.minor}" arg2="" />
+			</or>
+		</condition>
+		<property name="dot.version.minor" value=".${version.minor}" />
+	</target>
+
+	<target name="-init" depends="-load-version">
+
+		<!-- General project properties -->
+		<property name="title"               value="XINS" />
+		<property name="name"                value="${ant.project.name}" />
+		<property name="xins_version"        value="${version.major}.${version.middle}${dot.version.minor}${version.build}${version.suffix}" />
+		<property name="package-basename"    value="${name}-${xins_version}" />
+		<property name="xins_vendor"         value="Orange Nederland Breedband B.V." />
+		<property name="cvs.module"          value="${name}" />
+
+		<!-- SourceForge-related properties -->
+		<property name="sf.group"            value="71598" />
+		<property name="sf.package"          value="71219" />
+
+		<!-- Website-related properties -->
+		<property name="www.user"            value="${sf.user}" />
+		<property name="www.host"            value="${name}.sourceforge.net" />
+		<property name="www.dir"             value="/home/groups/x/xi/xins/htdocs" />
+		<property name="www.target"          value="${www.user}@${www.host}:${www.dir}" />
+		<property name="www.url"             value="http://www.xins.org/" />
+
+		<!-- Java compiler-related properties -->
+		<property name="javac.sourceversion" value="1.5"        />
+		<property name="javac.targetvm"      value="1.5"        />
+		<property name="javac.debug"         value="true"       />
+		<property name="javac.deprecation"   value="true"       />
+		<property name="javac.optimize"      value="false"      />
+		<property name="tests.deprecation"   value="false"      />
+
+		<!-- Javadoc-related properties -->
+		<property name="javadoc.srcdir.j2se" value="${java.home}/src" />
+		<property name="javadoc.srcdir.xins" value="src/java-common:build/src/java-common:src/java-server-framework:build/src/java-server-framework:src/java-client-framework:build/src/java-client-framework" />
+
+		<!-- Unit- and performance-testing-related properties -->
+		<property name="testclass"     value="org.xins.tests.AllTests"     />
+		<property name="perftestclass" value="org.xins.perftests.AllTests" />
+	</target>
+
+	<target name="version" depends="-init">
+		<echo message="Java ${java.version}" />
+		<echo message="${ant.version}" />
+		<echo message="${title} ${xins_version}" />
+	</target>
+
+	<target name="clean" description="Removes all generated files">
+		<delete dir="build" />
+		<delete dir="docs/javadoc" />
+		<delete dir="docs/javadoc-private" />
+		<delete dir="docs/logdoc" />
+		<delete dir="docs/xsltdoc" />
+		<delete dir="src/tests/build" />
+	</target>
+
+	<target name="java-logdoc" depends="-init" description="Compiles the XINS/Java logdoc code">
+		<mkdir dir="build/classes/logdoc" />
+		<javac
+		srcdir="src/java-common"
+		includes="org/xins/logdoc/*.java"
+		destdir="build/classes/logdoc"
+		debug="${javac.debug}"
+		deprecation="${javac.deprecation}"
+		optimize="${javac.optimize}"
+		source="${javac.sourceversion}"
+		target="${javac.targetvm}">
+			<classpath>
+				<fileset dir="lib" includes="*.jar" />
+			</classpath>
+		</javac>
+		<manifest file="build/MANIFEST.MF">
+			<section name="logdoc">
+				<attribute name="Specification-Title"    value="Logdoc"          />
+				<attribute name="Specification-Version"  value="${xins_version}" />
+				<attribute name="Specification-Vendor"   value="${xins_vendor}"  />
+				<attribute name="Implementation-Title"   value="Logdoc"          />
+				<attribute name="Implementation-Version" value="${xins_version}" />
+				<attribute name="Implementation-Vendor"  value="${xins_vendor}"  />
+			</section>
+		</manifest>
+		<jar
+		destfile="build/logdoc.jar"
+		basedir="build/classes/logdoc"
+		manifest="build/MANIFEST.MF" />
+	</target>
+
+	<target name="java-common" depends="java-logdoc, logdoc-java-common" description="Compiles the XINS/Java common code">
+		<copy file="src/java-common/org/xins/common/ant/antlib.xml"
+		todir="build/classes/java-common/org/xins/common/ant" />
+		<copy file="src/java-common/org/xins/common/servlet/container/xins.gif"
+		todir="build/classes/java-common/org/xins/common/servlet/container" />
+		<antcall target="-build-framework">
+			<param name="src.side" value="common" />
+			<param name="side"     value="common" />
+			<param name="type"     value="Common" />
+		</antcall>
+	</target>
+
+	<target name="java-client" depends="java-common, logdoc-java-client" description="Compiles the XINS/Java client framework">
+		<path id="path.common">
+			<pathelement path="build/classes/java-common" />
+		</path>
+		<antcall target="-build-framework" inheritRefs="true">
+			<param name="src.side" value="client-framework" />
+			<param name="side"     value="client"           />
+			<param name="type"     value="Client Framework" />
+		</antcall>
+	</target>
+
+	<target name="java-server" depends="java-common, logdoc-java-server" description="Compiles the XINS/Java server framework">
+		<mkdir dir="build/src/java-server-framework" />
+		<xslt
+		in="src/xml/default_resultcodes.xml"
+		out="build/src/java-server-framework/org/xins/server/DefaultResultCodes.java"
+		style="src/xslt/java-server-framework/default_resultcodes_to_java.xslt" />
+		<path id="path.common">
+			<pathelement path="build/classes/java-common" />
+		</path>
+		<available property="jmx.available" classname="javax.management.openmbean.OpenType">
+			<classpath>
+				<fileset dir="lib" includes="*.jar" />
+			</classpath>
+		</available>
+		<antcall target="download-jmx" />
+		<antcall target="-build-framework" inheritRefs="true">
+			<param name="src.side" value="server-framework" />
+			<param name="side"     value="server"           />
+			<param name="type"     value="Server Framework" />
+		</antcall>
+	</target>
+
+	<target name="java-tools" depends="java-common, java-client, java-server" description="Compiles the XINS/Java tools and put them in xins-common.jar">
+		<available property="spring.available" file="lib/spring.jar" />
+		<antcall target="download-spring" />
+		<javac
+		destdir="build/classes/java-common"
+		debug="${javac.debug}"
+		deprecation="${javac.deprecation}"
+		optimize="${javac.optimize}"
+		source="${javac.sourceversion}"
+		target="${javac.targetvm}">
+			<src path="src/java-common" />
+			<classpath>
+				<path refid="path.common" />
+				<pathelement location="build/logdoc.jar" />
+				<pathelement location="build/xins-client.jar" />
+				<pathelement location="build/xins-server.jar" />
+				<fileset dir="lib" includes="*.jar" />
+			</classpath>
+		</javac>
+		<jar
+		destfile="build/xins-common.jar"
+		basedir="build/classes/java-common"
+		update="true"
+		includes="org/xins/common/spring/**" />
+	</target>
+
+	<target name="download-spring" unless="spring.available">
+		<get src="http://repo1.maven.org/maven2/org/springframework/spring/2.0.6/spring-2.0.6.jar" 
+		dest="lib/spring.jar" usetimestamp="true" ignoreerrors="true" />
+	</target>
+
+	<target name="download-jmx" unless="jmx.available">
+		<get src="http://xins.cvs.sourceforge.net/*checkout*/xins/xins/lib/jmxri.LICENSE.html" 
+		dest="lib/jmxri.LICENSE.html" usetimestamp="true" ignoreerrors="true" />
+		<get src="http://xins.cvs.sourceforge.net/*checkout*/xins/xins/lib/jmxri.jar" 
+		dest="lib/jmxri.jar" usetimestamp="true" ignoreerrors="true" />
+	</target>
+
+	<target name="-build-framework">
+		<mkdir dir="build/src/java-${src.side}" />
+		<copy file="src/java-${src.side}/org/xins/${side}/Library.java" todir="build/src/java-${src.side}/org/xins/${side}/" />
+		<replace dir="build/src/java-${src.side}" token="%%VERSION%%" value="${xins_version}">
+			<include name="**/*.java" />
+		</replace>
+		<mkdir dir="build/classes/java-${side}" />
+		<javac
+		sourcepath=""
+		destdir="build/classes/java-${side}"
+		debug="${javac.debug}"
+		deprecation="${javac.deprecation}"
+		optimize="${javac.optimize}"
+		source="${javac.sourceversion}"
+		target="${javac.targetvm}">
+			<src path="build/src/java-${src.side}" />
+			<include name="org/xins/${side}/Library.java" />
+			<classpath>
+				<path refid="path.common" />
+				<pathelement location="build/logdoc.jar" />
+				<fileset dir="lib" includes="*.jar" />
+			</classpath>
+		</javac>
+		<javac
+		destdir="build/classes/java-${side}"
+		debug="${javac.debug}"
+		deprecation="${javac.deprecation}"
+		optimize="${javac.optimize}"
+		source="${javac.sourceversion}"
+		target="${javac.targetvm}">
+			<src path="src/java-${src.side}" />
+			<src path="build/src/java-${src.side}" />
+			<exclude name="org/xins/${side}/Library.java" />
+			<exclude name="org/xins/logdoc/**" />
+			<exclude name="org/xins/common/spring/**" />
+			<classpath>
+				<path refid="path.common" />
+				<pathelement location="build/logdoc.jar" />
+				<fileset dir="lib" includes="*.jar" />
+			</classpath>
+		</javac>
+		<manifest file="build/MANIFEST.MF">
+			<section name="xins-${side}">
+				<attribute name="Specification-Title"    value="XINS/Java ${type}" />
+				<attribute name="Specification-Version"  value="${xins_version}"        />
+				<attribute name="Specification-Vendor"   value="${xins_vendor}"    />
+				<attribute name="Implementation-Title"   value="XINS/Java ${type}" />
+				<attribute name="Implementation-Version" value="${xins_version}"        />
+				<attribute name="Implementation-Vendor"  value="${xins_vendor}"    />
+			</section>
+		</manifest>
+		<jar
+		destfile="build/xins-${side}.jar"
+		basedir="build/classes/java-${side}"
+		manifest="build/MANIFEST.MF" />
+	</target>
+
+	<target name="java" depends="java-logdoc,java-common,java-client,java-server,java-tools" description="Compiles the XINS/Java java code (logdoc, common, server and client)"/>
+
+	<target name="-prepare-logdoc-server">
+		<antcall target="-prepare-logdoc">
+			<param name="src.side" value="server-framework" />
+			<param name="side" value="server"/>
+		</antcall>
+	</target>
+
+	<target name="-prepare-logdoc-client">
+		<antcall target="-prepare-logdoc">
+			<param name="src.side" value="client-framework" />
+			<param name="side" value="client"/>
+		</antcall>
+	</target>
+
+	<target name="-prepare-logdoc-common">
+		<antcall target="-prepare-logdoc">
+			<param name="src.side" value="common" />
+			<param name="side" value="common"/>
+		</antcall>
+	</target>
+
+	<target name="-prepare-logdoc" depends="-init">
+		<!-- If not defined in the antcall, the default is the side -->
+		<property name="package" value="${side}" />
+		<xslt
+		in="src/logdoc/${side}/log.xml"
+		out="build/logdoc/${side}/build.xml"
+		style="src/xslt/logdoc/log_to_build.xslt">
+			<xmlcatalog id="log-dtds">
+				<dtd location="src/dtd/log_1_0.dtd"                publicId="-//XINS//DTD XINS Logdoc 1.0//EN" />
+				<dtd location="src/dtd/log_1_1.dtd"                publicId="-//XINS//DTD XINS Logdoc 1.1//EN" />
+				<dtd location="src/dtd/log_1_2.dtd"                publicId="-//XINS//DTD XINS Logdoc 1.2//EN" />
+				<dtd location="src/dtd/log_1_3.dtd"                publicId="-//XINS//DTD XINS Logdoc 1.3//EN" />
+				<dtd location="src/dtd/log_1_4.dtd"                publicId="-//XINS//DTD XINS Logdoc 1.4//EN" />
+				<dtd location="src/dtd/log_3_0.dtd"                publicId="-//XINS//DTD XINS Logdoc 3.0//EN" />
+				<dtd location="src/dtd/translation-bundle_1_0.dtd" publicId="-//XINS//DTD XINS Translation Bundle 1.0//EN" />
+				<dtd location="src/dtd/translation-bundle_1_1.dtd" publicId="-//XINS//DTD XINS Translation Bundle 1.1//EN" />
+				<dtd location="src/dtd/translation-bundle_1_2.dtd" publicId="-//XINS//DTD XINS Translation Bundle 1.2//EN" />
+				<dtd location="src/dtd/translation-bundle_1_3.dtd" publicId="-//XINS//DTD XINS Translation Bundle 1.3//EN" />
+				<dtd location="src/dtd/translation-bundle_1_4.dtd" publicId="-//XINS//DTD XINS Translation Bundle 1.4//EN" />
+			</xmlcatalog>
+			<param name="xins_home"       expression="${basedir}"                    />
+			<param name="logdoc_xslt_dir" expression="${basedir}/src/xslt/logdoc"    />
+			<param name="logdoc_dtd_dir"  expression="${basedir}/src/dtd"            />
+			<param name="sourcedir"       expression="${basedir}/src/logdoc/${side}" />
+			<param name="html_destdir"    expression="html"                          />
+			<param name="java_destdir"    expression="${basedir}/build/src/java-${src.side}/org/xins/${side}" />
+			<param name="package_name"    expression="org.xins.${package}"           />
+		</xslt>
+	</target>
+
+	<target name="logdoc-html-server" depends="-prepare-logdoc-server">
+		<antcall target="-logdoc-html">
+			<param name="side" value="server"/>
+		</antcall>
+	</target>
+
+	<target name="logdoc-html-client" depends="-prepare-logdoc-client">
+		<antcall target="-logdoc-html">
+			<param name="side" value="client"/>
+		</antcall>
+	</target>
+
+	<target name="logdoc-html-common" depends="-prepare-logdoc-common">
+		<antcall target="-logdoc-html">
+			<param name="side" value="common"/>
+		</antcall>
+	</target>
+
+	<target name="logdoc-html" depends="-init, logdoc-html-server, logdoc-html-client, logdoc-html-common">
+		<copy todir="docs/logdoc/server">
+			<fileset dir="build/logdoc/server/html" />
+		</copy>
+		<copy todir="docs/logdoc/client">
+			<fileset dir="build/logdoc/client/html" />
+		</copy>
+		<copy todir="docs/logdoc/common">
+			<fileset dir="build/logdoc/common/html" />
+		</copy>
+	</target>
+
+	<target name="-logdoc-html">
+		<copy file="src/css/logdoc/style.css" todir="build/logdoc/${side}/html" />
+		<ant dir="build/logdoc/${side}" target="html" inheritall="false" />
+	</target>
+
+	<target name="logdoc-java-server" depends="-prepare-logdoc-server">
+		<ant dir="build/logdoc/server" target="java" inheritall="false">
+			<property name="accesslevel" value="public" />
+		</ant>
+	</target>
+
+	<target name="logdoc-java-client" depends="-prepare-logdoc-client">
+		<antcall target="-logdoc-java">
+			<param name="side" value="client"/>
+		</antcall>
+	</target>
+
+	<target name="logdoc-java-common" depends="-prepare-logdoc-common">
+		<ant dir="build/logdoc/common" target="java" inheritall="false">
+			<property name="accesslevel" value="public" />
+		</ant>
+	</target>
+
+	<target name="-logdoc-java">
+		<ant dir="build/logdoc/${side}" target="java" inheritall="false">
+			<property name="accesslevel" value="package" />
+		</ant>
+	</target>
+
+	<target name="-jdksrc-avail">
+		<available
+		file="${javadoc.srcdir.j2se}"
+		type="dir"
+		property="jdksrc.available" />
+	</target>
+
+	<target
+	name="-javadoc-sourcepath-nojdksrc"
+	depends="-init,-jdksrc-avail"
+	unless="jdksrc.available">
+		<property name="javadoc.sourcepath" value="${javadoc.srcdir.xins}" />
+		<echo level="verbose" message="JDK source code not available." />
+	</target>
+
+	<target
+	name="-javadoc-sourcepath-jdksrc"
+	depends="-jdksrc-avail"
+	if="jdksrc.available">
+		<property name="javadoc.sourcepath" value="${javadoc.srcdir.xins}:${javadoc.srcdir.j2se}" />
+		<echo level="verbose" message="JDK source code available." />
+	</target>
+
+	<target
+	name="-javadoc-sourcepath"
+	depends="-javadoc-sourcepath-nojdksrc,-javadoc-sourcepath-jdksrc" />
+
+	<target
+	name="-do-javadoc"
+	depends="java,-javadoc-sourcepath"
+	unless="nodocs">
+		<mkdir dir="${javadoc.destdir}" />
+		<javadoc
+		sourcepath="${javadoc.sourcepath}"
+		destdir="${javadoc.destdir}"
+		source="${javac.sourceversion}"
+		version="yes"
+		use="yes"
+		author="yes"
+		private="${javadoc.private}"
+		windowtitle="${javadoc.title}"
+		doctitle="${javadoc.title}"
+		bottom="${javadoc.footer}">
+			<packageset dir="src/java-common"           includes="org/xins/**" />
+			<packageset dir="src/java-server-framework" includes="org/xins/**" />
+			<packageset dir="src/java-client-framework" includes="org/xins/**" />
+
+			<group title="XINS/Java Logdoc"           packages="org.xins.logdoc*" />
+			<group title="XINS/Java Common Library"   packages="org.xins.common*" />
+			<group title="XINS/Java Client Framework" packages="org.xins.client*" />
+			<group title="XINS/Java Server Framework" packages="org.xins.server*" />
+
+			<classpath>
+				<fileset dir="lib"             includes="*.jar" />
+				<fileset dir="${ant.home}/lib" includes="*.jar" />
+			</classpath>
+
+			<link offline="true" packagelistloc="src/package-lists/servlet/"            href="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/"   />
+			<link offline="true" packagelistloc="src/package-lists/j2se/"               href="http://java.sun.com/j2se/1.4.2/docs/api"               />
+			<link offline="true" packagelistloc="src/package-lists/log4j/"              href="http://jakarta.apache.org/log4j/docs/api/"             />
+			<link offline="true" packagelistloc="src/package-lists/commons-logging/"    href="http://jakarta.apache.org/commons/logging/api/"        />
+			<link offline="true" packagelistloc="src/package-lists/commons-httpclient/" href="http://jakarta.apache.org/commons/httpclient/apidocs/" />
+			<link offline="true" packagelistloc="src/package-lists/oro/"                href="http://jakarta.apache.org/oro/api/"                    />
+			<link offline="true" packagelistloc="src/package-lists/xmlenc/"             href="http://xmlenc.sourceforge.net/javadoc/0.52/"           />
+			<link offline="true" packagelistloc="src/package-lists/ant/"                href="http://xmlenc.sourceforge.net/ant-1.6.2-docs/"         />
+			<link offline="true" packagelistloc="src/package-lists/json/"               href="http://www.json.org/javadoc/"                          />
+		</javadoc>
+		<copy
+		file="src/css/javadoc/style.css"
+		tofile="${javadoc.destdir}/stylesheet.css"
+		overwrite="true" />
+	</target>
+
+	<target
+	name="javadoc"
+	depends="javadoc-public,javadoc-private"
+	description="Generates all Javadoc API documentation"
+	unless="nodocs" />
+
+	<target
+	name="javadoc-public"
+	depends="-init"
+	description="Generates public Javadoc API documentation"
+	unless="nodocs">
+		<antcall target="-do-javadoc">
+			<param name="javadoc.private" value="no" />
+			<param name="javadoc.destdir" value="docs/javadoc" />
+			<param name="javadoc.title"   value="${title} ${xins_version}" />
+			<param name="javadoc.footer"  value="See &lt;a target=&quot;_top&quot; href='${www.url}'&gt;${www.url}&lt;/a&gt;." />
+		</antcall>
+	</target>
+
+	<target
+	name="javadoc-private"
+	depends="-init"
+	description="Generates private Javadoc API documentation"
+	unless="nodocs">
+		<antcall target="-do-javadoc">
+			<param name="javadoc.private" value="yes" />
+			<param name="javadoc.destdir" value="docs/javadoc-private" />
+			<param name="javadoc.title"   value="${title} ${xins_version}" />
+			<param name="javadoc.footer"  value="See &lt;a target=&quot;_top&quot; href='${www.url}'&gt;${www.url}&lt;/a&gt;.&lt;br /&gt;This Javadoc API documentation set contains private and package private members as well." />
+		</antcall>
+	</target>
+
+	<target name="all" depends="java-server,javadoc" description="Generates everything" />
+
+	<target name="help" description="Print the help of the main targets" depends="-init">
+		<echo message="XINS ${xins_version}"                                                />
+		<echo message=""                                                                    />
+		<echo message="Main targets:"                                                       />
+		<echo message="  clean        : Remove all generated files"                         />
+		<echo message="  java         : Compile all Java source files"                      />
+		<echo message="  javadoc      : Generate the Javadoc API docs"                      />
+		<echo message="  logdoc-html  : Generate the Logdoc HTML pages"                     />
+		<echo message="  version      : Print the XINS version"                             />
+		<echo message="* tests        : Run all unit tests"                                 />
+		<echo message="* release      : Create a new XINS release"                          />
+		<echo                                                                               />
+		<echo message="The targets marked with an asterisk (*) need '-lib lib' to be"       />
+		<echo message="passed on the command line."                                         />
+		<echo                                                                               />
+		<echo message="Supported options (can change at any time):"                         />
+		<echo message="1) -Dforce=true         : Skip -dev suffix check on release"         />
+		<echo message="2) -Dmajor.release=true : Skip version update on release"            />
+		<echo message="3) -Dno-upload=true     : Skip uploads except FTP uploads"           />
+		<echo message="4) -Dno-ftp=true        : Skip FTP upload actions"                   />
+		<echo                                                                               />
+		<echo message="To create a release the following requirements apply:"               />
+		<echo message="1) CVS module 'xins-docs' must be checked out in parent directory"   />
+		<echo message="   and should be up-to-date;"                                        />
+		<echo message="2) CVS module 'xins-examples' must be checked out in parent"         />
+		<echo message="   directory and should be up-to-date;"                              />
+		<echo message="3) File .sourceforge.properties must exist in home directory and"    />
+		<echo message="   must contain valid sf.user and sf.password properties."           />
+		<echo message="4) The DOCBOOK_XSLT_HOME environment variable must be set and"       />
+		<echo message="   refer to the directory containing the Docbook XSLT files."        />
+	</target>
+</project>

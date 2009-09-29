@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE translation-bundle PUBLIC "-//XINS//DTD XINS Translation Bundle 1.4//EN" "http://www.xins.org/dtd/translation-bundle_1_4.dtd">
+<!-- $Id: translation-bundle-en_US.xml,v 1.62 2007/09/13 14:18:00 agoubard Exp $ -->
+
+<translation-bundle>
+	<!-- XXX: Removed 1000 here (@since XINS 1.3.0) -->
+	<!-- XXX: Removed 1001 here (@since XINS 1.3.0) -->
+	<!-- XXX: Removed 1002 here (@since XINS 1.3.0) -->
+	<!-- XXX: Removed 1003 here (@since XINS 1.3.0) -->
+	<!-- XXX: Removed 1004 here (@since XINS 1.3.0) -->
+	<!-- XXX: Removed 1005 here (@since XINS 1.3.0) -->
+
+	<translation entry="1050">Programming error detected by class <value-of-param name="detectingClass" />, method <value-of-param name="detectingMethod" /> in class <value-of-param name="subjectClass" />, method <value-of-param name="subjectMethod" />. Detail: <value-of-param name="detail" format="quoted" />.</translation>
+	<translation entry="1051">Ignoring caught <value-of-param name="exceptionClass" />. Exception message: <value-of-param name="exceptionMessage" format="quoted" />. Detail: <value-of-param name="detail" format="quoted" />.</translation>
+	<translation entry="1052">Programming error detected by class <value-of-param name="detectingClass" />, method <value-of-param name="detectingMethod" /> in class <value-of-param name="subjectClass" />, method <value-of-param name="subjectMethod" />. Caught unexpected <exception-property name="class" />. Exception message: <exception-property name="message" format="quoted" />. Detail: <value-of-param name="detail" format="quoted" />.</translation>
+	<translation entry="1053"><value-of-param name="message" /></translation>
+	<translation entry="1054"><value-of-param name="message" /></translation>
+	<translation entry="1055"><value-of-param name="message" /></translation>
+	<translation entry="1056"><value-of-param name="message" /></translation>
+	<translation entry="1057"><value-of-param name="message" /></translation>
+	<translation entry="1058"><value-of-param name="message" /></translation>
+
+	<translation entry="1100">Calling <value-of-param name="url" /><value-of-param name="parameters" />.</translation>
+	<translation entry="1101">Finished attempt to call <value-of-param name="url" /><value-of-param name="parameters" /> in <value-of-param name="duration" /> ms.</translation>
+	<translation entry="1102">Error while calling <value-of-param name="url" /><value-of-param name="parameters" /> in <value-of-param name="duration" /> ms: Unknown host.</translation>
+	<translation entry="1103">Error while calling <value-of-param name="url" /><value-of-param name="parameters" /> in <value-of-param name="duration" /> ms: Connection refused.</translation>
+	<translation entry="1104">Error while calling <value-of-param name="url" /><value-of-param name="parameters" /> in <value-of-param name="duration" /> ms: Connection time-out.</translation>
+	<translation entry="1105">Error while calling <value-of-param name="url" /><value-of-param name="parameters" /> in <value-of-param name="duration" /> ms: Socket time-out.</translation>
+	<translation entry="1106">Error while calling <value-of-param name="url" /><value-of-param name="parameters" /> in <value-of-param name="duration" /> ms: Total time-out.</translation>
+	<translation entry="1107">Received acceptable HTTP result with code <value-of-param name="code" /> while calling <value-of-param name="url" /><value-of-param name="parameters" />.</translation>
+	<translation entry="1108">Received unacceptable HTTP result with code <value-of-param name="code" /> while calling <value-of-param name="url" /><value-of-param name="parameters" />.</translation>
+	<translation entry="1109"><exception-property name="class" /> while calling <value-of-param name="url" /><value-of-param name="parameters" />. Exception message: <exception-property name="message" format="quoted" />.</translation>
+	<translation entry="1110">Error while calling <value-of-param name="url" /><value-of-param name="parameters" /> in <value-of-param name="duration" /> ms: No route to host.</translation>
+
+	<translation entry="1200">Starting watch thread #<value-of-param name="id"/> for file <value-of-param name="file" format="quoted" />. Checking for modifications every <value-of-param name="interval" /> second(s).</translation>
+	<translation entry="1201">Watch thread #<value-of-param name="id"/>: Changing watch interval for file <value-of-param name="file" format="quoted" /> from <value-of-param name="oldInterval" /> to <value-of-param name="newInterval" /> second(s).</translation>
+	<translation entry="1202">Watch thread #<value-of-param name="id"/>: Stopping watching of file <value-of-param name="file" format="quoted" />.</translation>
+	<translation entry="1203">Watch thread #<value-of-param name="id"/>: Thread stopped. It was watching file <value-of-param name="file" format="quoted" />.</translation>
+	<translation entry="1204">IO error in the HTTPFileWatcher.</translation>
+
+	<translation entry="1250">Increasing FastStringBuffer capacity from <value-of-param name="currentCapacity" /> to <value-of-param name="newCapacity" />.</translation>
+
+	<translation entry="1300">URL <value-of-param name="url" format="quoted" /> is malformed.</translation>
+	<translation entry="1301">Call to service at URL <value-of-param name="url" /> succeeded.</translation>
+	<translation entry="1302">Call to service at URL <value-of-param name="url" /> failed.</translation>
+	<translation entry="1303">Call completely failed.</translation>
+	<translation entry="1304">No more targets and no fail-over.</translation>
+	<translation entry="1305">No more targets but fail-over would be allowed.</translation>
+	<translation entry="1306">More targets available but fail-over is not allowed.</translation>
+	<translation entry="1307">More targets available and fail-over is allowed.</translation>
+	<translation entry="1308">Protocol in URL <value-of-param name="url" format="quoted" /> is unsupported.</translation>
+	<translation entry="1309">About to call service at URL <value-of-param name="url" />.</translation>
+
+	<translation entry="1350">The value of the property <value-of-param name="key" format="quoted" /> has been overwritten from <value-of-param name="oldValue" format="quoted" /> to <value-of-param name="newValue" format="quoted" />.</translation>
+	<translation entry="1351">The value of the property <value-of-param name="key" format="quoted" /> has been overwritten from <value-of-param name="oldValue" format="quoted" /> to <value-of-param name="newValue" format="quoted" />.</translation>
+
+	<translation entry="1400">Expiry folder #<value-of-param name="folderInstanceNumber" /> (<value-of-param name="folderName" format="quoted" />): Tick processed. Entries expired: <value-of-param name="expired" />.</translation>
+	<translation entry="1401">Associated expiry folder #<value-of-param name="folderInstanceNumber" /> (<value-of-param name="folderName" format="quoted" />) with expiry strategy #<value-of-param name="strategyInstanceNumber" />.</translation>
+	<translation entry="1402">Expiry strategy thread #<value-of-param name="instanceNumber" /> started.</translation>
+	<translation entry="1403">Expiry strategy thread #<value-of-param name="instanceNumber" /> stopped.</translation>
+	<translation entry="1404">Sleeping <value-of-param name="duration" /> ms in expiry strategy thread #<value-of-param name="instanceNumber" />.</translation>
+	<translation entry="1405">Sleep interrupted after <value-of-param name="duration" /> ms in expiry strategy thread #<value-of-param name="instanceNumber" />.</translation>
+	<translation entry="1406">Woke up after sleeping <value-of-param name="duration" /> ms in expiry strategy thread #<value-of-param name="instanceNumber" />.</translation>
+	<translation entry="1407">Triggering tick in expiry strategy thread #<value-of-param name="instanceNumber" />.</translation>
+	<translation entry="1408">Expiry folder #<value-of-param name="instanceNumber" /> (<value-of-param name="name" format="quoted" />) constructed.</translation>
+	<translation entry="1409">Expiry strategy #<value-of-param name="instanceNumber" /> constructed. Time-out is <value-of-param name="timeOut" /> ms. Precision is <value-of-param name="precision" /> ms.</translation>
+	
+	<translation entry="1500">Starting the Servlet container on port <value-of-param name="port" />.</translation>
+	<translation entry="1501">The HTTP Servlet container has thrown an I/O exception.</translation>
+	<translation entry="1502">Error when closing the HTTP Servlet container.</translation>
+	<translation entry="1503">Loading and initializing the Servlet located in the <value-of-param name="warFile" /> file.</translation>
+	<translation entry="1504">Query the Servlet with URL arguments: <value-of-param name="query" format="quoted" />.</translation>
+	<translation entry="1505">Query to the Servlet failed.</translation>
+	<translation entry="1506">Query to the Servlet succeeded with response <value-of-param name="response" format="quoted" /> and the HTTP status <value-of-param name="status" />.</translation>
+	<translation entry="1507">Closing the Servlet container.</translation>
+	<translation entry="1508">Failed to load the Servlet due to a Servlet exception.</translation>
+	<translation entry="1509">Failed to load the Servlet due to a generic exception.</translation>
+	<translation entry="1510"><value-of-param name="message" /></translation>
+	<translation entry="1511"><value-of-param name="message" /></translation>
+	<translation entry="1512">Failed to load or parse the WEB_INF/web.xml file.</translation>
+	<translation entry="1513">Incorrect URL: <value-of-param name="url" format="quoted" />.</translation>
+	<translation entry="1514">No resource found in the WAR file at the location <value-of-param name="location" format="quoted" />. Reason: <value-of-param name="reason" /></translation>
+
+	<translation entry="1550">The system was unable to create a SAX parser.</translation>
+
+	<translation entry="1600">Error (<value-of-param name="exceptionClass" />) when trying to convert <value-of-param name="value" format="quoted" /> of the class <value-of-param name="valueClass" /> to <value-of-param name="destClass" />. Details: <value-of-param name="reason" /></translation>
+</translation-bundle>

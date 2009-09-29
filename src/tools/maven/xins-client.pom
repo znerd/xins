@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.xins</groupId>
+	<artifactId>xins-client</artifactId>
+	<version>2.1</version>
+	<packaging>jar</packaging>
+	<name>XINS client Framework</name>
+	<url>http://www.xins.org</url>
+	<description>The XINS client framework</description>
+	<licenses>
+		<license>
+			<name>The BSD License</name>
+			<url>http://xins.sourceforge.net/COPYRIGHT</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<url>http://xins.cvs.sourceforge.net/xins/</url>
+	</scm>
+	<dependencies>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.15</version>
+		</dependency>
+		<dependency>
+			<groupId>oro</groupId>
+			<artifactId>oro</artifactId>
+			<version>2.0.8</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.xins</groupId>
+			<artifactId>xins-common</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.xins</groupId>
+			<artifactId>logdoc</artifactId>
+			<version>2.1</version>
+		</dependency>
+	</dependencies>
+</project>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE translation-bundle PUBLIC "-//XINS//DTD XINS Translation Bundle 1.4//EN" "http://www.xins.org/dtd/translation-bundle_1_4.dtd">
+<!-- $Id: translation-bundle-fr_FR.xml,v 1.20 2007/03/07 11:06:37 agoubard Exp $ -->
+
+<translation-bundle>
+	<translation entry="2100">Appel à <value-of-param name="url" />?_function=<value-of-param name="function" /><value-of-param name="parameters" />.</translation>
+	<translation entry="2101">Reçu un résultat de XINS réussi en appellant <value-of-param name="url" />?_function=<value-of-param name="function" /><value-of-param name="parameters" />.</translation>
+	<translation entry="2102">Erreur lors de l'appel de <value-of-param name="url" />?_function=<value-of-param name="function" /><value-of-param name="parameters" /> en <value-of-param name="duration" /> ms: Host inconnu.</translation>
+	<translation entry="2103">Erreur lors de l'appel de <value-of-param name="url" />?_function=<value-of-param name="function" /><value-of-param name="parameters" /> en <value-of-param name="duration" /> ms: Connection refusée.</translation>
+	<translation entry="2104">Erreur lors de l'appel de <value-of-param name="url" />?_function=<value-of-param name="function" /><value-of-param name="parameters" /> en <value-of-param name="duration" /> ms: Time-out de la connection.</translation>
+	<translation entry="2105">Erreur lors de l'appel de <value-of-param name="url" />?_function=<value-of-param name="function" /><value-of-param name="parameters" /> en <value-of-param name="duration" /> ms: Time-out de la socket.</translation>
+	<translation entry="2106">Erreur lors de l'appel de <value-of-param name="url" />?_function=<value-of-param name="function" /><value-of-param name="parameters" /> en <value-of-param name="duration" /> ms: Time-out total atteint.</translation>
+	<translation entry="2108">Erreur lors de l'appel de <value-of-param name="url" />?_function=<value-of-param name="function" /><value-of-param name="parameters" /> en <value-of-param name="duration" /> ms: Code status HTTP reçu inacceptable: <value-of-param name="code" />.</translation>
+	<translation entry="2109">Erreur lors de l'appel de <value-of-param name="url" />?_function=<value-of-param name="function" /><value-of-param name="parameters" /> en <value-of-param name="duration" /> ms: Erreur d'E/S non specifique.</translation>
+	<translation entry="2110">Erreur lors de l'appel de <value-of-param name="url" />?_function=<value-of-param name="function" /><value-of-param name="parameters" /> en <value-of-param name="duration" /> ms: Résultat XINS reçu invalide. Détail: <value-of-param name="detail" /></translation>
+	<translation entry="2111">Erreur lors de l'appel de <value-of-param name="url" />?_function=<value-of-param name="function" /><value-of-param name="parameters" /> en <value-of-param name="duration" /> ms: Une exception imprèvue a été attrapée.</translation>
+	<translation entry="2112">Reçu un résultat XINS non réussi (code erreur <value-of-param name="errorCode" format="quoted" />) lors de l'appel de <value-of-param name="url" />?_function=<value-of-param name="function" /><value-of-param name="parameters" />.</translation>
+	<translation entry="2113">La requête de l'appel pour la fonction <value-of-param name="function" /> avec les paramètres <value-of-param name="parameters" /> a échoué complètement après <value-of-param name="duration" /> ms. Raison: <value-of-param name="reason" format="quoted" /></translation>
+	<translation entry="2114">La version de la CAPI compilée pour <value-of-param name="apiName" format="quoted" /> (<value-of-param name="buildVersion" />) est différente du XINS/Java Client Framework utilisé (<value-of-param name="runtimeVersion" />).</translation>
+	<translation entry="2115">Reçu un code erreur fonctionnel <value-of-param name="errorCode" /> après <value-of-param name="duration" /> ms lors de l'appel de <value-of-param name="url" />?_function=<value-of-param name="function" /><value-of-param name="parameters" />.</translation>
+	<translation entry="2116">Impossible de trouver les spécifications pour l'API <value-of-param name="apiName" format="quoted" />, essai avec le ClassLoader.</translation>
+	<translation entry="2117">Erreur lors de l'appel de l'API en utilisant the protocol file.</translation>
+
+	<translation entry="2200">L'XML retourné est invalide. Le type de l'élément racine est <value-of-param name="localName" format="quoted" /> avec le namespace <value-of-param name="namespaceURI" format="quoted" /> au lieu de "result" sans namespace.</translation>
+	<translation entry="2201">Trouvé un paramètre de sortie sans nom ni valeur.</translation>
+	<translation entry="2202">Trouvé un paramètre de sortie sans nom. La valeur est <value-of-param name="value" format="quoted" />.</translation>
+	<translation entry="2203">Trouvé un paramètre de sortie sans valeur. Le nom est <value-of-param name="name" format="quoted" />.</translation>
+	<translation entry="2204">Trouvé un paramètre de sortie <value-of-param name="name" format="quoted" /> avec la valeur <value-of-param name="value" format="quoted" />.</translation>
+	<translation entry="2205">Impossible de convertir le caractère spécifié en XML: <value-of-param name="detail" /></translation>
+	<translation entry="2206">Ignore l'élément non reconnu de type <value-of-param name="localName" format="quoted" /> avec le namespace <value-of-param name="namespaceURI" format="quoted" /> à la racine.</translation>
+</translation-bundle>

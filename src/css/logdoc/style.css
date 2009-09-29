@@ -1,0 +1,101 @@
+/*
+ CSS Stylesheet for an HTML document describing a XINS API.
+
+ Version: $Revision: 1.8 $ $Date: 2006/11/23 13:27:20 $
+ Authors: Ernst de Haan <ernst@ernstdehaan.com>
+          Chris Gilbride <chris.gilbride@orange-ftgroup.com>
+
+ $Id: style.css,v 1.8 2006/11/23 13:27:20 znerd Exp $
+*/
+
+@media screen {
+	body {
+		font-family: Trebuchet Ms, Verdana, Lucida, sans-serif;
+		color: #000000;
+		background-color: #ffffff;
+	}
+}
+
+@media print {
+	body {
+		font-family: serif;
+	}
+}
+
+h1 {
+	color: #000000;
+	font-size: 150%;
+	text-align: left;
+}
+
+h2 {
+	color: #000000;
+	font-size: 120%;
+	text-align: left;
+	border-width: 1pt 0pt 0pt 0pt;
+	border-style: solid;
+	border-color: #8888dd;
+}
+
+h3 {
+	font-size: 110%
+}
+
+table.headerlinks {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+table.headerlinks tr td {
+	padding: 2pt;
+	margin: 0pt;
+	font-variant: small-caps;
+	background-color: #ddddff;
+	border-width: 0pt 0pt 1pt 0pt;
+	border-style: solid;
+	border-color: #8888dd;
+}
+
+table.headerlinks tr td.prevnext {
+	text-align: right;
+}
+
+.disabled {
+	color: #888888;
+}
+
+.active {
+	color: #888888;
+	font-weight: bold;
+}
+
+table {
+	border: none;
+	background-color: #ddddff;
+	border-collapse: collapse;
+	table-layout: fixed;
+	table-layout: auto;
+}
+
+table tr th {
+	color: #ffffff;
+	background-color: #8888dd;
+	vertical-align: top;
+	border: solid 1px #8888dd;
+	padding: 2pt;
+	font-weight: bold;
+}
+
+table tr td {
+	vertical-align: top;
+	border: solid 1px #8888dd;
+	padding: 2pt;
+}
+
+.value-of-param {
+	color: #ddddff;
+	background-color: #8888dd;
+	font-style: italic;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}

@@ -1,0 +1,42 @@
+<!--
+ Result Code DTD. This DTD should be added to all .rcd files in your
+ project by adding the following lines at the top of your .rcd file :
+<!DOCTYPE resultcode PUBLIC "-//XINS//DTD Result Code 1.1//EN" "http://www.xins.org/dtd/resultcode_1_1.dtd">
+-->
+<!ELEMENT resultcode (description, output?)>
+<!ATTLIST resultcode
+          name       NMTOKEN #REQUIRED
+          rcsversion CDATA #IMPLIED
+          rcsdate    CDATA #IMPLIED
+>
+<!ELEMENT description (#PCDATA|em)*>
+<!ELEMENT em (#PCDATA)>
+<!ELEMENT output (param*, data?)>
+<!ELEMENT param (description, deprecated?)>
+<!ATTLIST param
+          name       NMTOKEN #REQUIRED
+          required   (true|false) #REQUIRED
+          type       NMTOKEN #IMPLIED
+>
+<!ELEMENT deprecated (#PCDATA|em)*>
+<!ELEMENT data (element+)>
+<!ATTLIST data
+          contains   CDATA #REQUIRED
+          multiplicity CDATA #IMPLIED
+>
+<!ELEMENT element (description, deprecated?, contains?, attribute*)>
+<!ATTLIST element
+          name       NMTOKEN #REQUIRED
+>
+<!ELEMENT contains (contained*)>
+<!ELEMENT contained EMPTY>
+<!ATTLIST contained
+          element    NMTOKEN #REQUIRED
+          multiplicity CDATA #IMPLIED
+>
+<!ELEMENT attribute (description, deprecated?)>
+<!ATTLIST attribute
+          name       NMTOKEN #REQUIRED
+          required   (true | false) #IMPLIED
+          type       NMTOKEN #IMPLIED
+>

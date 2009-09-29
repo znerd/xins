@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE resultcode PUBLIC "-//XINS//DTD Result Code 1.4//EN" "http://www.xins.org/dtd/resultcode_1_4.dtd">
+
+<resultcode name="MissingInput"
+rcsversion="$Revision: 1.1 $" rcsdate="$Date: 2006/01/25 15:57:22 $">
+
+	<description>Indicates that some input parameters are missing.</description>
+	<output>
+		<data>
+			<contains>
+				<contained element="inputParameter" />
+			</contains>
+			<element name="inputParameter">
+				<description>The missing input parameter</description>
+				<attribute name="name" required="true" type="_text">
+					<description>The missing parameter name.</description>
+				</attribute>
+				<attribute name="details" required="false" type="_text">
+					<description>The details about why is this parameter missing.</description>
+				</attribute>
+			</element>
+		</data>
+	</output>
+
+</resultcode>

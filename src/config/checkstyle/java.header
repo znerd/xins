@@ -1,0 +1,8 @@
+^/\*$
+^ \* \$[I]d: [A-Z][A-Za-z0-9]*\.java,v [0-9]+(\.[0-9]+)+ 200[3-7]/[01][0-9]/[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9] [a-z][a-z0-9]* Exp \$$
+^ \*$
+^ \* Copyright 2003-2007 Orange Nederland Breedband B.V.$
+^ \* See the COPYRIGHT file for redistribution and use restrictions.$
+^ \*/$
+^package org.xins(\.[a-z]+)+;$
+^$

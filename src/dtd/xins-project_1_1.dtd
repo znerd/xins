@@ -1,0 +1,33 @@
+<!--
+ XINS project DTD. This DTD should be added to all xins-project.xml file
+ by adding the following lines at the top of the file :
+<!DOCTYPE project PUBLIC "-//XINS//DTD XINS Project 1.1//EN" "http://www.xins.org/dtd/xins-project_1_1.dtd">
+-->
+<!ELEMENT project (specdocs?, cvsweb?, patterntest?, api*)>
+<!ATTLIST project
+          name       NMTOKEN #REQUIRED
+          rcsversion CDATA #IMPLIED
+          rcsdate    CDATA #IMPLIED
+          dependenciesdir CDATA #IMPLIED
+          domain     NMTOKEN #REQUIRED
+>
+<!ELEMENT description (#PCDATA|em)*>
+<!ELEMENT em (#PCDATA)>
+<!ELEMENT specdocs EMPTY>
+<!ATTLIST specdocs
+          href       CDATA #REQUIRED
+>
+<!ELEMENT cvsweb EMPTY>
+<!ATTLIST cvsweb
+          href       CDATA #REQUIRED
+>
+<!ELEMENT patterntest EMPTY>
+<!ATTLIST patterntest
+          href       CDATA #REQUIRED
+>
+<!ELEMENT api (impl?, environments?)>
+<!ATTLIST api
+          name       NMTOKEN #REQUIRED
+>
+<!ELEMENT impl EMPTY>
+<!ELEMENT environments EMPTY>

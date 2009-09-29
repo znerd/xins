@@ -1,0 +1,36 @@
+<!--
+ XINS Implementation DTD. This DTD should be added to the impl.xml file of the
+ project by adding the following line at the top of the file :
+<!DOCTYPE impl PUBLIC "-//XINS//DTD Implementation 1.2//EN" "http://www.xins.org/dtd/impl_1_2.dtd">
+-->
+<!ELEMENT impl (logdoc?, runtime-properties?, dependency*, calling-convention?, instance*)>
+<!ELEMENT logdoc EMPTY>
+<!ATTLIST logdoc
+          accesslevel (package|public) #IMPLIED
+>
+<!ELEMENT runtime-properties (property*)>
+<!ELEMENT property (description)>
+<!ATTLIST property
+          name       NMTOKEN #REQUIRED
+          required   (true|false) #REQUIRED
+          type       NMTOKEN #IMPLIED
+>
+<!ELEMENT description (#PCDATA|em)*>
+<!ELEMENT em (#PCDATA)>
+<!ELEMENT dependency EMPTY>
+<!ATTLIST dependency
+          dir        CDATA #REQUIRED
+          includes   CDATA #IMPLIED
+>
+<!ELEMENT calling-convention EMPTY>
+<!ATTLIST calling-convention
+          name       CDATA #REQUIRED
+          class      CDATA #IMPLIED
+>
+<!ELEMENT instance EMPTY>
+<!ATTLIST instance
+          name       CDATA #REQUIRED
+          getter     CDATA #REQUIRED
+          class      CDATA #REQUIRED
+>
+

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE impl PUBLIC "-//XINS//DTD Implementation 1.4//EN" "http://xins.sourceforge.net/dtd/impl_1_4.dtd">
+
+<impl>
+	<logdoc accesslevel="public" />
+	<bootstrap-properties>
+		<bootstrap-property name="username">superuser</bootstrap-property>
+	</bootstrap-properties>
+	<runtime-properties>
+		<property name="allinone.rate" type="_float32" required="true">
+			<description>The tax rate of the country.</description>
+		</property>
+		<property name="currency" required="false">
+			<description>A currency of the country.</description>
+		</property>
+		<property name="capis.checkLinks1" type="_descriptor" required="false">
+			<description>A property with three links to test. One link should generate a ConnectionTimeOut error and the other should succeed</description>
+		</property>
+		<property name="capis.checkLinks2" type="_descriptor" required="false">
+			<description>A property with a link to test which should generate a ConnectionRefusal error.</description>
+		</property>
+		<property name="capis.checkLinks3" type="_descriptor" required="false">
+			<description>A property with a link to test which should generate an UnknownHost error.</description>
+		</property>
+		<property name="capis.checkLinks4" type="_descriptor" required="false">
+			<description>A property with a link to test which should generate a SocketTimeOut error.</description>
+		</property>
+		<property name="capis.checkLinks5" type="_descriptor" required="false">
+			<description>A property with a link to test with should succeed.</description>
+		</property>
+	</runtime-properties>
+	<calling-convention name="_xins-soap" default="true"/>
+	<calling-convention name="xins-tests" class="org.xins.tests.server.CustomTestConvention" />
+	<instance name="_sharedInstance" getter="getSharedInstance" class="SharedInstance" />
+</impl>

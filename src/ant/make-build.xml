@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="US-ASCII" ?>
+<!--
+ $Id: make-build.xml,v 1.34 2007/12/17 15:16:07 agoubard Exp $
+
+ Transforms a single XML file using XSLT to bootstrap the build process for a
+ XINS project.
+-->
+
+<project name="xins-bootstrap-ant" default="make-build" basedir=".">
+
+	<target name="make-build">
+		<property name="project_home" location="${user.dir}" />
+
+		<available file="${xins_home}/src/xslt/xins-project_to_ant-build.xslt"
+		           property="ant.build.xslt.exists" />
+		<fail message="Cannot find XINS at ${xins_home}, check your XINS_HOME environment variable." unless="ant.build.xslt.exists" />
+
+		<available file="${project_home}/xins-project.xml"
+		           property="xins-project.xml.exists" />
+		<fail message="Cannot find input file xins-project.xml in the ${project_home} directory, change your current directory to the one containing the xins-project.xml file." unless="xins-project.xml.exists" />
+
+		<mkdir dir="${project_home}/build" />
+
+		<property file="${xins_home}/.version.properties" />
+		<condition property="dot.version.minor" value="${version.minor}">
+			<or>
+				<equals arg1="${version.minor}" arg2="-alpha" />
+				<equals arg1="${version.minor}" arg2="-beta" />
+				<equals arg1="${version.minor}" arg2="-rc" />
+				<equals arg1="${version.minor}" arg2="" />
+			</or>
+		</condition>
+		<property name="dot.version.minor" value=".${version.minor}" />
+		<property name="version" value="${version.major}.${version.middle}${dot.version.minor}${version.build}${version.suffix}" />
+
+		<available file="${project_home}/build/build.xml" property="build.available" />
+		<antcall target="check-version">
+			<param name="project_home" value="${project_home}" />
+			<param name="version" value="${version}" />
+		</antcall>
+
+		<dependset>
+			<srcfileset    file="${xins_home}/.version.properties"                 />
+			<srcfileset    dir="${project_home}"    includes="apis/*/spec/api.xml" />
+			<srcfileset    dir="${project_home}"    includes="apis/*/impl/impl.xml" />
+			<srcfileset    dir="${project_home}"    includes="apis/*/impl-*/impl.xml" />
+			<targetfileset file="${project_home}/build/build.xml" />
+		</dependset>
+		<xslt in="${project_home}/xins-project.xml"
+		     out="${project_home}/build/build.xml"
+		   style="${xins_home}/src/xslt/xins-project_to_ant-build.xslt">
+			<xmlcatalog>
+				<classpath>
+					<pathelement path="${xins_home}/src/dtd"/>
+				</classpath>
+				<dtd publicId="-//XINS//DTD XINS Project 1.0//EN"            location="xins-project_1_0.dtd" />
+				<dtd publicId="-//XINS//DTD XINS API 1.0//EN"                location="api_1_0.dtd" />
+				<dtd publicId="-//XINS//DTD Function 1.0//EN"                location="function_1_0.dtd" />
+				<dtd publicId="-//XINS//DTD Type 1.0//EN"                    location="type_1_0.dtd" />
+				<dtd publicId="-//XINS//DTD Result Code 1.0//EN"             location="resultcode_1_0.dtd" />
+				<dtd publicId="-//XINS//DTD Implementation 1.0//EN"          location="impl_1_0.dtd" />
+				<dtd publicId="-//XINS//DTD Environments 1.0//EN"            location="environments_1_0.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Logdoc 1.0//EN"             location="log_1_0.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.0//EN" location="translation-bundle_1_0.dtd" />
+
+				<dtd publicId="-//XINS//DTD XINS Project 1.1//EN"            location="xins-project_1_1.dtd" />
+				<dtd publicId="-//XINS//DTD XINS API 1.1//EN"                location="api_1_1.dtd" />
+				<dtd publicId="-//XINS//DTD Function 1.1//EN"                location="function_1_1.dtd" />
+				<dtd publicId="-//XINS//DTD Type 1.1//EN"                    location="type_1_1.dtd" />
+				<dtd publicId="-//XINS//DTD Result Code 1.1//EN"             location="resultcode_1_1.dtd" />
+				<dtd publicId="-//XINS//DTD Implementation 1.1//EN"          location="impl_1_1.dtd" />
+				<dtd publicId="-//XINS//DTD Environments 1.1//EN"            location="environments_1_1.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Logdoc 1.1//EN"             location="log_1_1.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.1//EN" location="translation-bundle_1_1.dtd" />
+
+				<dtd publicId="-//XINS//DTD XINS Project 1.2//EN"            location="xins-project_1_2.dtd" />
+				<dtd publicId="-//XINS//DTD XINS API 1.2//EN"                location="api_1_2.dtd" />
+				<dtd publicId="-//XINS//DTD Function 1.2//EN"                location="function_1_2.dtd" />
+				<dtd publicId="-//XINS//DTD Type 1.2//EN"                    location="type_1_2.dtd" />
+				<dtd publicId="-//XINS//DTD Result Code 1.2//EN"             location="resultcode_1_2.dtd" />
+				<dtd publicId="-//XINS//DTD Implementation 1.2//EN"          location="impl_1_2.dtd" />
+				<dtd publicId="-//XINS//DTD Environments 1.2//EN"            location="environments_1_2.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Logdoc 1.2//EN"             location="log_1_2.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.2//EN" location="translation-bundle_1_2.dtd" />
+
+				<dtd publicId="-//XINS//DTD XINS Project 1.3//EN"            location="xins-project_1_3.dtd" />
+				<dtd publicId="-//XINS//DTD XINS API 1.3//EN"                location="api_1_3.dtd" />
+				<dtd publicId="-//XINS//DTD Function 1.3//EN"                location="function_1_3.dtd" />
+				<dtd publicId="-//XINS//DTD Category 1.3//EN"                location="category_1_3.dtd" />
+				<dtd publicId="-//XINS//DTD Type 1.3//EN"                    location="type_1_3.dtd" />
+				<dtd publicId="-//XINS//DTD Result Code 1.3//EN"             location="resultcode_1_3.dtd" />
+				<dtd publicId="-//XINS//DTD Implementation 1.3//EN"          location="impl_1_3.dtd" />
+				<dtd publicId="-//XINS//DTD Environments 1.3//EN"            location="environments_1_3.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Logdoc 1.3//EN"             location="log_1_3.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.3//EN" location="translation-bundle_1_3.dtd" />
+
+				<dtd publicId="-//XINS//DTD XINS Project 1.4//EN"            location="xins-project_1_4.dtd" />
+				<dtd publicId="-//XINS//DTD XINS API 1.4//EN"                location="api_1_4.dtd" />
+				<dtd publicId="-//XINS//DTD Function 1.4//EN"                location="function_1_4.dtd" />
+				<dtd publicId="-//XINS//DTD Category 1.4//EN"                location="category_1_4.dtd" />
+				<dtd publicId="-//XINS//DTD Type 1.4//EN"                    location="type_1_4.dtd" />
+				<dtd publicId="-//XINS//DTD Result Code 1.4//EN"             location="resultcode_1_4.dtd" />
+				<dtd publicId="-//XINS//DTD Implementation 1.4//EN"          location="impl_1_4.dtd" />
+				<dtd publicId="-//XINS//DTD Environments 1.4//EN"            location="environments_1_4.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Logdoc 1.4//EN"             location="log_1_4.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.4//EN" location="translation-bundle_1_4.dtd" />
+
+				<dtd publicId="-//XINS//DTD XINS Project 1.5//EN"            location="xins-project_1_5.dtd" />
+				<dtd publicId="-//XINS//DTD XINS API 1.5//EN"                location="api_1_5.dtd" />
+				<dtd publicId="-//XINS//DTD Function 1.5//EN"                location="function_1_5.dtd" />
+				<dtd publicId="-//XINS//DTD Category 1.5//EN"                location="category_1_5.dtd" />
+				<dtd publicId="-//XINS//DTD Type 1.5//EN"                    location="type_1_5.dtd" />
+				<dtd publicId="-//XINS//DTD Result Code 1.5//EN"             location="resultcode_1_5.dtd" />
+				<dtd publicId="-//XINS//DTD Implementation 1.5//EN"          location="impl_1_5.dtd" />
+				<dtd publicId="-//XINS//DTD Environments 1.5//EN"            location="environments_1_5.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Logdoc 1.5//EN"             location="log_1_5.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.5//EN" location="translation-bundle_1_5.dtd" />
+
+				<dtd publicId="-//XINS//DTD XINS Project 2.0//EN"            location="xins-project_2_0.dtd" />
+				<dtd publicId="-//XINS//DTD XINS API 2.0//EN"                location="api_2_0.dtd" />
+				<dtd publicId="-//XINS//DTD Function 2.0//EN"                location="function_2_0.dtd" />
+				<dtd publicId="-//XINS//DTD Category 2.0//EN"                location="category_2_0.dtd" />
+				<dtd publicId="-//XINS//DTD Type 2.0//EN"                    location="type_2_0.dtd" />
+				<dtd publicId="-//XINS//DTD Result Code 2.0//EN"             location="resultcode_2_0.dtd" />
+				<dtd publicId="-//XINS//DTD Implementation 2.0//EN"          location="impl_2_0.dtd" />
+				<dtd publicId="-//XINS//DTD Environments 2.0//EN"            location="environments_2_0.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Logdoc 2.0//EN"             location="log_2_0.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Translation Bundle 2.0//EN" location="translation-bundle_2_0.dtd" />
+
+				<dtd publicId="-//XINS//DTD XINS Project 2.1//EN"            location="xins-project_2_1.dtd" />
+				<dtd publicId="-//XINS//DTD XINS API 2.1//EN"                location="api_2_1.dtd" />
+				<dtd publicId="-//XINS//DTD Function 2.1//EN"                location="function_2_1.dtd" />
+				<dtd publicId="-//XINS//DTD Category 2.1//EN"                location="category_2_1.dtd" />
+				<dtd publicId="-//XINS//DTD Type 2.1//EN"                    location="type_2_1.dtd" />
+				<dtd publicId="-//XINS//DTD Result Code 2.1//EN"             location="resultcode_2_1.dtd" />
+				<dtd publicId="-//XINS//DTD Implementation 2.1//EN"          location="impl_2_1.dtd" />
+				<dtd publicId="-//XINS//DTD Environments 2.1//EN"            location="environments_2_1.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Logdoc 2.1//EN"             location="log_2_1.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Translation Bundle 2.1//EN" location="translation-bundle_2_1.dtd" />
+
+				<dtd publicId="-//XINS//DTD XINS Project 2.2//EN"            location="xins-project_2_2.dtd" />
+				<dtd publicId="-//XINS//DTD XINS API 2.2//EN"                location="api_2_2.dtd" />
+				<dtd publicId="-//XINS//DTD Function 2.2//EN"                location="function_2_2.dtd" />
+				<dtd publicId="-//XINS//DTD Category 2.2//EN"                location="category_2_2.dtd" />
+				<dtd publicId="-//XINS//DTD Type 2.2//EN"                    location="type_2_2.dtd" />
+				<dtd publicId="-//XINS//DTD Result Code 2.2//EN"             location="resultcode_2_2.dtd" />
+				<dtd publicId="-//XINS//DTD Implementation 2.2//EN"          location="impl_2_2.dtd" />
+				<dtd publicId="-//XINS//DTD Environments 2.2//EN"            location="environments_2_2.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Logdoc 2.2//EN"             location="log_2_2.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Translation Bundle 2.2//EN" location="translation-bundle_2_2.dtd" />
+
+				<dtd publicId="-//XINS//DTD XINS Project 3.0//EN"            location="xins-project_3_0.dtd" />
+				<dtd publicId="-//XINS//DTD XINS API 3.0//EN"                location="api_3_0.dtd" />
+				<dtd publicId="-//XINS//DTD Function 3.0//EN"                location="function_3_0.dtd" />
+				<dtd publicId="-//XINS//DTD Category 3.0//EN"                location="category_3_0.dtd" />
+				<dtd publicId="-//XINS//DTD Type 3.0//EN"                    location="type_3_0.dtd" />
+				<dtd publicId="-//XINS//DTD Result Code 3.0//EN"             location="resultcode_3_0.dtd" />
+				<dtd publicId="-//XINS//DTD Implementation 3.0//EN"          location="impl_3_0.dtd" />
+				<dtd publicId="-//XINS//DTD Environments 3.0//EN"            location="environments_3_0.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Logdoc 3.0//EN"             location="log_3_0.dtd" />
+				<dtd publicId="-//XINS//DTD XINS Translation Bundle 3.0//EN" location="translation-bundle_3_0.dtd" />
+			</xmlcatalog>
+			<param name="xins_home"    expression="${xins_home}"          />
+			<param name="project_home" expression="${project_home}"       />
+			<param name="builddir"     expression="${project_home}/build" />
+			<param name="xins_version" expression="${version}"            />
+		</xslt>
+	</target>
+
+	<!-- Clean the build directory if the XINS version has changed -->
+	<target name="check-version" if="build.available">
+		<ant antfile="${project_home}/build/build.xml" target="check-version">
+			<property name="xins.current.version" value="${version}" />
+		</ant>
+	</target>
+</project>

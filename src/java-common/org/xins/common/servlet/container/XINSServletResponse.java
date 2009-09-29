@@ -1,0 +1,467 @@
+/*
+ * $Id: XINSServletResponse.java,v 1.22 2007/09/18 08:45:08 agoubard Exp $
+ *
+ * Copyright 2003-2007 Orange Nederland Breedband B.V.
+ * See the COPYRIGHT file for redistribution and use restrictions.
+ */
+package org.xins.common.servlet.container;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Locale;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import org.xins.common.MandatoryArgumentChecker;
+import org.xins.common.collections.BasicPropertyReader;
+import org.xins.common.collections.PropertyReader;
+
+/**
+ * This class is an implementation of the HttpServletResponse that can be
+ * invoked locally.
+ *
+ * @version $Revision: 1.22 $ $Date: 2007/09/18 08:45:08 $
+ * @author <a href="mailto:anthony.goubard@japplis.com">Anthony Goubard</a>
+ */
+public class XINSServletResponse implements HttpServletResponse {
+
+   /**
+    * The content type of the result. Initially <code>null</code>.
+    */
+   private String _contentType;
+
+   /**
+    * The non-negative content length, or a negative number if unset.
+    * Initially a negative number.
+    */
+   private int _contentLength = -99;
+
+   /**
+    * The status of the result.
+    */
+   private int _status;
+
+   /**
+    * The encoding of the result. Must default to ISO-8859-1, according to the
+    * Java Servlet 2.4 Specification.
+    */
+   private String _encoding = "ISO-8859-1";
+
+   /**
+    * The writer (character output stream) where to write the result.
+    */
+   private StringWriter _writer;
+
+   /**
+    * The (binary) output stream where to write the result.
+    */
+   private OutputStream _outputStream;
+
+   /**
+    * The byte array where the output stream writes the binary data to.
+    */
+   private byte[] _binaryData;
+
+   /**
+    * The headers.
+    */
+   private BasicPropertyReader _headers = new BasicPropertyReader();
+
+   /**
+    * Creates a new instance of <code>XINSServletResponse</code>.
+    */
+   public XINSServletResponse() {
+   }
+
+   public void addDateHeader(String str, long param) {
+      throw new UnsupportedOperationException();
+   }
+
+   public void setDateHeader(String str, long param) {
+      throw new UnsupportedOperationException();
+   }
+
+   @Deprecated
+   public String encodeUrl(String url) {
+      return url;
+   }
+
+   public String encodeURL(String url) {
+      return url;
+   }
+
+   @Deprecated
+   public String encodeRedirectUrl(String str) {
+      throw new UnsupportedOperationException();
+   }
+
+   public String encodeRedirectURL(String str) {
+      throw new UnsupportedOperationException();
+   }
+
+   public boolean containsHeader(String str) {
+      return _headers.get(str) != null;
+   }
+
+   public void sendRedirect(String location) {
+      setStatus(302);
+      setHeader("Location", location);
+   }
+
+   /**
+    * Sets the content type.
+    *
+    * @param type
+    *    the content type, cannot be <code>null</code>.
+    *
+    * @throws IllegalArgumentException
+    *    if <code>type == null</code>.
+    */
+   public void setContentType(String type)
+   throws IllegalArgumentException {
+
+      MandatoryArgumentChecker.check("type", type);
+
+      setHeader("Content-Type", type);
+
+      String search = "charset=";
+      int i = type.indexOf(search);
+      if (i >= 0) {
+         _encoding = type.substring(i + search.length());
+      }
+
+      _contentType = type;
+   }
+
+   public void setStatus(int sc) {
+      _status = sc;
+   }
+
+   public void sendError(int sc) {
+      sendError(sc, null);
+   }
+
+   public void setBufferSize(int param) {
+      throw new UnsupportedOperationException();
+   }
+
+   /**
+    * Returns the content length.
+    *
+    * @return
+    *    the (non-negative) content length if set, or a negative value if
+    *    unset.
+    */
+   int getContentLength() {
+      return _contentLength;
+   }
+
+   public void setContentLength(int param) {
+      _contentLength = param;
+      setIntHeader("Content-Length", param);
+   }
+
+   public void addCookie(Cookie cookie) {
+      String cookieHeader = cookie.getName() + "=" + cookie.getValue();
+      if (cookie.getPath() != null) {
+         cookieHeader += "; path=" + cookie.getPath();
+      }
+      if (cookie.getDomain() != null) {
+         cookieHeader += "; domain=" + cookie.getDomain();
+      }
+      setHeader("Set-Cookie", cookieHeader);
+   }
+
+   public void setLocale(Locale locale) {
+      throw new UnsupportedOperationException();
+   }
+
+   @Deprecated
+   public void setStatus(int param, String str) {
+      throw new UnsupportedOperationException();
+   }
+
+   public void setIntHeader(String str, int param) {
+      setHeader(str, "" + param);
+   }
+
+   public void addIntHeader(String str, int param) {
+      setHeader(str, "" + param);
+   }
+
+   public void sendError(int sc, String msg) {
+      _status = sc;
+   }
+
+   public void setHeader(String str, String str1) {
+      _headers.set(str, str1);
+   }
+
+   public Locale getLocale() {
+      throw new UnsupportedOperationException();
+   }
+
+   public String getCharacterEncoding() {
+      return _encoding;
+   }
+
+   public int getBufferSize() {
+      throw new UnsupportedOperationException();
+   }
+
+   public void flushBuffer() {
+      throw new UnsupportedOperationException();
+   }
+
+   public void addHeader(String str, String str1) {
+      _headers.set(str, str1);
+   }
+
+   public ServletOutputStream getOutputStream() {
+      if (_writer != null) {
+         throw new IllegalStateException("getWriter() was already called.");
+      }
+      _outputStream = new OutputStream();
+      return _outputStream;
+   }
+
+   public PrintWriter getWriter() throws IllegalStateException {
+      if (_outputStream != null) {
+         throw new IllegalStateException("getOutputStream() was already called.");
+      }
+      _writer = new StringWriter();
+      return new PrintWriter(_writer);
+   }
+
+   public boolean isCommitted() {
+      throw new UnsupportedOperationException();
+   }
+
+   public void reset() {
+      throw new UnsupportedOperationException();
+   }
+
+   public void resetBuffer() {
+      throw new UnsupportedOperationException();
+   }
+
+   /**
+    * Gets the returned message from the servlet.
+    *
+    * @return
+    *    the returned message,
+    *    or <code>null</code> if either no message is returned or if
+    *    {@link #getOutputStream()} was used to produce (possibly binary) 
+    *    output.
+    */
+   public String getResult() {
+      if (_writer == null) {
+         return null;
+      }
+      return _writer.toString();
+   }
+
+   /**
+    * Checks whether there is binary output available.
+    *
+    * @return
+    *    <code>true</code> iff {@link #getOutputStream()} was called.
+    *
+    * @since XINS 2.1
+    */
+   public boolean isBinary() {
+      return _outputStream != null;
+   }
+
+   /**
+    * Returns the binary content. Should only be called if
+    * {@link #isBinary()} returns <code>true</code>.
+    *
+    * @return
+    *    the binary data.
+    *
+    * @since XINS 2.1
+    */
+   public byte[] getBytes() {
+      return _binaryData;
+   }
+
+   /**
+    * Gets the status of the returned message.
+    *
+    * @return
+    *    the HTTP status returned.
+    */
+   public int getStatus() {
+      return _status;
+   }
+
+   /**
+    * Gets the type of the returned content.
+    *
+    * @return
+    *    the content type, can be <code>null</code>.
+    *
+    * @see #setContentType(String)
+    */
+   public String getContentType() {
+      return _contentType;
+   }
+
+   /**
+    * Gets the headers to return to the client.
+    *
+    * @return
+    *    the headers, cannot be <code>null</code>.
+    *
+    * @since XINS 1.3.0
+    */
+   public PropertyReader getHeaders() {
+      return _headers;
+   }
+
+
+   //-------------------------------------------------------------------------
+   // Inner classes
+   //-------------------------------------------------------------------------
+
+   /**
+    * Implementation of a <code>ServletOutputStream</code>.
+    *
+    * @version $Revision: 1.18 $ $Date: 2007/01/04 10:17:34 $
+    * @author <a href="mailto:ernst@ernstdehaan.com">Ernst de Haan</a>
+    */
+   private final class OutputStream extends ServletOutputStream {
+
+      //----------------------------------------------------------------------
+      // Constructors
+      //----------------------------------------------------------------------
+
+      OutputStream() {
+         // empty
+      }
+
+
+      //----------------------------------------------------------------------
+      // Methods
+      //----------------------------------------------------------------------
+
+      public void write(int b) {
+         if (_binaryData == null) {
+            _binaryData = new byte[1];
+            _binaryData[0] = (byte) b;
+         } else {
+            byte[] tmp = new byte[_binaryData.length + 1];
+            System.arraycopy(_binaryData, 0, tmp, 0, _binaryData.length);
+            tmp[_binaryData.length] = (byte) b;
+            _binaryData = tmp;
+         }
+      }
+
+      public void write(byte[] b) {
+         write(b, 0, b.length);
+      }
+
+      public void write(byte[] b, int off, int len) {
+         if (_binaryData == null) {
+            _binaryData = new byte[len];
+            System.arraycopy(b, off, _binaryData, 0, len);
+         } else {
+            byte[] tmp = new byte[_binaryData.length + len];
+            System.arraycopy(_binaryData, 0,   tmp, 0,                  _binaryData.length);
+            System.arraycopy(b,           off, tmp, _binaryData.length, len);
+            _binaryData = tmp;
+         }
+      }
+
+      public void flush() {
+         // empty
+      }
+         
+      public void close() {
+         // empty
+      }
+
+      public void print(boolean b) {
+         print(b ? "true" : "false");
+      }
+
+      public void print(char c) {
+         print("" + c);
+      }
+
+      public void print(double d) {
+         print("" + d);
+      }
+
+      public void print(float f) {
+         print("" + f);
+      }
+
+      public void print(int i) {
+         print("" + i);
+      }
+
+      public void print(long l) {
+         print("" + l);
+      }
+
+      public void print(String s) {
+         byte[] bytes;
+         try {
+            bytes = s.getBytes("ISO-8859-1");
+         } catch (java.io.UnsupportedEncodingException exception) {
+            throw new RuntimeException(); // TODO
+         }
+
+         if (_binaryData == null) {
+            _binaryData = bytes;
+         } else {
+            byte[] tmp = new byte[_binaryData.length + bytes.length];
+            System.arraycopy(_binaryData, 0, tmp, 0, _binaryData.length);
+            System.arraycopy(bytes,       0, tmp, _binaryData.length, bytes.length);
+            // TODO: Make sure it should not be _binaryData.length + 1
+            _binaryData = tmp;
+         }
+      }
+
+      public void println() {
+         print("\r\n");
+      }
+
+      public void println(boolean b) {
+         print(b);
+         println();
+      }
+
+      public void println(char c) {
+         print(c);
+         println();
+      }
+
+      public void println(double d) {
+         print(d);
+         println();
+      }
+
+      public void println(float f) {
+         print(f);
+         println();
+      }
+
+      public void println(int i) {
+         print(i);
+         println();
+      }
+
+      public void println(long l) {
+         print(l);
+         println();
+      }
+
+      public void println(String s) {
+         print(s);
+         println();
+      }
+   }
+}

@@ -1,0 +1,32 @@
+<!--
+ XINS logdoc DTD. This DTD should be added to all log.xml file
+ by adding the following lines at the top of the file :
+<!DOCTYPE log PUBLIC "-//XINS//DTD XINS Logdoc 2.0//EN" "http://www.xins.org/dtd/log_2_0.dtd">
+-->
+<!ELEMENT log (translation-bundle*, group*)>
+<!ATTLIST log
+          since CDATA #IMPLIED
+>
+<!ELEMENT translation-bundle EMPTY>
+<!ATTLIST translation-bundle
+          locale               CDATA #REQUIRED
+>
+<!ELEMENT group (entry*)>
+<!ATTLIST group
+          id               NMTOKEN #REQUIRED
+          name             CDATA #IMPLIED
+>
+<!ELEMENT entry (description, param*)>
+<!ATTLIST entry
+          id               NMTOKEN #REQUIRED
+          level            NMTOKEN #IMPLIED
+          exception        (true | false) #IMPLIED
+>
+<!ELEMENT description (#PCDATA|em)*>
+<!ELEMENT em (#PCDATA)>
+<!ELEMENT param EMPTY>
+<!ATTLIST param
+          name            NMTOKEN #REQUIRED
+          type            (text | boolean | int8 | int16 | int32 | int64 | float32 | float64 | object | serializable) #IMPLIED
+          nullable        (true | false) #IMPLIED
+>

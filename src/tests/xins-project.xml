@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE project PUBLIC "-//XINS//DTD XINS Project 1.0//EN" "http://xins.sourceforge.net/dtd/xins-project_1_0.dtd">
+<project
+name="myprojects"
+rcsversion="$Revision: 1.2 $"
+rcsdate="$Date: 2006/09/19 07:35:47 $"
+domain="com.mycompany">
+
+	<api name="allinone">
+		<impl />
+		<environments />
+	</api>
+
+	<api name="portal">
+		<impl />
+		<environments />
+	</api>
+</project>

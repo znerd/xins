@@ -1,0 +1,51 @@
+<!--
+ XINS Implementation DTD. This DTD should be added to the impl.xml file of the
+ project by adding the following line at the top of the file :
+<!DOCTYPE impl PUBLIC "-//XINS//DTD Implementation 1.4//EN" "http://www.xins.org/dtd/impl_1_4.dtd">
+-->
+<!ELEMENT impl (logdoc?, bootstrap-properties?, runtime-properties?, content*, dependency*, calling-convention*, instance*)>
+<!ATTLIST impl
+          web-path    CDATA #IMPLIED
+>
+<!ELEMENT logdoc EMPTY>
+<!ATTLIST logdoc
+          accesslevel (package|public) #IMPLIED
+>
+<!ELEMENT bootstrap-properties (bootstrap-property*)>
+<!ELEMENT bootstrap-property (#PCDATA)>
+<!ATTLIST bootstrap-property
+          name       CDATA #REQUIRED
+>
+<!ELEMENT runtime-properties (property*)>
+<!ELEMENT property (description)>
+<!ATTLIST property
+          name       NMTOKEN #REQUIRED
+          required   (true|false) #REQUIRED
+          type       NMTOKEN #IMPLIED
+>
+<!ELEMENT description (#PCDATA|em)*>
+<!ELEMENT em (#PCDATA)>
+<!ELEMENT content EMPTY>
+<!ATTLIST content
+          dir        CDATA #IMPLIED
+          web-path   CDATA #IMPLIED
+          includes   CDATA #IMPLIED
+>
+<!ELEMENT dependency EMPTY>
+<!ATTLIST dependency
+          dir        CDATA #REQUIRED
+          includes   CDATA #IMPLIED
+>
+<!ELEMENT calling-convention EMPTY>
+<!ATTLIST calling-convention
+          name       CDATA #REQUIRED
+          class      CDATA #IMPLIED
+          default    (true|false) #IMPLIED
+>
+<!ELEMENT instance EMPTY>
+<!ATTLIST instance
+          name       CDATA #REQUIRED
+          getter     CDATA #REQUIRED
+          class      CDATA #REQUIRED
+>
+

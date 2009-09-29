@@ -1,0 +1,17 @@
+<!--
+ XINS Category DTD. This DTD should be set for all function category files.
+ Do this by adding the following lines at the top of the .cat
+<!DOCTYPE category PUBLIC "-//XINS//DTD Category 2.0//EN" "http://www.xins.org/dtd/category_2_0.dtd">
+-->
+<!ELEMENT category (description, function-ref*)>
+<!ATTLIST category
+          name           NMTOKEN #REQUIRED
+          rcsversion     CDATA #IMPLIED
+          rcsdate        CDATA #IMPLIED
+>
+<!ELEMENT description (#PCDATA|em)*>
+<!ELEMENT em (#PCDATA)>
+<!ELEMENT function-ref EMPTY>
+<!ATTLIST function-ref
+          name       NMTOKEN #REQUIRED
+>

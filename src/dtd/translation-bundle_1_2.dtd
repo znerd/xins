@@ -1,0 +1,20 @@
+<!--
+ XINS translation bundle DTD. This DTD should be added to all translation-bundle-xx-XX.xml file
+ by adding the following lines at the top of the file :
+<!DOCTYPE translation-bundle PUBLIC "-//XINS//DTD XINS Translation Bundle 1.2//EN" "http://www.xins.org/dtd/translation-bundle_1_2.dtd">
+-->
+<!ELEMENT translation-bundle (translation*)>
+<!ELEMENT translation (#PCDATA|value-of-param|exception-property)*>
+<!ATTLIST translation
+          entry       NMTOKEN #REQUIRED
+>
+<!ELEMENT value-of-param EMPTY>
+<!ATTLIST value-of-param
+          name        NMTOKEN #REQUIRED
+          format      NMTOKEN #IMPLIED
+>
+<!ELEMENT exception-property EMPTY>
+<!ATTLIST exception-property
+          name        (class|message) #REQUIRED
+          format      NMTOKEN #IMPLIED
+>

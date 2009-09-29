@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE api PUBLIC "-//XINS//DTD XINS API 1.5//EN" "http://xins.sourceforge.net/dtd/api_1_5.dtd">
+
+<api name="allinone" owner="johnd"
+rcsversion="$Revision: 1.16 $" rcsdate="$Date: 2006/09/25 13:34:21 $">
+
+	<description>API that uses all the features included in XINS.</description>
+
+	<function name="AttributeCombo"  />
+	<function name="DataSection"     />
+	<function name="DataSection2" freeze="1.1" />
+	<function name="DataSection3"    />
+	<function name="DataSection4"    />
+	<function name="DefaultValue"    />
+	<function name="DefinedTypes"    />
+	<function name="Echo"            />
+	<function name="Logdoc"          />
+	<function name="ParamCombo"      />
+	<function name="ParamComboNotAll"/>
+	<function name="ParamComboValue" />
+	<function name="ResultCode"      />
+	<function name="RuntimeProps"    />
+	<function name="SimpleOutput"    />
+	<function name="SimpleTypes"     />
+
+	<type name="Age"                  />
+	<type name="AgeNameProperties"    />
+	<type name="IPAddress"            />
+	<type name="Salutation"           />
+	<type name="TextList"          freeze="1.1" />
+	<type name="portal/Password"      />
+	<type name="portal/Username"      />
+
+	<resultcode name="AlreadySet"     />
+	<resultcode name="InvalidNumber"  />
+	<resultcode name="MissingInput" />
+
+	<category name="DataSections" />
+</api>

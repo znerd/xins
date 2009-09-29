@@ -1,0 +1,71 @@
+<html>
+	<head>
+		<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<title>XINS README</title>
+		<!-- $Id: README.html,v 1.19 2007/09/13 11:22:19 agoubard Exp $ -->
+	</head>
+	<body bgcolor="white">
+		<center>
+			<font color="#5555aa" size="8">XINS</font><br>
+			<font color="#5555aa" size="5">XML Interface for Network Services</font>
+		</center>
+
+		<p>
+		<font color="#5555aa" size="4">Description:</font>
+		<ul>
+			<li>XINS is a web application framework.</li>
+			<li>XINS is designed to be able to create web applications based on defined specifications.</li>
+			<li>XINS is based on a simple way to send requests (using URLs) and handle result (Simple XML format).</li>
+			<li>XINS generates a set of HTML pages from the specification and some forms to test the application.</li>
+			<li>XINS generates Java code to invoke the web application and to develop it.</li>
+			<li>XINS generates WSDL, OpenDocument format, unit tests and stubs.</li>
+			<li>XINS also detects if the parameters are conform to the specification.</li>
+			<li>XINS includes concepts like load balancing, fail over, logging, security, properties and statistics.</li>
+			<li>XINS accepts a lot of protocols: REST, SOAP, XML-RPC, JSON, JSON-RPC, Front-end Framework, ....</li>
+		</ul>
+
+		<p>
+		<font color="#5555aa" size="4">Documentation:</font>
+		<ul>
+			<li>XINS User Guide in <a href="docs/index.html">HTML</a> and <a href="docs/XINSGuide.pdf">PDF</a>.</li>
+			<li>XINS protocol in <a href="docs/protocol/index.html">HTML</a> and <a href="docs/protocol/XINSProtocol.pdf">PDF</a>.</li>
+			<li><a href="docs/javadoc/index.html">Javadoc</a> (<a href="docs/javadoc/overview-summary.html">no frames</a>).</li>
+			<li>Logdoc for the <a href="docs/logdoc/client/index.html">client</a>,
+			    <a href="docs/logdoc/common/index.html">common</a> and
+			    <a href="docs/logdoc/server/index.html">server</a>.</li>
+			<li><a href="CHANGES">Last changes</a>, <a href="COPYRIGHT">Copyright</a>.</li>
+		</ul>
+
+		<p>
+		<font color="#5555aa" size="4">Quick start:</font><p>
+		<i>If you have chosen "Compile and run demo" with the Windows installer, you can directly go to the <a href="demo/xins-project/build/specdocs/myproject/index.html">specdocs</a>.</i>
+		<ul>
+			<li>Check that <a href="http://java.sun.com/javase/downloads/index.jsp">Java</a> and <a href="http://ant.apache.org/">ANT</a> are properly installed.<br>
+			<li>Set the <i>XINS_HOME</i> environment variable to the installed xins directory.</li>
+			<li>Add %XINS_HOME%\bin to your PATH environment variable.</li>
+			<li>In the <i>demo\xins-projects</i> directory execute <i>xins specdocs-myproject</i> to generated the HTML pages containing the specification and the test forms.</li>
+			<li>Compile and run the API with<br />
+			    <i>xins -Dorg.xins.server.config=..\xins.properties run-myproject</i>.</li>
+			<li>Go to the web page <a href="demo/xins-project/build/specdocs/myproject/index.html">demo\xins-project\build\specdocs\myproject\index.html</a></li>
+		</ul>
+		<i>More detailed information can be found in the <a href="docs/index.html">documentation</a>.</i>
+
+		<P>
+		<font color="#5555aa" size="4">links:</font>
+		<ul>
+			<li><a href="http://www.xins.org">Web site</a>.</li>
+			<li><a href="http://xins.sourceforge.net/demo.html">On line demo</a>.</li>
+			<li><a href="http://sourceforge.net/project/showfiles.php?group_id=71598">Download page</a>.</li>
+		</ul>
+
+		<P>
+		<font color="#5555aa" size="4">Possible incompatibilities:</font><p/>
+		XINS 2.1 is mostly compatible with XINS 2.0.<p/>
+		In order to help you, here is the list of the possible incompatibilities you may find:
+		<ul>
+			<li><i>check-version target not found</i>. You need to delete the generated <i>build\build.xml</i> file.</li>
+			<li>The cookie <i>SessionId</i> set by the front-end framework has been renamed to <i>SessionID</i>.</li>
+		</ul>
+
+	</body>
+</html>

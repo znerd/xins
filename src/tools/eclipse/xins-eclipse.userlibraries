@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries version="2">
+	<library name="xins" systemlibrary="false">
+		<archive javadoc="file://Users/ernst/Coding/dhpc/xins/docs/javadoc/" path="/Users/ernst/Coding/dhpc/xins/build/xins-server.jar" source="/Users/ernst/Coding/dhpc/xins/src/java-server-framework"/>
+		<archive javadoc="file://Users/ernst/Coding/dhpc/xins/docs/javadoc/" path="/Users/ernst/Coding/dhpc/xins/build/xins-common.jar" source="/Users/ernst/Coding/dhpc/xins/src/java-common"/>
+		<archive javadoc="file://Users/ernst/Coding/dhpc/xins/docs/javadoc/" path="/Users/ernst/Coding/dhpc/xins/build/xins-client.jar" source="/Users/ernst/Coding/dhpc/xins/src/java-client"/>
+		<archive javadoc="file://Users/ernst/Coding/dhpc/xins/docs/javadoc/" path="/Users/ernst/Coding/dhpc/xins/build/logdoc.jar" source="/Users/ernst/Coding/dhpc/xins/src/java-common"/>
+		<archive path="/Users/ernst/Coding/dhpc/xins/lib/xmlenc.jar"/>
+		<archive path="/Users/ernst/Coding/dhpc/xins/lib/commons-httpclient.jar"/>
+		<archive path="/Users/ernst/Coding/dhpc/xins/lib/commons-logging.jar"/>
+		<archive path="/Users/ernst/Coding/dhpc/xins/lib/jakarta-oro.jar"/>
+		<archive path="/Users/ernst/Coding/dhpc/xins/lib/junit.jar"/>
+		<archive path="/Users/ernst/Coding/dhpc/xins/lib/log4j.jar"/>
+		<archive path="/Users/ernst/Coding/dhpc/xins/lib/commons-codec.jar"/>
+		<archive path="/Users/ernst/Coding/dhpc/xins/lib/servlet.jar"/>
+	</library>
+</eclipse-userlibraries>

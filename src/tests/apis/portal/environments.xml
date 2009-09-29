@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE environments PUBLIC "-//XINS//DTD Environments 1.5//EN" "http://www.xins.org/dtd/environments_1_5.dtd">
+
+<environments>
+
+	<environment id="localhost" url="http://127.0.0.1:8080/portal/" />
+
+</environments>

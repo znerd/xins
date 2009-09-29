@@ -1,0 +1,23 @@
+<!--
+ XINS Implementation DTD. This DTD should be added to the impl.xml file of the
+ project by adding the following line at the top of the file :
+<!DOCTYPE impl PUBLIC "-//XINS//DTD Implementation 1.0//EN" "http://www.xins.org/dtd/impl_1_0.dtd">
+-->
+<!ELEMENT impl (logdoc?, dependency*, calling-convention?, instance*)>
+<!ELEMENT logdoc EMPTY>
+<!ELEMENT dependency EMPTY>
+<!ATTLIST dependency
+          dir        CDATA #REQUIRED
+          includes   CDATA #IMPLIED
+>
+<!ELEMENT calling-convention EMPTY>
+<!ATTLIST calling-convention
+          name       CDATA #REQUIRED
+>
+<!ELEMENT instance EMPTY>
+<!ATTLIST instance
+          name       CDATA #REQUIRED
+          getter     CDATA #REQUIRED
+          class      CDATA #REQUIRED
+>
+

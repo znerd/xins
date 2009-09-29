@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# Bootstraps the XINS execution, by means of an Ant build file.
+#
+# $Id: xins,v 1.32 2007/09/27 09:20:50 agoubard Exp $
+
+
+# Determine whether XINS_HOME is set
+if [ "${XINS_HOME}" = "" ]; then
+
+	# Determine script directory
+	__DIRNAME__=`dirname $0`
+
+	# Assume the parent of the script directory is the XINS home directory
+	XINS_HOME=`dirname ${__DIRNAME__}`
+	if [ "${XINS_VERBOSE}" = "true" ]; then
+		echo "XINS_HOME not set, assuming: ${XINS_HOME}"
+	fi
+fi
+
+# Decide if XINS_HOME is valid by checking if make-build.xml exists
+BOOT_XML="${XINS_HOME}/src/ant/make-build.xml"
+if [ ! -f "${BOOT_XML}" ]; then
+	echo "ERROR: Unable to determine XINS home directory. Please set XINS_HOME correctly."
+	exit 1
+fi
+
+# Recognize '-version' (or 'version') option
+if [ "$1" = "-version" ] || [ "$1" = "version" ]; then
+	ant -q -f ${XINS_HOME}/build.xml version
+	exit 0
+fi
+
+# Create the build file if needed (by invoking Ant)
+ant -Dxins_home=${XINS_HOME} -q -f ${BOOT_XML}
+
+# If Ant returned successfully, then invoke Ant against the generated build file
+if [ "$?" = "0" ]; then
+	ant -Dxins_home=${XINS_HOME} -logger org.apache.tools.ant.NoBannerLogger -f build/build.xml $*
+fi

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE translation-bundle PUBLIC "-//XINS//DTD XINS Translation Bundle 1.2//EN" "http://xins.sourceforge.net/dtd/translation-bundle_1_2.dtd">
+
+<translation-bundle>
+	<translation entry="10000">Trouvé le numéro <value-of-param name="number" />
+	dans le paramètre <value-of-param name="parameter" format="quoted" />.</translation>
+	<translation entry="10001">Le système n'a pas pu trouvé de numéro.</translation>
+	<translation entry="10002">Pair: <value-of-param name="odd"/>,
+	plus 1000: <value-of-param name="moreThousands"/>, carré: <value-of-param name="square"/>,
+	avec le thread: <value-of-param name="thread" format="quoted"/>, le: <value-of-param name="date"/> .</translation>
+	<translation entry="10003">Test pour une erreur. Message: <exception-property name="message" />, Message 2: <exception-property name="message" format="quoted" />.
+	Classe: <exception-property name="class" />, Classe 2: <exception-property name="class" format="quoted"/>.</translation>
+</translation-bundle>

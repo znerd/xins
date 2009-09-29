@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE resultcode PUBLIC "-//XINS//DTD Result Code 1.4//EN" "http://xins.sourceforge.net/dtd/resultcode_1_4.dtd">
+
+<resultcode name="AlreadySet" type="functional" rcsversion="$Revision: 1.2 $" rcsdate="$Date: 2006/02/02 12:43:16 $">
+
+	<description>The parameter has already been given.</description>
+
+	<output>
+		<param name="count" required="true" type="_int32">
+			<description>The number of times that the parameter was already passed.</description>
+		</param>
+	</output>
+</resultcode>

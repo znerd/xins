@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE category PUBLIC "-//XINS//DTD Category 1.4//EN" "http://www.xins.org/dtd/category_1_4.dtd">
+<!-- $Id: DataSections.cat,v 1.2 2005/11/22 20:17:06 znerd Exp $ -->
+
+<category name="DataSections">
+	<description>Data section related functions.</description>
+	<function-ref name="DataSection" />
+	<function-ref name="DataSection2" />
+	<function-ref name="DataSection3" />
+</category>

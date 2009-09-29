@@ -1,0 +1,39 @@
+/*
+ * Stylesheet for the test results HTML generated with XSLT.
+ *
+ * $Id: style.css,v 1.2 2006/03/21 13:00:50 agoubard Exp $
+*/
+body {
+	background-color: #ffffff;
+}
+
+table {
+	background-color: #ccccff;
+	border-width: 2;
+}
+
+th {
+	background-color: #8888dd;
+	vertical-align: top;
+	text-align: left;
+	padding: 3pt;
+}
+
+td {
+	background-color: #ffffff;
+	vertical-align: top;
+	text-align: left;
+	padding: 3pt;
+}
+
+.okay {
+	color: #008800;
+}
+
+.failure {
+	color: #cc0000;
+}
+
+.error {
+	color: #cc0000;
+}

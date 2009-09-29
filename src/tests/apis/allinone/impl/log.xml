@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE log PUBLIC "-//XINS//DTD XINS Logdoc 1.0//EN" "http://xins.sourceforge.net/dtd/log_1_0.dtd">
+
+<log>
+
+	<translation-bundle locale="en_US" />
+	<translation-bundle locale="fr_FR" />
+
+	<group id="exampleLogdoc" name="Example">
+		<entry id="10000" level="DEBUG">
+			<description>Found a number in the input.</description>
+			<param name="parameter" />
+			<param name="number" nullable="false" type="int32" />
+		</entry>
+		<entry id="10001" level="ERROR" exception="true">
+			<description>The system can not find any number in the given parameter.</description>
+		</entry>
+		<entry id="10002" level="WARNING">
+			<description>Example of warning using a lot of different parameters.</description>
+			<param name="odd" nullable="false" type="boolean" />
+			<param name="moreThousands" type="boolean" />
+			<param name="square" nullable="false" type="int64" />
+			<param name="thread" type="text" />
+			<param name="date" nullable="false" type="object" />
+		</entry>
+		<entry id="10003" level="NOTICE" exception="true">
+			<description><em>Test</em> for error Test.</description>
+		</entry>
+	</group>
+</log>

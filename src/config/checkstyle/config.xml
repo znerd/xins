@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.0//EN" "http://www.puppycrawl.com/dtds/configuration_1_0.dtd"><!--
+ Checkstyle configuration. Based on the recommendations in "Effective Java" by
+ Joshua Bloch.
+
+ $Id: config.xml,v 1.23 2007/03/07 13:59:16 agoubard Exp $
+-->
+
+<module name="Checker">
+
+	<module name="PackageHtml" />
+
+	<module name="TreeWalker">
+
+		<!-- Avoid creating duplicate objects -->
+		<module name="IllegalInstantiation">
+			<property name="classes" value="java.lang.Boolean, java.lang.String" />
+		</module>
+
+		<!-- Avoid finalizers -->
+		<module name="GenericIllegalRegexp">
+			<property name="format" value="((public)|(protected))\s+void\s+finalize\(\s*\)" />
+		</module>
+
+		<!-- Always override hashCode when you override equals -->
+		<module name="EqualsHashCode" />
+
+		<!-- Make all fields private -->
+		<module name="VisibilityModifier" />
+
+		<!-- Avoid long parameter lists -->
+		<module name="ParameterNumber">
+			<property name="max" value="8" />
+		</module>
+
+		<!-- Write Javadoc comments for all API elements -->
+		<module name="JavadocType">
+			<property name="scope" value="private" />
+		</module>
+		<module name="JavadocMethod">
+			<property name="scope" value="private" />
+		</module>
+		<module name="JavadocVariable">
+			<property name="scope" value="private" />
+		</module>
+
+		<!-- Adhere to generally accepted naming conventions -->
+		<module name="PackageName">
+			<!-- no uppercase letters, between 2 and 12 characters -->
+			<property name="format" value="^[a-z]+(\.[a-z][a-z0-9]{1,11})*$" />
+		</module>
+		<module name="TypeName">
+			<property name="format" value="^[A-Z][a-zA-Z0-9]*$" />
+		</module>
+		<module name="ConstantName">
+			<property name="format" value="^[A-Z]*[A-Z0-9_]*$" />
+		</module>
+		<module name="LocalFinalVariableName">
+			<property name="format" value="^[A-Z]*[A-Z0-9_]*$" />
+		</module>
+		<module name="LocalVariableName">
+			<property name="format" value="^[a-z][a-zA-Z0-9]*$" />
+		</module>
+		<module name="MemberName">
+			<property name="format" value="^[_a-z][a-zA-Z0-9]*$" />
+		</module>
+		<module name="MethodName">
+			<property name="format" value="^[a-z][a-zA-Z0-9]*$" />
+		</module>
+		<module name="ParameterName">
+			<property name="format" value="^[a-z][a-zA-Z0-9]*$" />
+		</module>
+		<module name="StaticVariableName">
+			<property name="format" value="^[A-Z]*[A-Z0-9_]*$" />
+		</module>
+
+		<!-- Don't ignore exceptions, require a comment -->
+		<module name="EmptyBlock">
+			<property name="tokens" value="LITERAL_CATCH" />
+			<property name="option" value="text" />
+		</module>
+
+		<!-- Maximum file length is 1500 -->
+		<module name="FileLength">
+			<property name="max" value="1500" />
+		</module>
+
+		<!-- Maximum line length is 120 -->
+		<module name="LineLength">
+			<property name="max" value="120" />
+			<property name="ignorePattern" value="(@author)|(\$Id:)" />
+		</module>
+
+		<!-- Maximum 80 lines per method, excluding spaces and comments -->
+		<module name="MethodLength">
+			<property name="max" value="80" />
+			<property name="countEmpty" value="false" />
+		</module>
+
+		<!-- Maximum 8 parameters per method/constructor -->
+		<module name="ParameterNumber">
+			<property name="max" value="8" />
+		</module>
+
+		<!-- Check some Javadoc comments -->
+		<module name="JavadocType">
+			<property name="authorFormat" value="&lt;a href=&quot;mailto:" />
+			<property name="versionFormat" value="^\$[R]evision: [0-9]+(\.[0-9]+)+ \$ \$[D]ate: "/>
+		</module>
+		<module name="JavadocStyle">
+			<property name="checkEmptyJavadoc" value="true" />
+		</module>
+
+		<!-- Check imports -->
+		<module name="RedundantImport" />
+		<module name="UnusedImports" />
+
+		<!-- Avoid tab characters -->
+		<module name="TabCharacter" />
+
+		<!-- No whitespace at end of line -->
+		<module name="GenericIllegalRegexp">
+			<property name="format" value="\s$" />
+		</module>
+
+		<!-- No System.out or System.err calls -->
+		<module name="GenericIllegalRegexp">
+			<property name="format" value="System.out" />
+		</module>
+		<module name="GenericIllegalRegexp">
+			<property name="format" value="System.err" />
+		</module>
+
+		<!-- Find FIXME and TODO comments -->
+		<module name="TodoComment">
+			<property name="format" value="FIXME" />
+		</module>
+		<module name="TodoComment">
+			<property name="format" value="TODO" />
+			<property name="severity" value="warning" />
+		</module>
+
+		<!-- Do not shadow parameter -->
+		<module name="HiddenField" />
+
+		<!-- No String == AnotherString -->
+		<module name="StringLiteralEquality" />
+
+		<!-- Unnecessary Parentheses -->
+		<module name="UnnecessaryParentheses" />
+
+		<!-- Long values should have suffix 'L' and not 'l' -->
+		<module name="UpperEll" />
+
+		<!-- Enforce Java-style array definitions -->
+		<module name="ArrayTypeStyle" />
+
+		<!-- No trailing comments, please -->
+		<module name="TrailingComment" />
+
+	</module>
+</module>

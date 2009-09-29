@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE log PUBLIC "-//XINS//DTD XINS Logdoc 3.0//EN" "http://www.xins.org/dtd/log_3_0.dtd">
+<!-- $Id: log.xml,v 1.129 2007/09/03 12:11:57 agoubard Exp $ -->
+
+<log since="XINS 1.0.0">
+	<translation-bundle locale="en_US" />
+	<translation-bundle locale="fr_FR" />
+
+	<group id="servlet" name="Servlet">
+		<!-- XXX: Removed 3000 here (@since XINS 1.3.0) -->
+		<!-- XXX: Removed 3001 here (@since XINS 1.3.0) -->
+		<!-- XXX: Removed 3002 here (@since XINS 1.3.0) -->
+		<entry id="3003" level="ERROR" exception="true">
+			<description>Servlet failed while servicing request.</description>
+		</entry>
+	</group>
+
+	<group id="lifespan" name="Internal lifespan-related">
+		<entry id="3100" level="DEBUG">
+			<description>State change in APIServlet instance.</description>
+			<param name="oldState" />
+			<param name="newState" />
+		</entry>
+		<entry id="3101" level="ERROR">
+			<description>State change invalid.</description>
+			<param name="oldState" />
+			<param name="newState" />
+		</entry>
+	</group>
+
+	<group id="lifespan.bootstrap" name="Bootstrapping">
+		<entry id="3200" level="NOTICE">
+			<description>Bootstrapping XINS/Java Server Framework.</description>
+			<param name="version"   />
+			<param name="container" />
+			<param name="jvm"       />
+			<param name="os"        />
+		</entry>
+		<!-- XXX: Removed 3201 here (@since XINS 1.3.0) -->
+		<entry id="3202" level="FATAL">
+			<description>Unable to bootstrap XINS/Java Server Framework due to application server behaving unexpectedly.</description>
+			<param name="detail" />
+		</entry>
+		<entry id="3203" level="WARNING">
+			<description>Application server implements unexpected version of Java Servlet API Specification.</description>
+			<param name="actual_version" />
+			<param name="expected_version" />
+		</entry>
+		<!-- XXX: Removed 3204 here (@since XINS 1.3.0) -->
+		<entry id="3205" level="WARNING">
+			<description>The property that defines the runtime properties file to use is not set.</description>
+			<param name="propertyName" />
+		</entry>
+		<entry id="3206" level="FATAL">
+			<description>API class name not set in build property.</description>
+			<param name="propertyName" />
+		</entry>
+		<entry id="3207" level="FATAL" exception="true">
+			<description>API class cannot be loaded.</description>
+			<param name="propertyName" />
+			<param name="apiClass" />
+		</entry>
+		<entry id="3208" level="FATAL">
+			<description>API class is loaded, but is considered to be invalid.</description>
+			<param name="propertyName" />
+			<param name="apiClass" />
+			<param name="reason" />
+		</entry>
+		<entry id="3209" level="FATAL">
+			<description>Bootstrap of API class failed due to a missing but required property.</description>
+			<param name="propertyName" />
+			<param name="detail" />
+		</entry>
+		<entry id="3210" level="FATAL">
+			<description>Bootstrap of API class failed due to an invalid property value.</description>
+			<param name="propertyName" />
+			<param name="propertyValue" />
+			<param name="reason" />
+		</entry>
+		<entry id="3211" level="FATAL" exception="true">
+			<description>Bootstrap of API class failed.</description>
+		</entry>
+		<entry id="3212" level="INFO">
+			<description>Determined build-time settings.</description>
+			<param name="buildHost"    />
+			<param name="buildTime"    />
+			<param name="buildVersion" />
+			<param name="apiName"      />
+			<param name="apiVersion"   />
+		</entry>
+		<entry id="3213" level="DEBUG">
+			<description>Bootstrapping API-manageable.</description>
+			<param name="api" />
+			<param name="className" />
+		</entry>
+		<!-- XXX: Removed 3214 here (@since XINS 2.0) -->
+		<entry id="3215" level="FATAL">
+			<description>API-manageable could not be bootstrapped due to a missing required property.</description>
+			<param name="api" />
+			<param name="className" />
+			<param name="propertyName" />
+			<param name="detail" />
+		</entry>
+		<entry id="3216" level="FATAL">
+			<description>API-manageable could not be bootstrapped due to an invalid property value.</description>
+			<param name="api" />
+			<param name="className" />
+			<param name="propertyName" />
+			<param name="propertyValue" />
+			<param name="reason" />
+		</entry>
+		<entry id="3217" level="FATAL" exception="true">
+			<description>API-manageable could not be bootstrapped.</description>
+			<param name="api"       />
+			<param name="className" />
+		</entry>
+		<entry id="3218" level="DEBUG">
+			<description>Adding API-manageable to API.</description>
+			<param name="api" />
+			<param name="className" />
+		</entry>
+		<entry id="3220" level="DEBUG">
+			<description>Bootstrapping function.</description>
+			<param name="api" />
+			<param name="function" />
+		</entry>
+		<!-- XXX: Removed 3221 here (@since XINS 2.0) -->
+		<entry id="3222" level="FATAL">
+			<description>Function could not be bootstrapped due to a missing required property.</description>
+			<param name="api" />
+			<param name="function" />
+			<param name="propertyName" />
+			<param name="detail" />
+		</entry>
+		<entry id="3223" level="FATAL">
+			<description>Function could not be bootstrapped due to an invalid property value.</description>
+			<param name="api"           />
+			<param name="function"      />
+			<param name="propertyName"  />
+			<param name="propertyValue" />
+			<param name="reason"        />
+		</entry>
+		<entry id="3224" level="FATAL" exception="true">
+			<description>Function could not be bootstrapped.</description>
+			<param name="api"      />
+			<param name="function" />
+		</entry>
+		<entry id="3225" level="INFO">
+			<description>XINS/Java Server Framework is bootstrapped.</description>
+			<param name="version" />
+		</entry>
+		<entry id="3226" level="WARNING">
+			<description>XINS/Java Server Framework version is different from XINS/Java Common Library version.</description>
+			<param name="serverVersion" />
+			<param name="commonVersion" />
+		</entry>
+		<entry id="3227" level="WARNING">
+			<description>XINS/Java Server Framework version does not indicate a production release.</description>
+			<param name="version" />
+		</entry>
+		<entry id="3228" level="WARNING">
+			<description>API package was not built with a production release of XINS.</description>
+			<param name="version" />
+		</entry>
+		<entry id="3230" level="WARNING" exception="true">
+			<description>Unable to get the system property that defines the runtime properties file to use, due to a security restriction.</description>
+			<param name="propertyName" />
+		</entry>
+		<entry id="3231" level="DEBUG">
+			<description>Reading the runtime properties file to use from the bootstrap properties.</description>
+			<param name="propertyName" />
+		</entry>
+		<entry id="3232" level="WARNING">
+			<description>Expected bootstrap property to be set.</description>
+			<param name="propertyName" />
+		</entry>
+		<entry id="3233" level="DEBUG">
+			<description>API uses Logdoc logging.</description>
+		</entry>
+		<entry id="3234" level="DEBUG">
+			<description>API does not use Logdoc logging.</description>
+		</entry>
+		<entry id="3235" level="DEBUG">
+			<description>Determined API name.</description>
+			<param name="apiName" />
+		</entry>
+		<!-- XXX: Removed 3236 here (@since XINS 1.3.0) -->
+		<entry id="3237" level="DEBUG">
+			<description>Creating calling convention.</description>
+			<param name="name"      />
+			<param name="className" />
+		</entry>
+		<entry id="3239" level="ERROR" exception="true">
+			<description>Error while creating calling convention.</description>
+			<param name="name"      nullable="false" />
+			<param name="className" nullable="true"  />
+		</entry>
+		<entry id="3240" level="DEBUG">
+			<description>Bootstrapping calling convention.</description>
+			<param name="name" />
+		</entry>
+		<entry id="3242" level="FATAL">
+			<description>Calling convention could not be bootstrapped due to a missing required property.</description>
+			<param name="name"         />
+			<param name="propertyName" />
+			<param name="detail" />
+		</entry>
+		<entry id="3243" level="FATAL">
+			<description>Calling convention could not be bootstrapped due to an invalid property value.</description>
+			<param name="name"          />
+			<param name="propertyName"  />
+			<param name="propertyValue" />
+			<param name="reason"        />
+		</entry>
+		<entry id="3244" level="FATAL" exception="true">
+			<description>Calling convention could not be bootstrapped.</description>
+			<param name="name" />
+		</entry>
+		<entry id="3245" level="INFO">
+			<description>Determined default calling convention.</description>
+			<param name="name" />
+		</entry>
+		<entry id="3246" level="DEBUG">
+			<description>No custom calling convention specified.</description>
+		</entry>
+		<entry id="3247" level="DEBUG">
+			<description>Custom calling convention is specified.</description>
+			<param name="property"  />
+			<param name="name"      />
+			<param name="className" />
+		</entry>
+		<entry id="3248" level="INFO">
+			<description>The runtime properties file has not been defined, the system will use the xins.properties file found in the WEB-INF directory of the WAR file.</description>
+		</entry>
+		<entry id="3249" level="WARNING">
+			<description>Unable to register the management bean.</description>
+			<param name="details" />
+		</entry>
+		<entry id="3250" level="WARNING" exception="true">
+			<description>Unknown host, using localhost as default.</description>
+		</entry>
+		<entry id="3251" level="FATAL">
+			<description>Incorrect value for the enabling JMX runtime property.</description>
+			<param name="propertyValue" />
+		</entry>
+	</group>
+
+	<group id="log" name="Logging subsystem">
+		<entry id="3300" level="DEBUG">
+			<description>Initializing logging subsystem.</description>
+			<param name="configFile" />
+		</entry>
+		<entry id="3301" level="ERROR">
+			<description>Logging subsystem cannot be initialized since runtime properties file cannot be opened.</description>
+			<param name="configFile" nullable="false" />
+			<param name="detail"     nullable="true"  />
+		</entry>
+		<entry id="3302" level="ERROR" exception="true">
+			<description>Logging subsystem cannot be initialized since runtime properties file cannot be opened due to a security restriction.</description>
+			<param name="configFile" />
+		</entry>
+		<entry id="3303" level="ERROR" exception="true">
+			<description>Logging subsystem cannot be initialized since runtime properties file cannot be opened due to an I/O error.</description>
+			<param name="configFile" />
+		</entry>
+		<entry id="3304" level="WARNING">
+			<description>Logging subsystem not properly initialized, falling back to default initialization properties.</description>
+			<param name="configFile" />
+		</entry>
+		<entry id="3305" level="INFO">
+			<description>Logging subsystem has been properly initialized.</description>
+		</entry>
+		<entry id="3306" level="INFO">
+			<description>About to change locale for the log messages.</description>
+			<param name="oldLocale" />
+			<param name="newLocale" />
+		</entry>
+		<entry id="3307" level="NOTICE">
+			<description>Changed locale for the log messages.</description>
+			<param name="oldLocale" />
+			<param name="newLocale" />
+		</entry>
+		<entry id="3308" level="FATAL"> <!-- TODO: Should this really be fatal ? -->
+			<description>Failed to change the locale for the log messages.</description>
+			<param name="currentLocale" />
+			<param name="failedLocale" />
+		</entry>
+		<entry id="3309" level="FATAL"> <!-- TODO: Should this really be fatal ? -->
+			<description>Locale not supported by the Logdoc for the API.</description>
+			<param name="locale" />
+		</entry>
+		<entry id="3310" level="INFO">
+			<description>Changed hostname used for the context identifier.</description>
+			<param name="oldHostname" />
+			<param name="newHostname" />
+		</entry>
+		<entry id="3311" level="FATAL">
+			<description>Incorrect runtime properties file because of mutiple identical keys.</description>
+			<param name="configFile" />
+		</entry>
+	</group>
+
+	<group id="lifespan.init" name="Initialization">
+		<entry id="3400" level="WARNING">
+			<description>Runtime properties file cannot be opened while checking whether the file has been modified.</description>
+			<param name="configFile" />
+		</entry>
+		<entry id="3401" level="WARNING" exception="true">
+			<description>Runtime properties file cannot be opened while checking whether the file has been modified, due to a security restriction.</description>
+			<param name="configFile" />
+		</entry>
+		<!-- XXX: Removed 3402 here (@since XINS 2.0) -->
+		<entry id="3403" level="NOTICE">
+			<description>Runtime properties file watch interval changed.</description>
+			<param name="configFile" nullable="false" />
+			<param name="oldInterval" type="int32" nullable="false" />
+			<param name="newInterval" type="int32" nullable="false" />
+		</entry>
+		<entry id="3404" level="DEBUG">
+			<description>Determined local timezone.</description>
+			<param name="shortName" />
+			<param name="longName"  />
+		</entry>
+		<entry id="3405" level="INFO">
+			<description>Initializing API.</description>
+			<param name="api" />
+		</entry>
+		<entry id="3406" level="INFO">
+			<description>Initialized API.</description>
+			<param name="api" />
+		</entry>
+		<entry id="3407" level="NOTICE">
+			<description>Runtime properties file modified. Re-initializing XINS/Java Server Framework.</description>
+			<param name="configFile" nullable="false" />
+		</entry>
+		<entry id="3408" level="INFO">
+			<description>Runtime properties file watch interval not specified, using fallback default.</description>
+			<param name="configFile" />
+			<param name="propertyName" />
+			<param name="fallbackDefault" type="int32" nullable="false" />
+		</entry>
+		<entry id="3409" level="ERROR">
+			<description>Runtime properties file watch interval property value is invalid.</description>
+			<param name="configFile" />
+			<param name="propertyName" />
+			<param name="propertyValue" />
+		</entry>
+		<entry id="3410" level="DEBUG">
+			<description>Runtime properties file watch interval successfully parsed.</description>
+			<param name="configFile" />
+			<param name="propertyValue" />
+		</entry>
+		<entry id="3411" level="FATAL">
+			<description>API could not be initialized due to a missing required property.</description>
+			<param name="propertyName" />
+			<param name="detail" />
+		</entry>
+		<entry id="3412" level="FATAL">
+			<description>API could not be initialized due to an invalid property value.</description>
+			<param name="propertyName" />
+			<param name="propertyValue" />
+			<param name="reason" />
+		</entry>
+		<entry id="3413" level="FATAL" exception="true">
+			<description>API could not be initialized.</description>
+		</entry>
+		<entry id="3414" level="FATAL" exception="true">
+			<description>API could not be initialized due to an unexpected exception.</description>
+		</entry>
+		<entry id="3415" level="NOTICE">
+			<description>XINS/Java Server Framework has been (re-)initialized.</description>
+			<param name="duration" type="int32" nullable="false" />
+		</entry>
+		<entry id="3416" level="DEBUG">
+			<description>Initializing API-manageable.</description>
+			<param name="api"       />
+			<param name="className" />
+		</entry>
+		<!-- XXX: Removed 3417 here (@since XINS 2.0) -->
+		<entry id="3418" level="FATAL">
+			<description>API-manageable could not be initialized due to a missing required property.</description>
+			<param name="api"          />
+			<param name="className"    />
+			<param name="propertyName" />
+			<param name="detail" />
+		</entry>
+		<entry id="3419" level="FATAL">
+			<description>API-manageable could not be initialized due to an invalid property value.</description>
+			<param name="api"           />
+			<param name="className"     />
+			<param name="propertyName"  />
+			<param name="propertyValue" />
+			<param name="reason"        />
+		</entry>
+		<entry id="3420" level="FATAL" exception="true">
+			<description>API-manageable could not be initialized.</description>
+			<param name="api"       />
+			<param name="className" />
+		</entry>
+		<entry id="3421" level="DEBUG">
+			<description>Initializing function.</description>
+			<param name="api"      />
+			<param name="function" />
+		</entry>
+		<!-- XXX: Removed 3422 here (@since XINS 2.0) -->
+		<entry id="3423" level="ERROR">
+			<description>Function could not be initialized due to a missing required property.</description>
+			<param name="api"          />
+			<param name="function"     />
+			<param name="propertyName" />
+			<param name="detail" />
+		</entry>
+		<entry id="3424" level="ERROR">
+			<description>Function could not be initialized due to an invalid property value.</description>
+			<param name="api"           />
+			<param name="function"      />
+			<param name="propertyName"  />
+			<param name="propertyValue" />
+			<param name="reason"        />
+		</entry>
+		<entry id="3425" level="ERROR" exception="true">
+			<description>Function could not be initialized, exception available.</description>
+			<param name="api"      />
+			<param name="function" />
+		</entry>
+		<entry id="3426" level="WARNING">
+			<description>No access rule list defined.</description>
+			<param name="propertyName" />
+		</entry>
+		<entry id="3427" level="DEBUG">
+			<description>Access rule list defined and successfully loaded.</description>
+			<param name="ruleCount" type="int32" nullable="false" />
+		</entry>
+		<entry id="3428" level="ERROR">
+			<description>Error loading access rule list.</description>
+			<param name="propertyName"  type="text" nullable="false" />
+			<param name="propertyValue" type="text" nullable="false" />
+			<param name="message"       type="text" nullable="true"  />
+		</entry>
+		<entry id="3429" level="DEBUG">
+			<description>Access rule parsed.</description>
+			<param name="index" type="int32" nullable="false" />
+			<param name="rule"  type="text"  nullable="false" />
+		</entry>
+		<!-- XXX: Removed 3430 here (@since XINS 1.3.0) -->
+		<entry id="3431" level="DEBUG">
+			<description>No filter specified for incoming diagnostic context identifiers.</description>
+		</entry>
+		<entry id="3432" level="INFO">
+			<description>Valid filter specified for incoming diagnostic context identifiers.</description>
+			<param name="pattern" />
+		</entry>
+		<entry id="3433" level="ERROR">
+			<description>Invalid filter specified for incoming diagnostic context identifiers.</description>
+			<param name="pattern" />
+		</entry>
+		<entry id="3434" level="INFO">
+			<description>Unused runtime property.</description>
+			<param name="propertyName" />
+		</entry>
+		<entry id="3435" level="DEBUG">
+			<description>Initializing calling convention.</description>
+			<param name="name"     />
+		</entry>
+		<entry id="3436" level="DEBUG">
+			<description>Initialized calling convention.</description>
+			<param name="name"     />
+		</entry>
+		<entry id="3437" level="ERROR">
+			<description>Calling convention could not be initialized due to a missing required property.</description>
+			<param name="name"         />
+			<param name="propertyName" />
+			<param name="detail" />
+		</entry>
+		<entry id="3438" level="ERROR">
+			<description>Calling convention could not be initialized due to an invalid property value.</description>
+			<param name="name"          />
+			<param name="propertyName"  />
+			<param name="propertyValue" />
+			<param name="reason"        />
+		</entry>
+		<entry id="3439" level="ERROR" exception="true">
+			<description>Calling convention could not be initialized, exception available.</description>
+			<param name="name" />
+		</entry>
+		<entry id="3440" level="INFO">
+			<description>XSLT template cache in the XSLT calling convention is enabled.</description>
+		</entry>
+		<entry id="3441" level="INFO">
+			<description>XSLT template cache in the XSLT calling convention is disabled.</description>
+		</entry>
+		<entry id="3442" level="INFO">
+			<description>Determined a XSLT location for runtime properties used by the XSLT calling convention.</description>
+			<param name="apiName" />
+			<param name="propertySuffix" />
+			<param name="xsltLocation" />
+		</entry>
+		<entry id="3443" level="DEBUG">
+			<description>Loading and compiling XSLT style sheet.</description>
+			<param name="xsltLocation" />
+		</entry>
+		<entry id="3444" level="ERROR" exception="true">
+			<description>The XINS server failer to start.</description>
+		</entry>
+	</group>
+
+	<group id="runtime" name="Runtime">
+		<entry id="3500" level="NOTICE" exception="true">
+			<description>Exception thrown during function call.</description>
+			<param name="function" type="text"  nullable="false" />
+			<param name="callID"   type="int32" nullable="false" />
+		</entry>
+		<entry id="3501" level="ERROR">
+			<description>Function attempted to return invalid response.</description>
+			<param name="function" type="text"  nullable="false" />
+			<param name="callID"   type="int32" nullable="false" />
+			<param name="details"  type="text" />
+		</entry>
+		<entry id="3502" level="DEBUG" exception="true">
+			<description>Exception result message while checking a URL.</description>
+			<param name="url"    type="text"  nullable="false" />
+			<param name="result" type="text"  nullable="false" />
+		</entry>
+		<entry id="3503" level="DEBUG">
+			<description>Thread to check a URL has started.</description>
+			<param name="url"               type="text"   nullable="false" />
+			<param name="totalTimeout"      type="int32"  nullable="false" />
+			<param name="connectionTimeout" type="int32"  nullable="false" />
+			<param name="socketTimeout"     type="int32"  nullable="false" />
+		</entry>
+		<entry id="3504" level="DEBUG">
+			<description>Thread to check a URL has finished its execution.</description>
+			<param name="url"      type="text"   nullable="false" />
+			<param name="duration" type="int64"  nullable="false" />
+		</entry>
+		<entry id="3505" level="DEBUG">
+			<description>URL check thread is still active.</description>
+			<param name="url" type="text" nullable="false" />
+		</entry>
+		<entry id="3506" level="ERROR" exception="true">
+			<description>Calling convention thrown an I/O exception when creating the result.</description>
+			<param name="conventionClassName" type="text" nullable="false" />
+		</entry>
+		<entry id="3507" level="INFO">
+			<description>Unable to retrieve calling convention.</description>
+			<param name="name"   />
+			<param name="detail" />
+		</entry>
+		<entry id="3508" level="DEBUG">
+			<description>Request does not specify any calling convention.</description>
+		</entry>
+		<entry id="3509" level="DEBUG">
+			<description>A calling convention has been selected for a request that did not specify one explicitly.</description>
+			<param name="conventionClassName" />
+		</entry>
+		<entry id="3510" level="INFO">
+			<description>Unable to detect calling convention for request. None of the calling conventions matches.</description>
+		</entry>
+		<entry id="3511" level="INFO">
+			<description>Unable to detect calling convention for request. Multiple calling conventions match.</description>
+		</entry>
+		<entry id="3512" level="DEBUG">
+			<description>Cache miss for parsed request XML.</description>
+		</entry>
+		<entry id="3513" level="DEBUG">
+			<description>Cache hit for parsed request XML.</description>
+		</entry>
+		<entry id="3514" level="DEBUG">
+			<description>Caching parsed request XML.</description>
+		</entry>
+		<entry id="3515" level="DEBUG">
+			<description>Not caching parsed request XML since the content-type is not "text/xml".</description>
+		</entry>
+		<entry id="3516" level="INFO">
+			<description>Skipped call to the function.</description>
+			<param name="functionName" />
+			<param name="inParams" type="object" />
+		</entry>
+		<entry id="3517" level="WARNING">
+			<description>Unable to find the specified path in the WAR file.</description>
+			<param name="path" />
+			<param name="reason" />
+		</entry>
+	</group>
+
+	<group id="runtime.http" name="HTTP-level">
+		<entry id="3520" level="INFO">
+			<description>Received HTTP request with invalid method.</description>
+			<param name="ip"          nullable="false"               />
+			<param name="method"      nullable="true"                />
+			<param name="queryString" nullable="true"  filter="true" />
+			<!-- TODO: Log parameters ? -->
+		</entry>
+		<entry id="3521" level="INFO">
+			<description>Received HTTP request with valid method.</description>
+			<param name="ip"          nullable="false"               />
+			<param name="method"      nullable="true"                />
+			<param name="path"        nullable="true"                />
+			<param name="queryString" nullable="true"  filter="true" />
+			<!-- TODO: Log parameters ? -->
+		</entry>
+		<!-- XXX: Removed 3522 here (@since XINS 1.5.0) -->
+		<entry id="3523" level="INFO" exception="true">
+			<description>HTTP request cannot be processed. Returning HTTP status code indicating an error.</description>
+			<param name="ip"          type="text"  nullable="false"               />
+			<param name="method"      type="text"  nullable="false"               />
+			<param name="path"        type="text"  nullable="true"                />
+			<param name="queryString" type="text"  nullable="true"  filter="true" />
+			<param name="statusCode"  type="int32" nullable="false"               />
+			<param name="reason"      type="text"  nullable="true"                />
+		</entry>
+	</group>
+
+	<group id="runtime.tx" name="Transaction logging">
+		<entry id="3540" level="INFO">
+			<description>Function called. This entry differs from 3541 in that it logs all input and output parameters, while 3541 does not.</description>
+			<param name="start"        type="text"   nullable="false"               />
+			<param name="ip"           type="text"   nullable="false"               />
+			<param name="functionName" type="text"   nullable="false"               />
+			<param name="duration"     type="int64"  nullable="false"               />
+			<param name="errorCode"    type="text"   nullable="false"               />
+			<param name="inParams"     type="object" nullable="false" filter="true" />
+			<param name="outParams"    type="object" nullable="false" filter="true" />
+		</entry>
+		<entry id="3541" level="INFO">
+			<description>Function called. This entry differs from 3540 in that it does not log all input and output parameters, while 3540 does.</description>
+			<param name="start"        type="text"  nullable="false" />
+			<param name="ip"           type="text"  nullable="false" />
+			<param name="functionName" type="text"  nullable="false" />
+			<param name="duration"     type="int64" nullable="false" />
+			<param name="errorCode"    type="text"  nullable="false" />
+		</entry>
+	</group>
+
+	<group id="runtime.acl" name="Access rule matching">
+		<entry id="3550" level="DEBUG">
+			<description>Access rule matches. Allowing function call.</description>
+			<param name="ip"                      nullable="false" />
+			<param name="function"                nullable="false" />
+			<param name="convention"              nullable="true"  />
+			<param name="index"      type="int32" nullable="false" />
+			<param name="rule"                    nullable="false" />
+		</entry>
+		<entry id="3551" level="INFO">
+			<description>Access rule matches. Denying function call.</description>
+			<param name="ip"                      nullable="false" />
+			<param name="function"                nullable="false" />
+			<param name="convention"              nullable="true"  />
+			<param name="index"      type="int32" nullable="false" />
+			<param name="rule"                    nullable="false" />
+		</entry>
+		<!-- XXX: Removed 3552 (@since XINS 2.0) Replaced by 3239. -->
+		<entry id="3553" level="INFO">
+			<description>No access rule matched. Denying function call.</description>
+			<param name="ip"         nullable="false" />
+			<param name="function"   nullable="false" />
+			<param name="convention" nullable="true" />
+		</entry>
+	</group>
+
+	<group id="runtime.cc" name="Calling Convention">
+		<!-- XXX: Removed 3560 (@since XINS 1.3.0) Replaced by 3239. -->
+		<entry id="3570" level="INFO">
+			<description>No mapping found for the SOAP request element.</description>
+			<param name="elementName"  nullable="false" />
+			<param name="functionName" nullable="false" />
+		</entry>
+		<entry id="3571" level="WARNING" exception="true">
+			<description>Error when mapping SOAP request element.</description>
+			<param name="elementName"  nullable="false" />
+			<param name="functionName" nullable="false" />
+		</entry>
+	</group>
+
+	<group id="runtime.context" name="Diagnostic Context Identifiers">
+		<!-- XXX: Removed 3580 (@since XINS 2.0) Replaced by 3583. -->
+		<entry id="3581" level="DEBUG">
+			<description>Valid diagnostic context identifier specified in request.</description>
+			<!-- XXX: Removed (@since XINS 3.0): param name="contextID" type="text" nullable="false" -->
+		</entry>
+		<entry id="3582" level="NOTICE">
+			<description>Invalid diagnostic context identifier specified in request.</description>
+			<param name="contextID" type="text" nullable="false" />
+		</entry>
+		<entry id="3583" level="DEBUG">
+			<description>Generated diagnostic context identifier.</description>
+			<!-- XXX: Removed (@since XINS 3.0): param name="contextID" type="text" nullable="false" -->
+		</entry>
+	</group>
+
+	<group id="lifespan.shutdown" name="Shutdown">
+		<entry id="3600" level="NOTICE">
+			<description>Shutting down XINS/Java Server Framework.</description>
+		</entry>
+		<!-- XXX: Removed 3601 here (@since XINS 1.3.0) -->
+		<entry id="3602" level="NOTICE">
+			<description>XINS/Java Server Framework shutdown completed.</description>
+		</entry>
+		<entry id="3603" level="DEBUG">
+			<description>Deinitializing API-manageable.</description>
+			<param name="api" />
+			<param name="className" />
+		</entry>
+		<!-- XXX: Removed 3604 here (@since XINS 2.0) -->
+		<entry id="3605" level="WARNING">
+			<description>API-manageable could not be deinitialized.</description>
+			<param name="api" />
+			<param name="className" />
+			<param name="message" />
+		</entry>
+		<entry id="3606" level="WARNING" exception="true">
+			<description>API-manageable could not be deinitialized due to an unexpected exception.</description>
+			<param name="api" />
+			<param name="className" />
+		</entry>
+		<entry id="3607" level="DEBUG">
+			<description>Deinitializing function.</description>
+			<param name="api" />
+			<param name="function" />
+		</entry>
+		<!-- XXX: Removed 3608 here (@since XINS 2.0) -->
+		<entry id="3609" level="WARNING">
+			<description>Function could not be deinitialized.</description>
+			<param name="api" />
+			<param name="function" />
+			<param name="message" />
+		</entry>
+		<entry id="3610" level="WARNING" exception="true">
+			<description>Function could not be deinitialized due to an unexpected exception.</description>
+			<param name="api" />
+			<param name="function" />
+		</entry>
+		<!-- XXX: Removed 3611 here (@since XINS 1.3.0) -->
+	</group>
+
+	<group id="cc.frontend" name="Front-end calling convention">
+		<entry id="3700" level="ERROR" exception="true">
+			<description>Could not instantiate a session manager.</description>
+		</entry>
+		<entry id="3701" level="ERROR" exception="true">
+			<description>Unable to find or to compile the XSLT file.</description>
+			<param name="templateIdentifier" />
+		</entry>
+		<entry id="3702" level="ERROR" exception="true">
+			<description>Error during the serialisation of the command result.</description>
+		</entry>
+		<entry id="3703" level="ERROR" exception="true">
+			<description>Error during the transformation of the result element.</description>
+			<param name="lineNumber" />
+			<param name="columnNumber" />
+			<param name="publicId" />
+			<param name="systemId" />
+		</entry>
+		<entry id="3704" level="DEBUG">
+			<description>Transforming the result for a command.</description>
+			<param name="command" />
+		</entry>
+		<entry id="3705" level="WARNING">
+			<description>API specification not found.</description>
+			<param name="details" />
+		</entry>
+	</group>
+</log>

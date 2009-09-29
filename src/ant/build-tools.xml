@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="US-ASCII" ?>
+<project name="xins-tools" basedir=".">
+
+	<target name="-init-tools" depends="-load-properties">
+		<path id="tools-cp">
+			<fileset dir="${xins_home}/lib">
+				<include name="**/*.jar"/>
+			</fileset>
+		</path>
+		<input addproperty="api.name"
+		       message="Please, enter the name of the api:" />
+		<available property="api.source.dir" value="apis/${api.name}/impl" file="apis/${api.name}/impl" type="dir" />
+		<fail message="No implementation directory found for API ${api.name}" unless="api.source.dir" />
+	</target>
+
+	<target name="help-tools"  description="Shows the supported commands for the tools.">
+			<echo><![CDATA[Tools targets:
+- download-tools  Downloads the dependencies used by the tools.
+- java2html       Generates HTML pages which contains the API code.
+- pmd             Generates the PMD report for an API.
+- checkstyle      Generates the checkstyle report for an API.
+- coverage        Generates the unit tests code coverage report
+                  for an API.
+- emma            Generates the unit tests code coverage report
+                  using EMMA.
+- findbugs        Generates the FindBugs report for an API.
+- lint4j          Generates the Lint4J report for an API.
+- jdepend         Generates the JDepend report for an API.
+- cvschangelog    Generates the CVS change logs report for an API.
+- jmeter          Generates JMeter tests from the function examples
+- run-jmeter      Executes some JMeter tests.
+- maven           Generates a POM file for an API.
+- eclipse         Generates Eclipse project files for an API.
+- xsd-to-types    Generates XINS type files from XML Schema files.
+- wsdl-to-api     Generates the XINS API files from the WSDL.
+- smd             Generates the Simple Method Description for an API.
+- webstart        Generates the Java Web Start file (JNLP) for an API.
+- glean           Generates Glean report for an API.
+
+The name of the API is specified with the 'api.name' Ant property.
+
+Some build properties can/should be set for some tools:
+findbugs.home     [required, findbugs, directory of FindBugs]
+pmd.rules         [optional, pmd, list of PMD rules]
+jmeter.home       [required, run-jmeter, directory of JMeter]
+jmeter.test       [optional, run-jmeter, test to execute]
+xsd.dir           [required, xsd-to-types, directory of xsd files]
+wsdl.location     [optional, wsdl-to-api, location of the WSDL]
+smd.endpoint      [optional, smd, the enpoint of the API]
+glean.home        [required, glean, directory of Glean]
+]]>
+</echo>
+	</target>
+
+	<target name="download-tools" description="Download the dependencies JAR file used by the tools.">
+		<get src="http://www.ibiblio.org/maven2/java2html/j2h/1.3.1/j2h-1.3.1.jar"
+		     dest="${xins_home}/lib/j2h.jar"
+		     usetimestamp="true" ignoreerrors="true" />
+		<get src="http://www.ibiblio.org/maven2/pmd/pmd/3.9/pmd-3.9.jar"
+		     dest="${xins_home}/lib/pmd.jar"
+		     usetimestamp="true" ignoreerrors="true" />
+		<get src="http://www.ibiblio.org/maven2/jaxen/jaxen/1.1.1/jaxen-1.1.1.jar"
+		     dest="${xins_home}/lib/jaxen.jar"
+		     usetimestamp="true" ignoreerrors="true" />
+		<get src="http://www.ibiblio.org/maven/checkstyle/jars/checkstyle-4.1.jar"
+		     dest="${xins_home}/lib/checkstyle.jar"
+		     usetimestamp="true" ignoreerrors="true" />
+		<get src="http://www.ibiblio.org/maven/commons-beanutils/jars/commons-beanutils-1.7.0.jar"
+		     dest="${xins_home}/lib/commons-beanutils.jar"
+		     usetimestamp="true" ignoreerrors="true" />
+		<get src="http://www.ibiblio.org/maven/antlr/jars/antlr-2.7.6.jar"
+		     dest="${xins_home}/lib/antlr.jar"
+		     usetimestamp="true" ignoreerrors="true" />
+		<get src="http://www.ibiblio.org/maven2/cobertura/cobertura/1.8/cobertura-1.8.jar"
+		     dest="${xins_home}/lib/cobertura.jar"
+		     usetimestamp="true" ignoreerrors="true" />
+		<get src="http://www.ibiblio.org/maven2/asm/asm/2.2.1/asm-2.2.1.jar"
+		     dest="${xins_home}/lib/asm.jar"
+		     usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/emma/emma/2.0.5312/emma-2.0.5312.jar"
+		     dest="${xins_home}/lib/emma.jar"
+		     usetimestamp="true" ignoreerrors="true" />
+		<get src="http://repo1.maven.org/maven2/emma/emma_ant/2.0.5312/emma_ant-2.0.5312.jar"
+		     dest="${xins_home}/lib/emma_ant.jar"
+		     usetimestamp="true" ignoreerrors="true" />
+		<get src="http://www.jutils.com/maven/lint4j/jars/lint4j-0.9.1.jar"
+		     dest="${xins_home}/lib/lint4j.jar"
+		     usetimestamp="true" ignoreerrors="true" />
+		<get src="http://www.ibiblio.org/maven/jdepend/jars/jdepend-2.9.1.jar"
+		     dest="${ant.home}/lib/jdepend.jar"
+		     usetimestamp="true" ignoreerrors="true" />
+		<input addproperty="extra-tools.dir"
+		       message="Where do you want to install FindBugs and JMeter?"
+		       defaultvalue="${xins_home}/.." />
+		<get src="http://heanet.dl.sourceforge.net/sourceforge/findbugs/findbugs-1.3.0.tar.gz"
+		     dest="${extra-tools.dir}/findbugs-1.3.0.tar.gz"
+		     usetimestamp="true" ignoreerrors="true" />
+		<gunzip src="${extra-tools.dir}/findbugs-1.3.0.tar.gz" />
+		<untar src="${extra-tools.dir}/findbugs-1.3.0.tar" dest="${extra-tools.dir}" />
+		<delete file="${extra-tools.dir}/findbugs-1.3.0.tar" />
+		<get src="http://www.eu.apache.org/dist/jakarta/jmeter/binaries/jakarta-jmeter-2.2.tgz"
+		     dest="${extra-tools.dir}/jakarta-jmeter-2.2.tgz"
+		     usetimestamp="true" ignoreerrors="true" />
+		<gunzip src="${extra-tools.dir}/jakarta-jmeter-2.2.tgz" />
+		<untar src="${extra-tools.dir}/jakarta-jmeter-2.2.tar" dest="${extra-tools.dir}" />
+		<delete file="${extra-tools.dir}/jakarta-jmeter-2.2.tgz" />
+		<get src="http://jbrugge.com/glean/glean-1.2.tar.gz"
+		     dest="${extra-tools.dir}/glean-1.2.tar.gz"
+		     usetimestamp="true" ignoreerrors="true" />
+		<gunzip src="${extra-tools.dir}/glean-1.2.1.tar.gz" />
+		<untar src="${extra-tools.dir}/glean-1.2.1.tar" dest="${extra-tools.dir}" />
+		<delete file="${extra-tools.dir}/glean-1.2.1.tar" />
+	</target>
+
+	<target name="java2html" depends="-init-tools" description="Generates HTML pages which contains the API code.">
+		<taskdef name="java2html" classname="com.java2html.Java2HTMLTask">
+			<classpath refid="tools-cp" />
+		</taskdef>
+		<mkdir dir="${builddir}/j2h/${api.name}" />
+		<java2html
+		title="Source X-ref for ${api.name}"
+		destination="${builddir}/j2h/${api.name}"
+		footer="no">
+			<fileset dir="${api.source.dir}">
+				<include name="**/*.java" />
+			</fileset>
+		</java2html>
+		<!--copy
+		file="${xins_home}/src/j2h/front.html"
+		todir="${builddir}/j2h/${api.name}"
+		overwrite="true" /-->
+		<copy file="${xins_home}/src/css/j2h/style.css"
+		tofile="${builddir}/j2h/${api.name}/stylesheet.css"
+		overwrite="true" />
+	</target>
+
+	<target name="pmd" depends="-init-tools" description="Generates the PMD report for an API.">
+		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
+			<classpath refid="tools-cp" />
+		</taskdef>
+		<property name="build.java.version" value="${ant.java.version}" />
+		<property name="pmd.rules" value="rulesets/basic.xml,rulesets/unusedcode.xml" />
+		<mkdir dir="${builddir}/pmd/${api.name}" />
+		<pmd rulesetfiles="${pmd.rules}" targetjdk="${build.java.version}">
+			<formatter type="html" toFile="${builddir}/pmd/${api.name}/index.html"/>
+			<fileset dir="${api.source.dir}">
+				<include name="**/*.java" />
+			</fileset>
+		</pmd>
+	</target>
+
+	<target name="checkstyle" depends="-init-tools" description="Generates the checkstyle report for an API.">
+		<taskdef name="checkstyle" classname="com.puppycrawl.tools.checkstyle.CheckStyleTask">
+			<classpath refid="tools-cp" />
+		</taskdef>
+		<mkdir dir="${builddir}/checkstyle/${api.name}" />
+		<checkstyle config="${xins_home}/src/config/checkstyle/config.xml" failOnViolation="false">
+			<formatter type="xml" tofile="${builddir}/checkstyle/${api.name}/results.xml"/>
+			<fileset dir="${api.source.dir}">
+				<include name="**/*.java"/>
+			</fileset>
+		</checkstyle>
+		<xslt
+		in="${builddir}/checkstyle/${api.name}/results.xml"
+		out="${builddir}/checkstyle/${api.name}/index.html"
+		style="${xins_home}/src/xslt/checkstyle/index.xslt" />
+		<copy
+		file="${xins_home}/src/css/checkstyle/style.css"
+		tofile="${builddir}/checkstyle/${api.name}/stylesheet.css" />
+	</target>
+
+	<target name="coverage" depends="-init-tools" description="Generates the unit tests code coverage report for an API.">
+		<taskdef name="cobertura-instrument" classname="net.sourceforge.cobertura.ant.InstrumentTask">
+			<classpath refid="tools-cp" />
+		</taskdef>
+		<taskdef name="cobertura-report" classname="net.sourceforge.cobertura.ant.ReportTask">
+			<classpath refid="tools-cp" />
+		</taskdef>
+		<delete dir="${builddir}/coverage/${api.name}" />
+		<mkdir dir="${builddir}/coverage/${api.name}" />
+		<antcall target="classes-api-${api.name}" />
+		<cobertura-instrument todir="${builddir}/coverage/${api.name}/instrumented-classes">
+			<fileset dir="${builddir}/classes-api/${api.name}">
+				<include name="**/*.class" />
+				<exclude name="**/*$Request.class" />
+				<exclude name="**/*Result.class" />
+			</fileset>
+		</cobertura-instrument>
+		<copy todir="${builddir}/coverage/${api.name}/instrumented-classes" overwrite="false">
+			<fileset dir="${builddir}/classes-api/${api.name}" includes="**/*.class" />
+		</copy>
+		<antcall target="war-${api.name}">
+			<param name="classes.api.dir" value="${builddir}/coverage/${api.name}/instrumented-classes" />
+		</antcall>
+		<!-- unless explicitly set to false, the API will be started at the same time -->
+		<property name="test.start.server" value="true" />
+		<antcall target="test-${api.name}">
+			<param name="test.start.server" value="${test.start.server}" />
+			<param name="classes.api.dir" value="${builddir}/coverage/${api.name}/instrumented-classes" />
+		</antcall>
+		<cobertura-report format="html"	destdir="${builddir}/coverage/${api.name}"> <!-- datafile="${builddir}/coverage/${api.name}/cobertura.ser" -->
+			<fileset dir="${api.source.dir}" includes="**/*.java" />
+			<fileset dir="${builddir}/java-fundament/${api.name}" includes="**/*.java" />
+		</cobertura-report>
+		<delete file="${project_home}/cobertura.ser" />
+	</target>
+
+	<target name="emma" depends="-init-tools" description="Generates the unit tests code coverage report using EMMA.">
+		<path id="emma.lib">
+			<pathelement location="${xins_home}/lib/emma.jar" />
+			<pathelement location="${xins_home}/lib/emma_ant.jar" />
+		</path>
+
+		<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+		<delete dir="${builddir}/emma/${api.name}" />
+		<mkdir dir="${builddir}/emma/${api.name}" />
+		<antcall target="classes-api-${api.name}" />
+		<path id="instrumented.path">
+			<!-- not working fileset dir="${builddir}/classes-api/${api.name}">
+				<include name="**/*.class" />
+				<exclude name="**/*$Request.class" />
+				<exclude name="**/*Result.class" />
+			</fileset -->
+			<path location="${builddir}/classes-api/${api.name}" />
+		</path>
+		<emma enabled="true">
+			<instr instrpathref="instrumented.path"
+			destdir="${builddir}/emma/${api.name}/instrumented-classes"	
+			metadatafile="${builddir}/emma/${api.name}/metadata.emma" />
+		</emma>
+		<copy todir="${builddir}/emma/${api.name}/instrumented-classes" overwrite="true">
+			<fileset dir="${builddir}/classes-api/${api.name}">
+				<include name="**/*$Request.class" />
+				<include name="**/*Result.class" />
+			</fileset>
+		</copy>
+		<antcall target="war-${api.name}">
+			<param name="classes.api.dir" value="${builddir}/emma/${api.name}/instrumented-classes" />
+		</antcall>
+		<!-- unless explicitly set to false, the API will be started at the same time -->
+		<property name="test.start.server" value="true" />
+		<antcall target="test-${api.name}">
+			<param name="test.start.server" value="${test.start.server}" />
+			<param name="classes.api.dir" value="${builddir}/emma/${api.name}/instrumented-classes" />
+		</antcall>
+		<emma enabled="true">
+			<report sourcepath="${project_home}/apis/${api.name}/impl">
+				<fileset dir="${builddir}/emma/${api.name}">
+					<include name="*.emma" />
+				</fileset>
+				<txt outfile="${builddir}/emma/${api.name}/${api.name}-emma-coverage.txt" />
+				<html outfile="${builddir}/emma/${api.name}/${api.name}-emma-coverage.html" />
+			</report>
+		</emma>
+	</target>
+
+	<target name="findbugs" depends="-prepare-classes, -init-tools" description="Generates the FindBugs report for an API.">
+		<fail message="Please, specify the findbugs.home property" unless="findbugs.home" />
+		<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpath="${findbugs.home}/lib/findbugs-ant.jar" />
+		<mkdir dir="${builddir}/findbugs/${api.name}" />
+		<findbugs home="${findbugs.home}"
+		output="html"
+		outputFile="${builddir}/findbugs/${api.name}/index.html" >
+			<sourcePath path="${api.source.dir}" />
+			<class location="${builddir}/classes-api/${api.name}" />
+			<auxClasspath>
+				<path refid="xins.classpath" />
+			</auxClasspath>
+		</findbugs>
+	</target>
+
+	<target name="lint4j" depends="-init-tools" description="Generates the Lint4J report for an API.">
+		<taskdef name="lint4j" classname="com.jutils.lint4j.ant.Lint4jAntTask">
+			<classpath refid="tools-cp" />
+		</taskdef>
+		<mkdir dir="${builddir}/lint4j/${api.name}" />
+		<condition property="lint4j.package" value="${domain}.*">
+			<isset property="domain" />
+		</condition>
+		<property name="lint4j.package" value="*" />
+		<lint4j packages="${lint4j.package}">
+			<sourcePath path="${api.source.dir}" />
+			<classpath>
+				<path refid="xins.classpath" />
+				<dirset dir="${builddir}">
+					<include name="java-fundament/${api.name}" />
+					<include name="classes-types/${api.name}" />
+					<include name="classes-api/${api.name}" />
+				</dirset>
+			</classpath>
+			<formatters>
+				<formatter type="text"/>
+				<formatter type="text" toFile="${builddir}/lint4j/${api.name}/lint4j-report.txt"/>
+				<formatter type="xml" toFile="${builddir}/lint4j/${api.name}/lint4j-report.xml"/>
+			</formatters>
+		</lint4j>
+	</target>
+
+	<target name="jdepend" depends="-prepare-classes, -init-tools" description="Generates the JDepend report for an API.">
+		<mkdir dir="${builddir}/jdepend/${api.name}" />
+		<jdepend classpathref="xins.classpath" format="xml" outputfile="${builddir}/jdepend/${api.name}/${api.name}-jdepend.xml">
+			<classespath>
+				<pathelement location="${builddir}/classes-api/${api.name}"/>
+			</classespath>
+		</jdepend>
+		<xslt in="${builddir}/jdepend/${api.name}/${api.name}-jdepend.xml"
+		out="${builddir}/jdepend/${api.name}/index.html"
+		style="${ant.home}/etc/jdepend.xsl" />
+	</target>
+
+	<target name="cvschangelog" depends="-init-tools" description="Generates the CVS change logs report for an API.">
+		<mkdir dir="${builddir}/cvschangelog/${api.name}" />
+		<cvschangelog dir="${project_home}/apis/${api.name}" destfile="${builddir}/cvschangelog/${api.name}/changelog.xml" />
+		<xslt in="${builddir}/cvschangelog/${api.name}/changelog.xml"
+		out="index.html"
+		style="${ant.home}/etc/changelog.xsl">
+			<param name="title" expression="Change Log for ${api.name} API"/>
+			<param name="module" expression="${api.name}"/>
+			<param name="cvsweb" expression="${cvsweb}/apis/${api.name}"/>
+		</xslt>
+	</target>
+
+	<target name="jmeter" depends="-init-tools" description="Generates JMeter tests from the function examples.">
+		<mkdir dir="${builddir}/jmeter/${api.name}" />
+		<xslt
+		in="apis/${api.name}/spec/api.xml"
+		out="${builddir}/jmeter/${api.name}/${api.name}.jmx"
+		style="${xins_home}/src/tools/jmeter/${api.name}/api_to_jmx.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="project_home" expression="${project_home}" />
+		</xslt>
+	</target>
+
+	<target name="run-jmeter" depends="-init-tools" description="Executes some JMeter tests.">
+		<fail message="Please, specify the jmeter.home property" unless="jmeter.home" />
+		<taskdef name="jmeter" classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask" classpath="${jmeter.home}/extras/ant-jmeter.jar" />
+		<property name="jmeter.test" value="${builddir}/jmeter/${api.name}/${api.name}" />
+		<jmeter jmeterhome="${jmeter.home}"
+		testplan="${jmeter.test}.jmx"
+		resultlog="${jmeter.test}.jlt">
+			<property name="jmeter.save.saveservice.output_format" value="xml"/>
+			<property name="jmeter.save.saveservice.assertion_results" value="all"/>
+			<property name="file_format.testlog" value="2.0"/>
+		</jmeter>
+		<xslt force="true"
+		in="${jmeter.test}.jlt"
+		out="${builddir}/jmeter/${api.name}/index.html"
+		style="${jmeter.home}/extras/jmeter-results-detail-report.xsl">
+		</xslt>
+	</target>
+
+	<target name="maven" depends="-init-tools" description="Generates a POM file for an API.">
+		<xslt
+		in="apis/${api.name}/spec/api.xml"
+		out="apis/${api.name}/pom.xml"
+		style="${xins_home}/src/tools/maven/api_to_pom.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="api" expression="${api.name}" />
+			<param name="xins_home" expression="${xins_home}" />
+			<param name="project_home" expression="${project_home}" />
+		</xslt>
+	</target>
+
+	<target name="eclipse" depends="-init-tools" description="Generates Eclipse project files for an API.">
+		<!-- Create destination directories -->
+		<mkdir dir="${builddir}/java-fundament/${api.name}" />
+		<mkdir dir="${builddir}/java-types/${api.name}" />
+		<mkdir dir="${builddir}/classes-api/${api.name}" />
+		<mkdir dir="${builddir}/classes-types/${api.name}" />
+
+		<!-- Copy the build file for the API -->
+		<copy file="${xins_home}/demo/xins-project/apis/petstore/nbbuild.xml"
+		todir="apis/${api.name}" overwrite="false" />
+		<replace file="apis/${api.name}/nbbuild.xml"
+		token="value=&quot;petstore&quot;" value="value=&quot;${api.name}&quot;" />
+		<replace file="apis/${api.name}/nbbuild.xml"
+		token="name=&quot;petstore&quot;" value="name=&quot;${api.name}&quot;" />
+
+		<!-- Create the xins user library if needed -->
+		<replace file="${xins_home}/src/tools/eclipse/xins-eclipse.userlibraries"
+		token="%%XINS_HOME%%" value="${xins_home}" />
+
+		<!-- Create the project files -->
+		<xslt
+		in="apis/${api.name}/spec/api.xml"
+		out="apis/${api.name}/.project"
+		style="${xins_home}/src/tools/eclipse/api_to_project.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="project_home" expression="${project_home}" />
+		</xslt>
+		<xslt
+		in="apis/${api.name}/spec/api.xml"
+		out="apis/${api.name}/.classpath"
+		style="${xins_home}/src/tools/eclipse/api_to_classpath.xslt">
+			<xmlcatalog refid="all-dtds" />
+		</xslt>
+		<mkdir dir="apis/${api.name}/.externalToolBuilders" />
+		<xslt
+		in="apis/${api.name}/spec/api.xml"
+		out="apis/${api.name}/.externalToolBuilders/${api.name} Ant Builder.launch"
+		style="${xins_home}/src/tools/eclipse/api_to_antbuilder.xslt">
+			<xmlcatalog refid="all-dtds" />
+		</xslt>
+		<xslt
+		in="apis/${api.name}/spec/api.xml"
+		out="apis/${api.name}/.tomcatplugin"
+		style="${xins_home}/src/tools/eclipse/api_to_tomcatplugin.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="project_home" expression="${project_home}" />
+		</xslt>
+		<xslt
+		in="apis/${api.name}/spec/api.xml"
+		out="apis/${api.name}/tomcat-server.xml"
+		style="${xins_home}/src/tools/eclipse/api_to_tomcatserver.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="project_home" expression="${project_home}" />
+		</xslt>
+	</target>
+
+	<target name="xsd-to-types" depends="-load-properties" description="Generates type files from a set of XML Schema files.">
+		<input addproperty="api.name"
+		       message="Please, enter the name of the api:" />
+		<mkdir dir="apis/${api.name}/spec" />
+		<input addproperty="xsd.dir"
+		       message="Please, enter the directory containing the XSD files:" />
+		<available property="xsd.dir.exists" file="${xsd.dir}" type="dir" />
+		<fail message="No directory &quot;${xsd.dir}&quot; found for XSD." unless="xsd.dir.exists" />
+		<xslt
+		basedir="${xsd.dir}"
+		includes="*.xsd"
+		destdir="apis/${api.name}/spec"
+		extension=".typ"
+		style="${xins_home}/src/xslt/webapp/schema_to_types.xslt">
+			<param name="project_home" expression="${project_home}" />
+			<param name="specsdir" expression="${project_home}/apis/${api.name}/spec" />
+		</xslt>
+	</target>
+
+	<target name="wsdl-to-api-download" unless="wsdl.file">
+		<mkdir dir="${builddir}/wsdl" />
+		<get src="${wsdl.location}" dest="${builddir}/wsdl/${api.name}.wsdl" />
+	</target>
+
+	<target name="wsdl-to-api" depends="-load-properties" description="Generates the XINS API files from the WSDL.">
+		<input addproperty="api.name"
+		       message="Please, enter the name of the api:" />
+		<available property="api.exists" file="${project_home}/apis/${api.name}/spec/api.xml" type="file" />
+		<fail message="There is an already existing API named ${api.name}." if="api.exists" />
+		<input addproperty="wsdl.location"
+		       message="Please, enter the location of the WSDL URL or file:" />
+		<condition property="wsdl.file" value="${wsdl.location}">
+			<not>
+				<or>
+					<contains string="${wsdl.location}" substring="http://" casesensitive="false" />
+					<contains string="${wsdl.location}" substring="https://" casesensitive="false" />
+				</or>
+			</not>
+		</condition>
+		<antcall target="wsdl-to-api-download" />
+		<property name="wsdl.file" value="${builddir}/wsdl/${api.name}.wsdl" />
+		<available property="wsdl.file.exists" file="${wsdl.file}" type="file" />
+		<fail message="No WSDL file &quot;${wsdl.file}&quot; found." unless="wsdl.file.exists" />
+		<!-- Execute some tranformations to be able to get the most of the WSDL -->
+		<copy file="${wsdl.file}" tofile="${wsdl.file}.copy" />
+		<replaceregexp file="${wsdl.file}.copy" match="targetNamespace=&quot;\S*&quot;" replace="" byline="true" />
+		<replaceregexp file="${wsdl.file}.copy" match="xmlns=&quot;\S*&quot;" replace="" byline="true" />
+		<replace file="${wsdl.file}.copy">
+			<replacefilter token="&lt;wsdl:" value="&lt;" />
+			<replacefilter token="&lt;/wsdl:" value="&lt;/" />
+			<replacefilter token="&lt;xs:schema " value="&lt;xsd:schema xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; " />
+			<replacefilter token="&lt;xs:" value="&lt;xsd:" />
+			<replacefilter token="&lt;/xs:" value="&lt;/xsd:" />
+			<replacefilter token="&quot;xs:" value="&quot;xsd:" />
+			<replacefilter token="&lt;s:schema " value="&lt;xsd:schema xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; " />
+			<replacefilter token="&lt;s:" value="&lt;xsd:" />
+			<replacefilter token="&lt;/s:" value="&lt;/xsd:" />
+			<replacefilter token="&quot;s:" value="&quot;xsd:" />
+			<replacefilter token="&lt;schema " value="&lt;xsd:schema xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; " />
+			<replacefilter token="&lt;/schema" value="&lt;/schema" />
+			<replacefilter token="&lt;/schema" value="&lt;/xsd:schema" />
+			<replacefilter token="&lt;complexType" value="&lt;xsd:complexType" />
+			<replacefilter token="&lt;/complexType" value="&lt;/xsd:complexType" />
+			<replacefilter token="&lt;sequence" value="&lt;xsd:sequence" />
+			<replacefilter token="&lt;/sequence" value="&lt;/xsd:sequence" />
+			<replacefilter token="&lt;element" value="&lt;xsd:element" />
+			<replacefilter token="&lt;/element" value="&lt;/xsd:element" />
+			<replacefilter token="&lt;simpleType" value="&lt;xsd:simpleType" />
+			<replacefilter token="&lt;/simpleType" value="&lt;/xsd:simpleType" />
+			<replacefilter token="&lt;complexContent" value="&lt;xsd:complexContent" />
+			<replacefilter token="&lt;/complexContent" value="&lt;/xsd:complexContent" />
+			<replacefilter token="&lt;extension" value="&lt;xsd:extension" />
+			<replacefilter token="&lt;/extension" value="&lt;/xsd:extension" />
+		</replace>
+		<xslt
+		in="${wsdl.file}.copy"
+		out="apis/${api.name}/spec/api.xml"
+		style="${xins_home}/src/xslt/webapp/wsdl_to_api.xslt">
+			<param name="project_home" expression="${project_home}" />
+			<param name="specsdir" expression="${project_home}/apis/${api.name}/spec" />
+			<param name="api_name" expression="${api.name}" />
+		</xslt>
+		<!--delete file="${wsdl.file}.copy" /-->
+	</target>
+
+	<target name="smd" depends="-init-tools" description="Generates the SMD file for an API.">
+		<mkdir dir="${builddir}/smd" />
+		<property name="smd.endpoint" value="" />
+		<xslt
+		in="apis/${api.name}/spec/api.xml"
+		out="${builddir}/smd/${api.name}.smd"
+		style="${xins_home}/src/tools/dojo/api_to_smd.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="project_home" expression="${project_home}" />
+			<param name="endpoint" expression="${smd.endpoint}" />
+		</xslt>
+		<replace file="${builddir}/smd/${api.name}.smd">
+			<replacefilter token="//?_convention=_xins-jsonrpc" value="/?_convention=_xins-jsonrpc" />
+		</replace>
+	</target>
+
+	<target name="webstart" depends="-init-tools" description="Generates the Web Start file for an API.">
+		<mkdir dir="${builddir}/webstart" />
+		<xslt
+		in="apis/${api.name}/spec/api.xml"
+		out="${builddir}/webstart/${api.name}.jnlp"
+		style="${xins_home}/src/tools/webstart/api_to_jnlp.xslt">
+			<xmlcatalog refid="all-dtds" />
+			<param name="project_home" expression="${project_home}" />
+			<param name="xins_version" expression="${xins_version}" />
+		</xslt>
+	</target>
+
+	<target name="glean" depends="-init-tools" description="Generates the Glean report for an API.">
+		<mkdir dir="${builddir}/glean" />
+		<available property="glean.props.available" file="apis/${api.name}/glean.properties" />
+		<antcall target="create-glean-props" />
+		<property name="project.feedback.properties" file="${project_home}/apis/${api.name}/glean.properties" />
+		<ant antfile="${glean.home}/build.xml" dir="${glean.home}" inheritall="false">
+			<property name="feedback.properties" value="${project.feedback.properties}"/>
+		</ant>
+	</target>
+
+	<target name="create-glean-props" depends="-init-tools" description="Generates the Glean properties file for an API." unless="glean.props.available">
+		<echo file="apis/${api.name}/glean.properties">
+# Glean properties for the ${api.name} API
+
+# Define which tools you want feedback from
+tool.pattern = javadoc,javancss,jdepend,pmd
+
+# Define the base of the project as an absolute path, not relative
+project.root = ${project_home}/apis/${api.name}
+
+src.dir = ${project.root}/impl
+bin.dir = ${project_home}/build/classes-api/${api.name}
+lib.dir = ${xins_home}/lib
+
+src.project.name = ${api.name} API
+
+gen.report.root = ${project_home}/build/glean
+</echo>
+	</target>
+</project>

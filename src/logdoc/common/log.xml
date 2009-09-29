@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE log PUBLIC "-//XINS//DTD XINS Logdoc 3.0//EN" "http://www.xins.org/dtd/log_3_0.dtd">
+<!-- $Id: log.xml,v 1.71 2007/09/13 14:18:01 agoubard Exp $ -->
+
+<log since="XINS 1.0.0">
+	<translation-bundle locale="en_US" />
+	<translation-bundle locale="fr_FR" />
+
+	<!-- <group id="trace" name="Tracing of constructors, class functions and instance methods"> -->
+		<!-- XXX: Removed 1000 here (@since XINS 1.3.0) -->
+		<!-- XXX: Removed 1001 here (@since XINS 1.3.0) -->
+		<!-- XXX: Removed 1002 here (@since XINS 1.3.0) -->
+		<!-- XXX: Removed 1003 here (@since XINS 1.3.0) -->
+		<!-- XXX: Removed 1004 here (@since XINS 1.3.0) -->
+		<!-- XXX: Removed 1005 here (@since XINS 1.3.0) -->
+	<!-- </group> -->
+
+	<group id="lowlevel" name="Low-level generic messages">
+		<entry id="1050" level="ERROR">
+			<description>Programming error (not due to an unexpected exception).</description>
+			<param name="detectingClass"  type="text" nullable="false" />
+			<param name="detectingMethod" type="text" nullable="false" />
+			<param name="subjectClass"    type="text" nullable="false" />
+			<param name="subjectMethod"   type="text" nullable="false" />
+			<param name="detail"          type="text" nullable="true"  />
+		</entry>
+		<entry id="1051" level="DEBUG">
+			<description>Ignoring allowable exception.</description>
+			<param name="exceptionClass"  type="text" nullable="false" />
+			<param name="exceptionMessage" type="text" nullable="true" />
+			<param name="detectingClass"  type="text" nullable="false" />
+			<param name="detectingMethod" type="text" nullable="false" />
+			<param name="subjectClass"    type="text" nullable="false" />
+			<param name="subjectMethod"   type="text" nullable="false" />
+			<param name="detail"          type="text" nullable="true"  />
+		</entry>
+		<entry id="1052" level="ERROR" exception="true">
+			<description>Programming error (unexpected exception).</description>
+			<param name="detectingClass"  type="text" nullable="false" />
+			<param name="detectingMethod" type="text" nullable="false" />
+			<param name="subjectClass"    type="text" nullable="false" />
+			<param name="subjectMethod"   type="text" nullable="false" />
+			<param name="detail"          type="text" nullable="true"  />
+		</entry>
+		<entry id="1053" level="DEBUG" exception="true">
+			<description>Untranslated debug message.</description>
+			<param name="message" type="text" nullable="true" />
+		</entry>
+		<entry id="1054" level="INFO" exception="true">
+			<description>Untranslated informational message.</description>
+			<param name="message" type="text" nullable="true" />
+		</entry>
+		<entry id="1055" level="NOTICE" exception="true">
+			<description>Untranslated notice message.</description>
+			<param name="message" type="text" nullable="true" />
+		</entry>
+		<entry id="1056" level="WARNING" exception="true">
+			<description>Untranslated warning message.</description>
+			<param name="message" type="text" nullable="true" />
+		</entry>
+		<entry id="1057" level="ERROR" exception="true">
+			<description>Untranslated non-fatal error message.</description>
+			<param name="message" type="text" nullable="true" />
+		</entry>
+		<entry id="1058" level="FATAL" exception="true">
+			<description>Untranslated fatal error message.</description>
+			<param name="message" type="text" nullable="true" />
+		</entry>
+	</group>
+
+	<group id="http" name="HTTP-related">
+		<entry id="1100" level="INFO">
+			<description>Calling HTTP service.</description>
+			<param name="url"	     type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+		</entry>
+		<entry id="1101" level="DEBUG">
+			<description>HTTP service called.</description>
+			<param name="url"	     type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+		</entry>
+		<entry id="1102" level="NOTICE" exception="false">
+			<description>Unknown host error while calling HTTP service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+		</entry>
+		<entry id="1103" level="NOTICE">
+			<description>Connection refused while calling HTTP service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+		</entry>
+		<entry id="1104" level="NOTICE">
+			<description>Connection time-out while calling HTTP service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+			<param name="timeOut"    type="int32"  nullable="false"               />
+		</entry>
+		<entry id="1105" level="NOTICE">
+			<description>Socket time-out while calling HTTP service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+			<param name="timeOut"    type="int32"  nullable="false"               />
+		</entry>
+		<entry id="1106" level="NOTICE">
+			<description>Total call time-out while calling HTTP service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+			<param name="timeOut"    type="int32"  nullable="false"               />
+		</entry>
+		<entry id="1107" level="INFO">
+			<description>HTTP result received, status code is considered acceptable.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+			<param name="code"       type="int32"  nullable="false"               />
+		</entry>
+		<entry id="1108" level="INFO">
+			<description>HTTP result received, status code is considered unacceptable.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+			<param name="code"       type="int32"  nullable="false"               />
+		</entry>
+		<entry id="1109" level="NOTICE" exception="true">
+			<description>Unrecognized I/O error while calling HTTP service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+		</entry>
+		<entry id="1110" level="NOTICE">
+			<description>No route to host while calling HTTP service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+		</entry>
+	</group>
+
+	<group id="io" name="General I/O">
+		<entry id="1200" level="INFO">
+			<description>Starting file watch thread.</description>
+			<param name="id"       type="int32" nullable="false" />
+			<param name="file"     type="text"  nullable="false" />
+			<param name="interval" type="int32" nullable="false" />
+		</entry>
+		<entry id="1201" level="INFO">
+			<description>Changing file watch interval.</description>
+			<param name="id"          type="int32" nullable="false" />
+			<param name="file"        type="text"  nullable="false" />
+			<param name="oldInterval" type="int32" nullable="false" />
+			<param name="newInterval" type="int32" nullable="false" />
+		</entry>
+		<entry id="1202" level="INFO">
+			<description>Stopping file watch thread.</description>
+			<param name="id"   type="int32" nullable="false" />
+			<param name="file"              nullable="false" />
+		</entry>
+		<entry id="1203" level="INFO">
+			<description>Stopped file watch thread.</description>
+			<param name="id" type="int32" nullable="false" />
+			<param name="file"            nullable="false" />
+		</entry>
+		<entry id="1204" level="WARNING" exception="true">
+			<description>I/O Error for the HTTPFileWatcher.</description>
+		</entry>
+	</group>
+
+	<group id="text" name="Text">
+		<entry id="1250" level="DEBUG">
+			<description>Increasing capacity of FastStringBuffer instance.</description>
+			<param name="currentCapacity" type="int32" nullable="false" />
+			<param name="newCapacity"     type="int32" nullable="false" />
+		</entry>
+	</group>
+
+	<group id="service" name="Service calling framework">
+		<entry id="1300" level="DEBUG" exception="true">
+			<description>URL is malformed.</description>
+			<param name="url" type="text" nullable="false" />
+		</entry>
+		<entry id="1301" level="DEBUG">
+			<description>Call to a specific target succeeded.</description>
+			<param name="url" type="text" nullable="false" />
+		</entry>
+		<entry id="1302" level="DEBUG">
+			<description>Call to a specific target failed.</description>
+			<param name="url" type="text" nullable="false" />
+		</entry>
+		<entry id="1303" level="DEBUG">
+			<description>Call completely failed.</description>
+			<!-- TODO: Include call (request) ID ? -->
+		</entry>
+		<entry id="1304" level="DEBUG">
+			<description>No more targets and no fail-over</description>
+		</entry>
+		<entry id="1305" level="DEBUG">
+			<description>No more targets, but fail-over would be allowed</description>
+		</entry>
+		<entry id="1306" level="DEBUG">
+			<description>More targets available, but fail-over is not allowed</description>
+		</entry>
+		<entry id="1307" level="DEBUG">
+			<description>More targets available and fail-over is allowed</description>
+		</entry>
+		<entry id="1308" level="DEBUG">
+			<description>Unsupported protocol.</description>
+			<param name="url" type="text" nullable="false" />
+		</entry>
+		<entry id="1309" level="DEBUG">
+			<description>About to call a specific target.</description>
+			<param name="url" type="text" nullable="false" />
+		</entry>
+	</group>
+
+	<group id="collections" name="Generic collection classes">
+		<entry id="1350" level="WARNING">
+			<description>A property value has changed.</description>
+			<param name="key" type="text" nullable="false" />
+			<param name="oldValue" type="text" nullable="false" />
+			<param name="newValue" type="text" />
+		</entry>
+		<entry id="1351" level="ERROR">
+			<description>A property value has changed.</description>
+			<param name="key" type="text" nullable="false" />
+			<param name="oldValue" type="text" nullable="false" />
+			<param name="newValue" type="text" />
+		</entry>
+	</group>
+
+	<group id="collections.expiry" name="Expiry-related collection classes">
+		<entry id="1400" level="DEBUG">
+			<description>Tick processed by expiry folder.</description>
+			<param name="folderInstanceNumber" type="int32" nullable="false" />
+			<param name="folderName"           type="text"  nullable="false" />
+			<param name="expired"              type="int32" nullable="false" />
+		</entry>
+		<entry id="1401" level="DEBUG">
+			<description>Associating expiry folder with expiry stategy thread.</description>
+			<param name="folderInstanceNumber"   type="int32" nullable="false" />
+			<param name="folderName"             type="text"  nullable="false" />
+			<param name="strategyInstanceNumber" type="int32" nullable="false" />
+		</entry>
+		<entry id="1402" level="DEBUG">
+			<description>Expiry strategy thread started.</description>
+			<param name="instanceNumber" type="int32" nullable="false" />
+		</entry>
+		<entry id="1403" level="DEBUG">
+			<description>Expiry strategy thread stopped.</description>
+			<param name="instanceNumber" type="int32" nullable="false" />
+		</entry>
+		<entry id="1404" level="DEBUG">
+			<description>Sleeping in expiry strategy thread.</description>
+			<param name="instanceNumber" type="int32" nullable="false" />
+			<param name="duration" type="int64" nullable="false" />
+		</entry>
+		<entry id="1405" level="DEBUG">
+			<description>Sleep interrupted in expiry strategy thread.</description>
+			<param name="instanceNumber" type="int32" nullable="false" />
+			<param name="duration"       type="int64" nullable="false" />
+		</entry>
+		<entry id="1406" level="DEBUG">
+			<description>Woke up after sleeping in expiry strategy thread.</description>
+			<param name="instanceNumber" type="int32" nullable="false" />
+			<param name="duration"       type="int64" nullable="false" />
+		</entry>
+		<entry id="1407" level="DEBUG">
+			<description>Triggering tick in expiry strategy thread.</description>
+			<param name="instanceNumber" type="int32" nullable="false" />
+		</entry>
+		<entry id="1408" level="DEBUG">
+			<description>Constructed a new expiry folder</description>
+			<param name="instanceNumber" type="int32" nullable="false" />
+			<param name="name"           type="text"  nullable="false" />
+		</entry>
+		<entry id="1409" level="DEBUG">
+			<description>Constructed a new expiry strategy.</description>
+			<param name="instanceNumber" type="int32" nullable="false" />
+			<param name="timeOut"        type="int64" nullable="false" />
+			<param name="precision"      type="int64" nullable="false" />
+		</entry>
+	</group>
+
+	<group id="container" name="Servlet container">
+		<entry id="1500" level="INFO">
+			<description>HTTP Servlet container started on a specific port.</description>
+			<param name="port" type="int32" nullable="false" />
+		</entry>
+		<entry id="1501" level="ERROR" exception="true">
+			<description>The HTTP Servlet container has thrown an I/O exception.</description>
+		</entry>
+		<entry id="1502" level="ERROR" exception="true">
+			<description>Error when closing the HTTP Servlet container.</description>
+		</entry>
+		<entry id="1503" level="DEBUG">
+			<description>Loading and initializing the Servlet.</description>
+			<param name="warFile" type="text" nullable="false" />
+		</entry>
+		<entry id="1504" level="DEBUG">
+			<description>Performing a query to the API.</description>
+			<param name="query" type="text" nullable="false" />
+		</entry>
+		<entry id="1505" level="ERROR" exception="true">
+			<description>Query to the API failed.</description>
+		</entry>
+		<entry id="1506" level="DEBUG">
+			<description>Query to the API succeeded.</description>
+			<param name="response" type="text" nullable="true" />
+			<param name="status" type="int32" nullable="false" />
+		</entry>
+		<entry id="1507" level="DEBUG">
+			<description>Closing the Servlet container.</description>
+		</entry>
+		<entry id="1508" level="ERROR" exception="true">
+			<description>Failed to load the Servlet due to a Servlet exception.</description>
+		</entry>
+		<entry id="1509" level="ERROR" exception="true">
+			<description>Failed to load the Servlet due to a generic exception.</description>
+		</entry>
+		<entry id="1510" level="INFO">
+			<description>Message logged using the Servlet context.</description>
+			<param name="message" type="text" nullable="true" />
+		</entry>
+		<entry id="1511" level="WARNING" exception="true">
+			<description>Exception logged using the Servlet context.</description>
+			<param name="message" type="text" nullable="true" />
+		</entry>
+		<entry id="1512" level="ERROR" exception="true">
+			<description>Failed to load or parse the WEB_INF/web.xml file.</description>
+		</entry>
+		<entry id="1513" level="WARNING">
+			<description>Incorrect URL.</description>
+			<param name="url" type="text" nullable="false" />
+		</entry>
+		<entry id="1514" level="WARNING">
+			<description>Resource not found.</description>
+			<param name="location" type="text" nullable="false" />
+			<param name="reason" type="text" />
+		</entry>
+	</group>
+	
+	<group id="xml" name="XML">
+		<entry id="1550" level="ERROR" exception="true">
+			<description>Unable to create a SAX parser.</description>
+		</entry>
+	</group>
+
+	<group id="types" name="Types" />
+
+	<group id="utils" name="Utilities">
+		<entry id="1600" level="WARNING">
+			<description>Error when trying to convert a value.</description>
+			<param name="value" type="text" />
+			<param name="valueClass" type="text" />
+			<param name="destClass" type="text" />
+			<param name="exceptionClass" type="text" nullable="false" />
+			<param name="reason" type="text" />
+		</entry>
+	</group>
+</log>

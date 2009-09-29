@@ -1,0 +1,13 @@
+<!--
+ XINS Type DTD. This DTD should be added to the authors.xml file by adding the
+ following lines at the top of the file :
+<!DOCTYPE authors PUBLIC "-//XINS//DTD Authors 1.1//EN" "http://www.xins.org/dtd/authors_1_1.dtd">
+-->
+<!ELEMENT authors (author*)>
+<!ELEMENT author EMPTY>
+<!ATTLIST author
+          id         NMTOKEN #REQUIRED
+          email      NMTOKEN #REQUIRED
+          name       CDATA   #REQUIRED
+>
+

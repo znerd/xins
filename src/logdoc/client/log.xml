@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE log PUBLIC "-//XINS//DTD XINS Logdoc 3.0//EN" "http://www.xins.org/dtd/log_3_0.dtd">
+<!-- $Id: log.xml,v 1.45 2007/05/29 12:22:30 agoubard Exp $ -->
+
+<log since="XINS 1.0.0">
+	<translation-bundle locale="en_US" />
+	<translation-bundle locale="fr_FR" />
+
+	<group id="call" name="XINS service calling">
+		<entry id="2100" level="INFO">
+			<description>Calling XINS service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="function"   type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+		</entry>
+		<entry id="2101" level="INFO">
+			<description>Successful XINS result received.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="function"   type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+		</entry>
+		<entry id="2102" level="WARNING" exception="false">
+			<description>Unknown host error while calling XINS service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="function"   type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+		</entry>
+		<entry id="2103" level="WARNING">
+			<description>Connection refused while calling XINS service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="function"   type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+		</entry>
+		<entry id="2104" level="WARNING">
+			<description>Connection time-out while calling XINS service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="function"   type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+			<param name="timeOut"    type="int32"  nullable="false"               />
+		</entry>
+		<entry id="2105" level="WARNING">
+			<description>Socket time-out while calling XINS service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="function"   type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+			<param name="timeOut"    type="int32"  nullable="false"               />
+		</entry>
+		<entry id="2106" level="WARNING">
+			<description>Total call time-out while calling XINS service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="function"   type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+			<param name="timeOut"    type="int32"  nullable="false"               />
+		</entry>
+		<!-- XXX: 2107 -->
+		<entry id="2108" level="WARNING">
+			<description>Unacceptable status code received while calling XINS service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="function"   type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+			<param name="code"       type="int32"  nullable="false"               />
+		</entry>
+		<entry id="2109" level="WARNING" exception="true">
+			<description>Unrecognized I/O error while calling XINS service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="function"   type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+		</entry>
+		<entry id="2110" level="WARNING" exception="false">
+			<description>Invalid result received from XINS service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="function"   type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+			<param name="detail"     type="text"   nullable="false"               />
+		</entry>
+		<entry id="2111" level="WARNING" exception="true">
+			<description>Unexpected exception while calling XINS service.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="function"   type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+		</entry>
+		<entry id="2112" level="WARNING" exception="false">
+			<description>Unsuccessful XINS result received.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="function"   type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+			<param name="errorCode"  type="text"   nullable="false"               />
+		</entry>
+		<entry id="2113" level="ERROR" exception="false">
+			<description>XINS call request completely failed.</description>
+			<param name="function"   type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+			<param name="reason"     type="text"   nullable="true"                />
+		</entry>
+		<entry id="2114" level="WARNING">
+			<description>The CAPI has been compiled with a different XINS version.</description>
+			<param name="apiName"        type="text" nullable="true"  />
+			<param name="buildVersion"   type="text" nullable="false" />
+			<param name="runtimeVersion" type="text" nullable="false" />
+		</entry>
+		<entry id="2115" level="INFO">
+			<description>Functional error code returned from XINS call.</description>
+			<param name="url"        type="text"   nullable="false"               />
+			<param name="function"   type="text"   nullable="false"               />
+			<param name="parameters" type="object" nullable="true"  filter="true" />
+			<param name="duration"   type="int64"  nullable="false"               />
+			<param name="errorCode"  type="text"   nullable="false"               />
+		</entry>
+		<entry id="2116" level="WARNING" exception="true">
+			<description>Unable to find the API specifications, trying with the ClassLoader.</description>
+			<param name="apiName" type="text" />
+		</entry>
+		<entry id="2117" level="ERROR" exception="true">
+			<description>Error when calling the API using the file protocol.</description>
+		</entry>
+	</group>
+
+	<group id="parse" name="XINS call result parsing">
+		<entry id="2200" level="NOTICE">
+			<description>Root element is not "result".</description>
+			<param name="namespaceURI" type="text" nullable="true" />
+			<param name="localName"    type="text" nullable="false" />
+		</entry>
+		<entry id="2201" level="INFO">
+			<description>Found output parameter with name nor value.</description>
+		</entry>
+		<entry id="2202" level="INFO">
+			<description>Found output parameter without name.</description>
+			<param name="value" type="text" nullable="false" />
+		</entry>
+		<entry id="2203" level="INFO">
+			<description>Found output parameter without value.</description>
+			<param name="name" type="text" nullable="false" />
+		</entry>
+		<entry id="2204" level="DEBUG">
+			<description>Parsed output parameter.</description>
+			<param name="name"  type="text" nullable="false" />
+			<param name="value" type="text" nullable="false" />
+		</entry>
+		<entry id="2205" level="NOTICE" exception="true">
+			<description>Unable to convert the specified character string to XML.</description>
+			<param name="detail" type="text" nullable="true" />
+		</entry>
+		<entry id="2206" level="INFO">
+			<description>Ignoring unrecognized element at root level.</description>
+			<param name="namespaceURI" type="text" nullable="true" />
+			<param name="localName"    type="text" nullable="false" />
+		</entry>
+	</group>
+</log>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-meta xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" office:version="1.0">
+	<office:meta>
+		<meta:generator>XINS #version#</meta:generator>
+		<meta:creation-date>#date#</meta:creation-date>
+		<dc:date>#date#</dc:date>
+		<dc:language>en-US</dc:language>
+		<meta:editing-cycles>1</meta:editing-cycles>
+		<meta:user-defined meta:name="Info 1"/>
+		<meta:user-defined meta:name="Info 2"/>
+		<meta:user-defined meta:name="Info 3"/>
+		<meta:user-defined meta:name="Info 4"/>
+		<meta:document-statistic meta:image-count="0" meta:object-count="0"/>
+	</office:meta>
+</office:document-meta>

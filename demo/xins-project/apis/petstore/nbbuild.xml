@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="US-ASCII" ?>
+
+<project name="petstore" default="-init" basedir="../..">
+
+	<!-- $Id: nbbuild.xml,v 1.19 2007/08/23 14:44:43 agoubard Exp $ -->
+	<!-- Uncomment the following if you want to see the other targets. -->
+	<!-- If this file is not in the project directory change the file attribute accordingly. -->
+	<!--import file="c:/projects/xins-apis/build/build.xml" optional="true" /-->
+
+	<target name="-init-properties">
+		<!-- Override the following property for your own project -->
+		<property name="xins.properties" value="${basedir}/../xins.properties" />
+
+		<property name="api.name" value="petstore" />
+		<available property="xins.properties.exists" file="${xins.properties}" type="file" />
+
+		<property environment="env" />
+		<available property="xins.home" value="c:\projects\xins"
+		           file="${env.XINS_HOME}" type="dir" />
+		<fail message="Please set the XINS_HOME variable correctly" unless="xins.home" />
+
+		<path id="api.classpath">
+			<fileset includes="logdoc.jar xins-common.jar xins-client.jar xins-server.jar" dir="${xins.home}/build"/>
+			<fileset includes="commons-codec.jar commons-httpclient.jar commons-logging.jar commons-net.jar jakarta-oro.jar log4j.jar servlet.jar xmlenc.jar" dir="${xins.home}/lib"/>
+			<path location="build/classes-api/${api.name}"/>
+			<path location="build/classes-types/${api.name}"/>
+		</path>
+
+	</target>
+
+	<target name="-init" depends="-init-properties, make-build" />
+	<!-- Creates or updates the build.xml -->
+	<target name="make-build" depends="-init-properties" description="Creates or updates the build.xml">
+		<ant antfile="${xins.home}/src/ant/make-build.xml" dir="${basedir}">
+			<property name="xins_home" value="${xins.home}" />
+			<property name="user.dir" value="${basedir}" />
+		</ant>
+	</target>
+
+	<target name="build" depends="-init" description="Builds the API">
+		<!-- If you're using Tomcat for the WAR file, you may want to remove the
+         unpacked directory before rebuilding the WAR. To do it just uncomment
+         the following line. -->
+		<!-- <delete dir="${basedir}/build/webapps/${api.name}/${api.name}" /> -->
+		<ant antfile="${basedir}/build/build.xml"
+		     dir="${basedir}"
+		     target="war-${api.name}">
+			<property name="user.dir" value="${basedir}" />
+		</ant>
+	</target>
+
+	<target name="specdocs" depends="-init" description="Builds the specdocs API">
+		<ant antfile="${basedir}/build/build.xml"
+		     dir="${basedir}"
+		     target="specdocs-${api.name}">
+			<property name="user.dir" value="${basedir}" />
+		</ant>
+		<antcall target="-nbbrowse">
+			<param name="file" value="${basedir}/build/specdocs/${api.name}/index.html" />
+		</antcall>
+	</target>
+
+	<target name="clean" depends="-init" description="Cleans the API">
+		<ant antfile="${basedir}/build/build.xml"
+		     dir="${basedir}"
+		     target="clean-${api.name}">
+			<property name="user.dir" value="${basedir}" />
+		</ant>
+	</target>
+
+	<target name="javadoc" depends="-init" description="Creates the Javadoc of the API">
+		<ant antfile="${basedir}/build/build.xml"
+		     dir="${basedir}"
+		     target="javadoc-api-${api.name}">
+			<property name="user.dir" value="${basedir}" />
+		</ant>
+		<antcall target="-nbbrowse">
+			<param name="file" value="${basedir}/build/javadoc-api/${api.name}/index.html" />
+		</antcall>
+	</target>
+
+	<target name="test" depends="-init" description="Run the unit tests of the API">
+		<ant antfile="${basedir}/build/build.xml"
+		     dir="${basedir}"
+		     target="test-${api.name}">
+			<property name="user.dir" value="${basedir}" />
+		</ant>
+	</target>
+
+	<target name="-nbbrowse" depends="-init" if="netbeans.home">
+		<nbbrowse file="${file}" />
+	</target>
+
+	<!-- Run the API using the internal servlet container. -->
+	<target name="run" depends="build, copy-props" description="Executes the API">
+		<available property="xins.properties.available" file="${xins.properties}" type="file" />
+		<fail message="Please, set the xins.properties variable correctly" unless="xins.properties.available" />
+		<ant antfile="${basedir}/build/build.xml"
+		     dir="${basedir}"
+		     target="run-${api.name}">
+			<property name="user.dir" value="${basedir}" />
+			<property name="org.xins.server.config" value="${xins.properties}" />
+		</ant>
+	</target>
+
+	<!-- Run the API using Jetty servlet container. Jetty is available at http://jetty.mortbay.org/ -->
+	<target name="run-jetty" depends="build, specdocs, copy-props" description="Executes the API using Jetty">
+		<available property="jetty.xml.exists" file="${basedir}/jetty_${api.name}.xml" />
+		<antcall target="jetty-xml" />
+		<available property="xins.properties.available" file="${xins.properties}" type="file" />
+		<fail message="Please, set the xins.properties variable correctly" unless="xins.properties.available" />
+		<java jar="${env.JETTY_HOME}/start.jar" dir="${basedir}" fork="true">
+			<jvmarg value="-Dorg.xins.server.config=${xins.properties}" />
+			<jvmarg value="-Djetty.home=${env.JETTY_HOME}" />
+			<arg value="jetty_${api.name}.xml" />
+		</java>
+	</target>
+
+	<target name="deploy-tomcat" depends="build" description="Executes the API using Tomcat">
+		<available property="tomcat.file" file="${user.home}/.netbeans/dev/tomcat55.properties" value="${user.home}/.netbeans/dev/tomcat55.properties" />
+		<available property="tomcat.file" file="${user.home}/.netbeans/5.5/tomcat55.properties" value="${user.home}/.netbeans/5.5/tomcat55.properties" />
+		<available property="tomcat.file" file="${user.home}/.netbeans/5.0/tomcat55.properties" value="${user.home}/.netbeans/5.0/tomcat55.properties" />
+		<fail message="Please set the tomcat.file property" unless="tomcat.file" />
+		<loadproperties srcfile="${tomcat.file}" />
+
+		<!-- This one seems to throw a NullPointerException (NB 6.0 M7) -->
+		<!-- nbdeploy debugmode="true" clientUrlPart="${tomcat.url}/${api.name}" forceRedeploy="true"/ -->
+
+		<property name="catalina.ant.jar" value="${tomcat.home}/server/lib/catalina-ant.jar" />
+		<taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask" classpath="${catalina.ant.jar}"/>
+		<taskdef name="undeploy"  classname="org.apache.catalina.ant.UndeployTask" classpath="${catalina.ant.jar}"/>
+		<!-- uncomment undeployed once the application is deployed -->
+		<!--undeploy url="${tomcat.url}/manager" username="${tomcat.username}"
+							password="${tomcat.password}" path="/${api.name}"/-->
+		<deploy url="${tomcat.url}/manager" username="${tomcat.username}"
+						password="${tomcat.password}" path="/${api.name}"
+						war="${basedir}/build/webapps/${api.name}/${api.name}.war"/>
+	</target>
+
+	<target name="debug" depends="build, copy-props" description="Debugs the API">
+		<fail unless="netbeans.home">This target can only run inside the NetBeans IDE.</fail>
+		<available property="xins.properties.available" file="${xins.properties}" type="file" />
+		<fail message="Please, set the xins.properties variable correctly" unless="xins.properties.available" />
+		<nbjpdastart name="${api.name}" addressproperty="jpda.address" transport="dt_socket">
+			<classpath>
+				<pathelement location="${basedir}/build/classes-api/${api.name}" />
+				<pathelement location="${basedir}/build/classes-types/${api.name}" />
+				<pathelement location="${basedir}/build/classes-tests/${api.name}" />
+				<pathelement location="${xins.home}/build/xins-server.jar" />
+				<pathelement location="${xins.home}/build/xins-common.jar" />
+			</classpath>
+			<sourcepath>
+				<pathelement location="${basedir}/apis/${api.name}/impl" />
+				<pathelement location="${basedir}/build/java-types/${api.name}" />
+				<pathelement location="${basedir}/apis/${api.name}/test" />
+				<pathelement location="${xins.home}/src/java-server-framework" />
+				<pathelement location="${xins.home}/src/java-common" />
+			</sourcepath>
+		</nbjpdastart>
+		<java fork="true" classname="org.xins.common.servlet.container.HTTPServletStarter">
+			<jvmarg value="-Dorg.xins.server.config=${xins.properties}" />
+			<jvmarg value="-Xdebug" />
+			<jvmarg value="-Xnoagent" />
+			<jvmarg value="-Djava.compiler=none" />
+			<jvmarg value="-Xrunjdwp:transport=dt_socket,address=${jpda.address}"/>
+			<arg path="build/webapps/${api.name}/${api.name}.war"/>
+			<classpath refid="api.classpath" />
+		</java>
+	</target>
+
+	<target name="debug-fix" depends="-init-properties" description="Fix a bug while debugging the API">
+		<fail unless="netbeans.home">This target can only run inside the NetBeans IDE.</fail>
+		<ant antfile="${basedir}/build/build.xml"
+		     dir="${basedir}"
+		     target="classes-api-${api.name}">
+			<property name="user.dir" value="${basedir}" />
+		</ant>
+		<nbjpdareload>
+			<fileset dir="${basedir}/build/classes-api/${api.name}">
+				<include name="**/*.class"/>
+			</fileset>
+		</nbjpdareload>
+	</target>
+
+	<!-- The profiler is available at http://profiler.netbeans.org/ or included in NetBeans 6-->
+	<target name="profile" depends="build, specdocs, copy-props" description="Profile the API">
+		<fail unless="profiler.info.jvm">This target should be executed using the Profile -> Profile Main Project menu item.</fail>
+		<available property="xins.properties.available" file="${xins.properties}" type="file" />
+		<fail message="Please, set the xins.properties variable correctly" unless="xins.properties.available" />
+		<nbprofiledirect>
+			<classpath refid="api.classpath" />
+		</nbprofiledirect>
+		<java fork="true" classname="org.xins.common.servlet.container.HTTPServletStarter"
+		      jvm="${profiler.info.jvm}">
+			<jvmarg value="-Dorg.xins.server.config=${xins.properties}" />
+			<jvmarg value="${profiler.info.jvmargs.agent}" />
+			<jvmarg line="${profiler.info.jvmargs}" />
+			<arg path="build/webapps/${api.name}/${api.name}.war" />
+			<classpath refid="api.classpath" />
+		</java>
+	</target>
+
+	<target name="ask" depends="-init" description="Ask the user for the target to execute.">
+		<input addproperty="xins.target" message="Which target do you to execute?" />
+		<ant antfile="${basedir}/build/build.xml" target="${xins.target}" />
+	</target>
+
+	<target name="-create-project" depends="-init-properties" unless="xins-project.exists">
+		<input addproperty="domain"
+		message="Please, enter the basis domain:"
+		defaultvalue="com.mycompany" />
+
+		<echo file="${project.dir}/xins-project.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project PUBLIC "-//XINS//DTD XINS Project 2.0//EN"
+          "http://www.xins.org/dtd/xins-project_2_0.dtd">
+<project name="myprojects"
+         rcsversion="$]]><![CDATA[Revision$" rcsdate="$]]><![CDATA[Date$"
+         domain="]]>${domain}<![CDATA[">
+</project>]]></echo>
+	</target>
+
+	<target name="create-api" depends="-init-properties" description="Creates an API">
+		<input addproperty="project.dir"
+		message="Please, enter the project directory: (Can be empty)"
+		defaultvalue="${basedir}" />
+		<echo message="prop ${project.dir}" />
+		<input addproperty="new.api.name"
+		message="Please, enter the name of the new API:" />
+
+		<available property="xins-project.exists" file="${project.dir}/xins-project.xml" />
+		<antcall target="-create-project" />
+		<antcall target="make-build" />
+		<ant antfile="${basedir}/build/build.xml" target="create-api">
+			<property name="user.dir" value="${basedir}" />
+			<property name="basedir" value="${project.dir}" />
+			<property name="api.name" value="${new.api.name}" />
+		</ant>
+		<antcall target="copy-nb-files">
+			<param name="api.dir" value="${project.dir}/apis/${new.api.name}" />
+		</antcall>
+		<antcall target="make-build">
+			<param name="basedir" value="${project.dir}" />
+		</antcall>
+		<echo message="API ${new.api.name} created." />
+		<ant antfile="${project.dir}/build/build.xml"
+		     dir="${project.dir}"
+		     target="classes-api-${new.api.name}">
+			<property name="user.dir" value="${project.dir}" />
+			<property name="basedir" value="${project.dir}" />
+		</ant>
+	</target>
+
+	<target name="copy-nb-files" depends="-init-properties" description="Copy the NetBeans project files for an API">
+		<input addproperty="new.api.name" message="Please, enter the name of the API:" />
+		<input addproperty="api.dir" message="Directory of the API (Leave empty if same group of APIs):" defaultvalue="${basedir}/apis/${new.api.name}" />
+		<copy todir="${api.dir}">
+			<fileset dir="${xins.home}/demo/xins-project/apis/petstore">
+				<include name="nbbuild.xml" />
+				<include name="nbproject/*" />
+			</fileset>
+		</copy>
+		<replace file="${api.dir}/nbproject/project.xml"
+		token="petstore" value="${new.api.name}" />
+		<replace file="${api.dir}/nbproject/project.xml"
+		token="../../../.." value="${xins.home}" />
+		<replace file="${api.dir}/nbbuild.xml"
+		token="value=&quot;petstore&quot;" value="value=&quot;${new.api.name}&quot;" />
+		<replace file="${api.dir}/nbbuild.xml"
+		token="name=&quot;petstore&quot;" value="name=&quot;${new.api.name}&quot;" />
+	</target>
+
+	<target name="jetty-xml" depends="-init" unless="jetty.xml.exists" description="Creates the web application file used by Jetty">
+		 <echo file="${basedir}/jetty_${api.name}.xml"><![CDATA[<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE Configure PUBLIC
+ "-//Mort Bay Consulting//DTD Configure 1.2//EN"
+ "http://jetty.mortbay.org/configure_1_2.dtd">
+
+<Configure class="org.mortbay.jetty.Server">
+
+  <Call name="addListener">
+    <Arg>
+      <New class="org.mortbay.http.SocketListener">
+        <Set name="port">8080</Set>
+      </New>
+    </Arg>
+  </Call>
+
+  <Call name="addWebApplication">
+    <Arg>/]]>${api.name}<![CDATA[/*</Arg>
+    <Arg>build/webapps/]]>${api.name}<![CDATA[/]]>${api.name}<![CDATA[.war</Arg>
+  </Call>
+
+</Configure>]]></echo>
+	</target>
+
+	<!-- Copy the example xins.properties to project directory -->
+	<target name="copy-props" depends="-init-properties" unless="xins.properties.exists">
+		<copy file="${xins.home}/demo/xins.properties" tofile="${xins.properties}" failonerror="false" />
+	</target>
+
+</project>

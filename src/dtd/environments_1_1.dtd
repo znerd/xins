@@ -1,0 +1,12 @@
+<!--
+ XINS Environments DTD. This DTD should be added to the environments.xml file
+ of the project by adding the following line at the top of the file :
+<!DOCTYPE environments PUBLIC "-//XINS//DTD Environments 1.1//EN" "http://www.xins.org/dtd/environments_1_1.dtd">
+-->
+<!ELEMENT environments (environment*)>
+<!ELEMENT environment EMPTY>
+<!ATTLIST environment
+          id         NMTOKEN #REQUIRED
+          url        CDATA   #REQUIRED
+>
+

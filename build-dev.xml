@@ -1,0 +1,1065 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!-- $Id: build-dev.xml,v 1.112 2007/09/25 08:16:54 agoubard Exp $ -->
+
+<project name="xins-extra" basedir=".">
+
+	<!--
+	Defines the 'junit' task. This target fails if the required class for
+	this task is not available.
+	-->
+	<target name="-junit-task">
+		<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+			<classpath location="lib/junit.jar" />
+    </taskdef>
+		<property name="junit.showoutput" value="false" />
+	</target>
+
+	<!--
+	Defines the 'checkstyle' task. This target fails if the required class
+	for this task is not available.
+	-->
+	<target name="-checkstyle-task">
+		<taskdef name="checkstyle" classname="com.puppycrawl.tools.checkstyle.CheckStyleTask">
+			<classpath location="lib/checkstyle.jar" />
+		</taskdef>
+	</target>
+
+	<!--
+	Defines the 'j2h' (Java2HTML) task. This target fails if the required
+	class for this task is not available.
+	-->
+	<target name="-j2h-task">
+		<taskdef name="java2html" classname="com.java2html.Java2HTMLTask">
+			<classpath location="lib/j2h.jar" />
+		</taskdef>
+	</target>
+
+	<!--
+	Determines the SourceForge account with the corresponding password by
+	reading the properties 'sf.user' and 'sf.password' from a file.
+	-->
+	<target name="-load-sfproperties">
+		<property name="sf.file" value="${user.home}/.sourceforge.properties" />
+		<available property="sf.file.exists" file="${sf.file}" />
+		<fail message="The file ${sf.file} does not exists" unless="sf.file.exists" />
+		<property file="${sf.file}" />
+		<condition property="sf.isset">
+			<and>
+				<isset property="sf.user" />
+				<isset property="sf.password" />
+			</and>
+		</condition>
+		<fail unless="sf.isset">
+Properties 'sf.user' and 'sf.password' must be set. These are normally read
+from the SourceForge properties file.
+
+Please do either of the following:
+1) add the missing properties to the file;
+2) specify what file to read from instead by setting the 'sf.file'
+   property on the command line;
+3) specify the missing properties manually, on the command line.
+
+The current SourceForge properties file used is:
+${sf.file}</fail>
+	</target>
+
+	<target name="-init-release-properties" depends="-load-version">
+		<property name="version"           value="${version.major}.${version.middle}${dot.version.minor}${version.build}" />
+		<property name="xins_version"      value="${version}" />
+		<property name="tests.deprecation" value="false"  />
+	</target>
+
+	<target name="-init-release" depends="-init-release-properties,-load-sfproperties,-init" />
+
+	<target name="clean-release" depends="clean">
+		<delete dir="docs" />
+		<delete dir="demo" />
+	</target>
+
+	<target name="do-upload-logdoc"
+	depends="-load-sfproperties,-init"
+	unless="no-upload">
+		<echo message="Uploading ${title} ${version} Logdoc HTML to ${www.host}" />
+
+		<!-- Create TAR GZ file for Logdoc HTML -->
+		<echo message="Creating TAR GZ file for Logdoc HTML" />
+		<tar tarfile="build/logdoc.tar" longfile="gnu">
+			<tarfileset dir="build/logdoc/common/html" mode="664" prefix="${version}/common" />
+			<tarfileset dir="build/logdoc/client/html" mode="664" prefix="${version}/client" />
+			<tarfileset dir="build/logdoc/server/html" mode="664" prefix="${version}/server" />
+		</tar>
+		<gzip src="build/logdoc.tar" destfile="build/logdoc.tgz" />
+		<delete file="build/logdoc.tar" />
+
+		<!-- Copy to remote host -->
+		<echo message="Copying TAR GZ file for Logdoc HTML to ${www.target}/logdoc" />
+		<scp
+		todir="${www.target}/logdoc"
+		password="${sf.password}"
+		trust="true"
+		file="build/logdoc.tgz" />
+
+		<!-- Remotely: Unpack and create symbolic link -->
+		<echo message="Unpacking TAR GZ file for Logdoc HTML remotely" />
+		<sshexec
+		host="${www.host}"
+		username="${sf.user}"
+		password="${sf.password}" trust="true"
+		command="cd ${www.dir}/logdoc &amp;&amp; tar zxf logdoc.tgz &amp;&amp; rm logdoc.tgz &amp;&amp; rm -f latest &amp;&amp; ln -s ${version} latest" />
+	</target>
+
+	<target
+	name="upload-logdoc"
+	depends="-init-release,logdoc-html,do-upload-logdoc"
+	description="Generates Logdoc HTML and then uploads it for the web site"
+	unless="no-upload" />
+
+	<target name="classes-tests" depends="java" description="Compiles the test cases">
+		<!-- Compiles the example used for the tests -->
+		<!--delete dir="src/tests/build" /-->
+		<!-- property name="build.java.version" value="1.3" /-->
+
+		<taskdef resource="org/xins/common/ant/antlib.xml" classpath="build/classes/java-common" />
+		<xins api="allinone" target="opendoc" projectdir="src/tests" />
+		<xins api="portal" target="war" projectdir="src/tests" />
+		<xins api="portal" target="jar" projectdir="src/tests" />
+
+		<!-- TODO: Can these be combined? -->
+		<ant antfile="build/build.xml" dir="src/tests" target="specdocs-allinone" />
+		<ant antfile="build/build.xml" dir="src/tests" target="jar-allinone"      />
+		<ant antfile="build/build.xml" dir="src/tests" target="war-allinone"      />
+		<ant antfile="build/build.xml" dir="src/tests" target="wsdl-allinone"     />
+		<ant antfile="build/build.xml" dir="src/tests" target="smd">
+			<property name="api.name" value="allinone" />
+		</ant>
+
+		<!-- Store the path for compilation and execution -->
+		<path id="tests.classpath">
+			<pathelement location="build/classes/tests" />
+			<pathelement location="build/xins-common.jar" />
+			<pathelement location="build/xins-server.jar" />
+			<pathelement location="build/xins-client.jar" />
+			<pathelement location="build/logdoc.jar" />
+			<pathelement location="src/tests/build/capis/allinone-capi.jar" />
+			<pathelement location="src/tests/build/classes-api/allinone" />
+			<pathelement location="src/tests/build/classes-types/allinone" />
+			<pathelement location="src/tests/build/capis/portal-capi.jar" />
+			<pathelement location="src/tests/build/classes-api/portal" />
+			<pathelement location="src/tests/build/classes-types/portal" />
+			<pathelement location="src/tests/myproject-capi.jar" />
+			<pathelement location="${ant.home}/lib/ant.jar" />
+			<fileset dir="lib" includes="*.jar" />
+		</path>
+
+		<!-- Compiles the tests -->
+		<mkdir dir="build/classes/tests" />
+		<javac
+		destdir="build/classes/tests"
+		includes="org/xins/**/*.java"
+		debug="true"
+		deprecation="${tests.deprecation}"
+		source="${javac.targetvm}"
+		target="${javac.targetvm}">
+			<src path="src/tests" />
+			<classpath refid="tests.classpath" />
+		</javac>
+	</target>
+
+	<target name="do-tests" depends="-junit-task,classes-tests" description="Runs the unit tests">
+		<mkdir dir="build/testresults" />
+		<mkdir dir="build/testresults/xml" />
+
+		<junit fork="true" printsummary="true" failureproperty="tests.failed" showoutput="${junit.showoutput}">
+			<sysproperty key="user.dir" value="${basedir}"/>
+			<formatter type="xml" />
+			<test name="${testclass}" todir="build/testresults/xml" outfile="testresults"/>
+			<classpath refid="tests.classpath" />
+		</junit>
+	</target>
+
+	<target name="testreports" description="Generates the unit test reports">
+		<mkdir dir="build/testresults/html" />
+		<xslt
+		in="build/testresults/xml/testresults.xml"
+		out="build/testresults/html/index.html"
+		style="src/xslt/tests/index.xslt" />
+		<copy
+		file="src/css/tests/stylesheet.css"
+		todir="build/testresults/html" />
+	</target>
+
+	<target name="tests" depends="do-tests,testreports" description="Runs the unit tests and generates reports">
+		<fail if="tests.failed" message="All tests should run" />
+	</target>
+
+	<target name="tests-ui" depends="classes-tests" description="Runs the unit tests in a graphical environment">
+		<mkdir dir="build/testresults" />
+		<java fork="true" classname="junit.swingui.TestRunner">
+			<sysproperty key="user.dir" value="${basedir}"/>
+			<arg value="-noloading"/>
+			<arg value="${testclass}"/>
+			<classpath refid="tests.classpath" />
+		</java>
+	</target>
+
+	<target name="test-netbeans" depends="-junit-task,classes-tests" description="Runs the unit tests in NetBeans">
+		<mkdir dir="build/testresults" />
+		<mkdir dir="build/testresults/xml" />
+
+		<junit fork="true" printsummary="true" showoutput="true" dir="${basedir}" failureproperty="tests.failed">
+			<sysproperty key="user.dir" value="${basedir}"/>
+      <formatter usefile="false" type="brief"/>
+			<formatter type="xml" />
+			<test name="${testclass}" todir="build/testresults/xml" outfile="testresults"/>
+			<classpath refid="tests.classpath" />
+		</junit>
+	</target>
+
+	<target name="do-perftests" depends="-junit-task,classes-tests" description="Runs the performance tests">
+		<mkdir dir="build/perftestresults" />
+		<mkdir dir="build/perftestresults/xml" />
+		<junit printsummary="true" failureproperty="perftests.failed">
+			<sysproperty key="user.dir" value="${basedir}"/>
+			<formatter type="xml" />
+			<test name="${perftestclass}" todir="build/perftestresults/xml" outfile="perftestresults"/>
+			<classpath refid="tests.classpath" />
+		</junit>
+	</target>
+
+	<target name="perftestreports" description="Generates the performance test reports">
+		<mkdir dir="build/perftestresults/html" />
+		<xslt
+		in="build/perftestresults/xml/perftestresults.xml"
+		out="build/perftestresults/html/index.html"
+		style="src/xslt/tests/perftests.xslt" />
+		<copy
+		file="src/css/tests/stylesheet.css"
+		todir="build/perftestresults/html" />
+	</target>
+
+	<target name="perftests" depends="do-perftests,perftestreports" description="Runs the performance tests and generates reports" />
+
+	<target name="clean-coverage">
+		<delete file="cobertura.ser" />
+		<delete dir="build/instrumented-classes" />
+		<delete dir="build/testresults/coverage" />
+		<delete dir="build/coverage-src" />
+	</target>
+
+	<target name="-prepare-coverage" depends="clean-coverage">
+		<taskdef classpath="lib/cobertura.jar" resource="tasks.properties"/>
+		<cobertura-instrument todir="build/instrumented-classes/java-client">
+			<fileset dir="build/classes/java-client">
+				<include name="**/*.class" />
+				<exclude name="org/xins/client/Log*.class" />
+				<exclude name="org/xins/client/TranslationBundle*.class" />
+			</fileset>
+		</cobertura-instrument>
+		<cobertura-instrument todir="build/instrumented-classes/java-server">
+			<fileset dir="build/classes/java-server">
+				<include name="**/*.class" />
+				<exclude name="org/xins/server/Log*.class" />
+				<exclude name="org/xins/server/TranslationBundle*.class" />
+			</fileset>
+		</cobertura-instrument>
+		<cobertura-instrument todir="build/instrumented-classes/java-common">
+			<fileset dir="build/classes/java-common">
+				<include name="**/*.class" />
+				<exclude name="org/xins/common/Log*.class" />
+				<exclude name="org/xins/common/TranslationBundle*.class" />
+			</fileset>
+		</cobertura-instrument>
+	</target>
+
+	<target name="coverage" depends="-junit-task,classes-tests,-prepare-coverage">
+		<mkdir dir="build/testresults" />
+		<mkdir dir="build/testresults/xml" />
+		<mkdir dir="build/testresults/coverage" />
+		<junit printsummary="true" failureproperty="tests.failed" maxmemory="512m" fork="yes" showoutput="true" haltonfailure="false">
+			<sysproperty key="user.dir" value="${basedir}" />
+			<sysproperty key="net.sourceforge.cobertura.datafile"	file="${basedir}/cobertura.ser" />
+			<formatter type="xml" />
+			<test name="${testclass}" todir="build/testresults/xml" outfile="testresults"/>
+			<classpath>
+				<pathelement location="build/instrumented-classes/java-client" />
+				<pathelement location="build/instrumented-classes/java-server" />
+				<pathelement location="build/instrumented-classes/java-common" />
+				<path refid="tests.classpath" />
+			</classpath>
+		</junit>
+		<cobertura-report format="html"	destdir="build/testresults/coverage">
+			<fileset dir="src/java-client-framework" includes="**/*.java" />
+			<fileset dir="src/java-server-framework" includes="**/*.java" />
+			<fileset dir="src/java-common" includes="**/*.java" />
+		</cobertura-report>
+	</target>
+
+	<target name="j2h" depends="-j2h-task,java" description="Generates pretty-printed Java code as HTML">
+		<mkdir dir="build/j2h" />
+		<java2html
+		title="Source X-ref for ${title} ${version}"
+		destination="build/j2h"
+		footer="no">
+			<fileset dir="src/java-common">
+				<include name="**/*.java" />
+			</fileset>
+			<fileset dir="src/java-server-framework">
+				<include name="**/*.java" />
+			</fileset>
+			<fileset dir="src/java-client-framework">
+				<include name="**/*.java" />
+			</fileset>
+		</java2html>
+		<copy
+		file="src/j2h/front.html"
+		todir="build/j2h"
+		overwrite="true" />
+		<copy file="src/css/j2h/style.css"
+		tofile="build/j2h/stylesheet.css"
+		overwrite="true" />
+	</target>
+
+	<target
+	name="do-upload-javadoc"
+	depends="-load-sfproperties,-init"
+	description="Uploads the Javadoc documentation to the web site"
+	unless="no-upload">
+		<echo message="Uploading ${title} ${version} Javadoc to ${www.host}" />
+
+		<!-- Create TAR GZ file for Javadoc -->
+		<echo message="Creating TAR GZ file for Javadoc HTML" />
+		<tar tarfile="build/javadoc.tar" longfile="gnu">
+			<tarfileset dir="docs/javadoc"         mode="664" dirmode="775" prefix="javadoc/${version}" />
+		</tar>
+		<gzip src="build/javadoc.tar" destfile="build/javadoc.tgz" />
+		<delete file="build/javadoc.tar" />
+
+		<!-- Copy to remote host -->
+		<echo message="Copying TAR GZ file for Javadoc to ${www.target}/" />
+		<scp
+		todir="${www.target}/"
+		password="${sf.password}"
+		trust="true"
+		file="build/javadoc.tgz" />
+
+		<!-- Remotely: unpack and create symbolic links -->
+		<echo message="Unpacking TAR GZ file for Javadoc remotely" />
+		<sshexec
+		host="${www.host}"
+		username="${sf.user}"
+		password="${sf.password}"
+		trust="true"
+		command="cd ${www.dir} &amp;&amp; tar zxf javadoc.tgz &amp;&amp; rm javadoc.tgz &amp;&amp; cd javadoc &amp;&amp; rm -f latest &amp;&amp; ln -s ${version} latest" />
+	</target>
+
+	<target
+	name="upload-javadoc"
+	depends="-init-release,javadoc,javadoc-private,do-upload-javadoc"
+	description="Generates and then uploads the Javadoc API documentation to the web site"
+	unless="no-upload" />
+
+	<target name="-prepare-checkstyle" depends="-checkstyle-task" />
+
+	<target name="checkstyle-text" depends="-prepare-checkstyle" description="Prints checkstyle errors">
+		<checkstyle config="src/config/checkstyle/config-xins.xml" failOnViolation="false">
+			<fileset dir="src/java-common"           includes="**/*.java" />
+			<fileset dir="src/java-server-framework" includes="**/*.java" />
+			<fileset dir="src/java-client-framework" includes="**/*.java" />
+			<formatter type="plain" />
+		</checkstyle>
+	</target>
+
+	<target name="checkstyle-xml" depends="-prepare-checkstyle" description="Checks the style of the source code">
+		<mkdir dir="build/checkstyle" />
+		<mkdir dir="build/checkstyle/xml" />
+		<checkstyle config="src/config/checkstyle/config-xins.xml" failOnViolation="false">
+			<fileset dir="src/java-common"           includes="**/*.java" />
+			<fileset dir="src/java-server-framework" includes="**/*.java" />
+			<fileset dir="src/java-client-framework" includes="**/*.java" />
+			<formatter type="xml" tofile="build/checkstyle/xml/results.xml"/>
+		</checkstyle>
+	</target>
+
+	<target name="checkstyle-report" description="Generates the checkstyle report">
+		<mkdir dir="build/checkstyle/html" />
+		<xslt
+		in="build/checkstyle/xml/results.xml"
+		out="build/checkstyle/html/index.html"
+		style="src/xslt/checkstyle/index.xslt" />
+		<copy
+		file="src/css/checkstyle/style.css"
+		tofile="build/checkstyle/html/stylesheet.css" />
+	</target>
+
+	<target name="checkstyle" depends="checkstyle-xml,checkstyle-report" description="Checks the style of the source code" />
+
+	<target
+	name="upload-checkstyle"
+	depends="-init-release,checkstyle"
+	description="Generates the Checkstyle report and uploads it to the web site"
+	unless="no-upload">
+		<echo message="Uploading ${title} ${version} Checkstyle report to ${www.host}" />
+		<echo level="verbose" message="Creating directory ${www.dir}/checkstyle/${version} on ${www.host}" />
+		<sshexec host="${www.host}" username="${sf.user}" password="${sf.password}" trust="true"
+		         command="mkdir -p ${www.dir}/checkstyle/${version}" />
+		<echo level="verbose" message="Copying files to directory ${www.dir}/checkstyle/${version} on ${www.host}" />
+		<!-- TODO: Send compressed archive and unpack remotely -->
+		<scp
+		todir="${www.target}/checkstyle/${version}"
+		password="${sf.password}"
+		trust="true">
+			<fileset dir="build/checkstyle/html" />
+		</scp>
+		<sshexec host="${www.host}" username="${sf.user}" password="${sf.password}" trust="true"
+		         command="rm ${www.dir}/checkstyle/latest" />
+		<sshexec host="${www.host}" username="${sf.user}" password="${sf.password}" trust="true"
+		         command="ln -s ${www.dir}/checkstyle/${version} ${www.dir}/checkstyle/latest" />
+	</target>
+
+	<target name="upload-j2h"
+	depends="-init-release,j2h"
+	description="Uploads the Java2HTML documentation to the web site"
+	unless="no-upload">
+		<echo message="Uploading ${title} ${version} Java2HTML documentation to ${www.host}" />
+
+		<!-- Create TAR GZ file for Java2HTML -->
+		<echo level="verbose" message="Creating TAR GZ file for Java2HTML" />
+		<tar tarfile="build/j2h.tar" longfile="gnu">
+			<tarfileset dir="build/j2h" mode="664" dirmode="775" prefix="j2h/${version}" />
+		</tar>
+		<gzip src="build/j2h.tar" destfile="build/j2h.tgz" />
+		<delete file="build/j2h.tar" />
+
+		<!-- Copy to remote host -->
+		<echo level="verbose" message="Copying TAR GZ file for Java2HTML" />
+		<scp
+		todir="${www.target}/"
+		password="${sf.password}"
+		trust="true"
+		file="build/j2h.tgz" />
+
+		<!-- Remotely: unpack and create symbolic links -->
+		<echo level="verbose" message="Unpacking TAR GZ file for Java2HTML remotely" />
+		<sshexec
+		host="${www.host}"
+		username="${sf.user}"
+		password="${sf.password}"
+		trust="true"
+		command="cd ${www.dir} &amp;&amp; tar zxf j2h.tgz &amp;&amp; rm j2h.tgz &amp;&amp; cd j2h &amp;&amp; rm -f latest &amp;&amp; ln -s ${version} latest" />
+	</target>
+
+	<target name="copy-demo" depends="-init">
+		<!-- Copy the examples in the release -->
+		<delete dir="demo" />
+		<mkdir dir="demo" />
+		<copy todir="demo">
+			<fileset dir="../${name}-examples">
+				<include name="build.xml" />
+				<include name="nbbuild.xml" />
+				<include name="xins.properties" />
+				<include name="jetty_myproject.xml" />
+				<include name="jetty_allinone.xml" />
+				<include name="jetty_filteredproject.xml" />
+				<include name="rundemo.bat" />
+				<include name="rundemo" />
+				<include name="capis/**/*.xml" />
+				<include name="capis/**/*.java" />
+				<include name="capis/perl/*.pl" />
+				<include name="capis/php/*.php" />
+				<include name="capis/javascript/*.html" />
+				<include name="capis/javascript/*.js" />
+				<include name="capis/javascript/*.smd" />
+				<include name="capis/javascript/*.LICENSE" />
+				<include name="xins-project/.version.properties" />
+				<include name="xins-project/build.properties" />
+				<include name="xins-project/**/*.xml" />
+				<include name="xins-project/**/*.fnc" />
+				<include name="xins-project/**/*.typ" />
+				<include name="xins-project/**/*.rcd" />
+				<include name="xins-project/**/*.cat" />
+				<include name="xins-project/**/*.java" />
+				<include name="xins-project/**/*.html" />
+				<include name="xins-project/apis/toolbox/**/*.groovy" />
+				<include name="xins-project/apis/petstore/**/*" />
+				<include name="xins-project/apis/fileupload/lib/*.jar" />
+				<exclude name="build" />
+				<exclude name="xins-project/build/**/*" />
+				<exclude name="xins-project/apis/allinone/impl-stub/com/**/*" />
+				<exclude name="xins-project/apis/allinone/test/**/*" />
+				<exclude name="xins-project/apis/petstore/database/*.DBF" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copy-docs" depends="-init" unless="nodocs">
+		<!-- Create and copy the documentation -->
+		<ant dir="../${name}-docs" target="manuals" inheritall="false">
+			<property name="version" value="${version.major}.${version.middle}${dot.version.minor}${version.build}" />
+		</ant>
+		<copy todir="docs">
+			<fileset dir="../${name}-docs/build/guide">
+				<exclude name="*.fo" />
+				<exclude name="XINSGuide.html" />
+			</fileset>
+			<fileset dir="../${name}-docs/build">
+				<include name="protocol/**" />
+				<include name="frontend/**" />
+				<exclude name="**/*.fo" />
+				<exclude name="protocol/XINSProtocol.html" />
+				<exclude name="frontend/XINSFrontend.html" />
+			</fileset>
+		</copy>
+		<copy todir="docs/primer">
+			<fileset dir="../${name}-docs/src/web">
+				<include name="primer.html" />
+				<include name="primer.css" />
+				<include name="${name}-primer-*.png" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="package" depends="-init-release-properties,clean-release,java,javadoc,logdoc-html,copy-demo,copy-docs" description="Builds a complete distribution archive">
+		<!-- convert all text files to Unix LF -->
+		<patternset id="release.text.files">
+			<include name="src/ant/**/*"                   />
+			<include name="src/config/checkstyle/config.xml" />
+			<include name="src/css/**"                     />
+			<include name="src/dtd/**/*"                   />
+			<include name="src/java-client-framework/**/*" />
+			<include name="src/java-common/**/*"           />
+			<include name="src/java-server-framework/**/*" />
+			<include name="src/logdoc/client/*"            />
+			<include name="src/logdoc/common/*"            />
+			<include name="src/logdoc/server/*"            />
+			<include name="src/opendoc/**/*"               />
+			<include name="src/package-lists/**/*"         />
+			<include name="src/tools/dojo/**/*"            />
+			<include name="src/tools/eclipse/**/*"         />
+			<include name="src/tools/jmeter/**/*"          />
+			<include name="src/tools/maven/**/*"           />
+			<include name="src/tools/webstart/**/*"        />
+			<include name="src/xml/**/*"                   />
+			<include name="src/xslt/**/*"                  />
+			<include name="lib/apache.LICENSE"             />
+			<include name="lib/commons-codec.LICENSE"      />
+			<include name="lib/commons-httpclient.LICENSE" />
+			<include name="lib/commons-logging.LICENSE"    />
+			<include name="lib/jakarta-oro.LICENSE"        />
+			<include name="lib/log4j.LICENSE"              />
+			<include name="lib/junit.LICENSE"              />
+			<include name="lib/json.LICENSE"               />
+			<include name="lib/xmlenc.LICENSE"             />
+			<include name="docs/**/*.html"                 />
+			<include name="docs/**/*.css"                  />
+			<include name="docs/javadoc/package-list"      />
+			<include name="demo/capis/**/*"                />
+			<include name="demo/xins-project/**/*"         />
+			<include name="demo/*.xml"                     />
+			<include name="demo/xins.properties"           />
+			<include name="build.xml"                      />
+			<include name=".version.properties"            />
+			<include name="CHANGES"                        />
+			<include name="COPYRIGHT"                      />
+			<include name="README.html"                    />
+			<exclude name="src/css/xsltdoc/**"             />
+			<exclude name="src/xslt/tests/perftests.xslt"  />
+			<exclude name="src/xslt/xsltdoc/**/*"          />
+			<exclude name="docs/javadoc-private/**/*.html" />
+			<exclude name="docs/javadoc-private/**/*.css"  />
+			<exclude name="demo/xins-project/apis/fileupload/lib/*.jar" />
+			<exclude name="demo/xins-project/apis/petstore/lib/tinySQL.jar" />
+			<exclude name="demo/xins-project/apis/petstore/web/rabbit.gif" />
+			<exclude name="demo/xins-project/apis/petstore/nbproject/private" />
+		</patternset>
+		<mkdir dir="build/lf" />
+		<copy todir="build/lf" includeEmptyDirs="false">
+			<fileset dir=".">
+				<patternset refid="release.text.files" />
+				<include name="bin/*"                  />
+				<include name="demo/rundemo"           />
+				<include name="demo/rundemo.bat"       />
+			</fileset>
+		</copy>
+		<fixcrlf srcdir="build/lf" eol="unix" eof="remove">
+			<patternset refid="release.text.files" />
+			<include name="bin/xins" />
+			<include name="demo/rundemo" />
+		</fixcrlf>
+		<fixcrlf srcdir="build/lf" eol="dos" eof="asis">
+			<include name="bin/xins.bat" />
+			<include name="demo/rundemo.bat" />
+		</fixcrlf>
+		<replace file="build/lf/demo/xins-project/apis/petstore/nbproject/project.xml"
+			token="../../../../xins/"
+			value="../../../../" />
+
+		<!-- Tar the release file -->
+		<tar tarfile="build/${package-basename}.tar" longfile="gnu">
+			<tarfileset
+			dir="${basedir}"
+			prefix="${name}-${version}"
+			mode="644">
+				<include name="build/*.jar"                    />
+				<include name="demo/xins-project/apis/fileupload/lib/commons-fileupload.jar" />
+				<include name="demo/xins-project/apis/fileupload/lib/commons-io.jar" />
+				<include name="demo/xins-project/apis/petstore/lib/tinySQL.jar" />
+				<include name="demo/xins-project/apis/petstore/web/rabbit.gif" />
+				<include name="docs/XINSGuide.pdf"             />
+				<include name="docs/javadoc/resources/inherit.gif" />
+				<include name="docs/frontend/XINSFrontend.pdf" />
+				<include name="docs/protocol/XINSProtocol.pdf" />
+				<include name="docs/primer/*.png"              />
+				<include name="lib/commons-codec.jar"          />
+				<include name="lib/commons-httpclient.jar"     />
+				<include name="lib/commons-logging.jar"        />
+				<include name="lib/jakarta-oro.jar"            />
+				<include name="lib/log4j.jar"                  />
+				<include name="lib/xmlenc.jar"                 />
+				<include name="lib/servlet.jar"                />
+				<include name="lib/junit.jar"                  />
+				<include name="lib/json.jar"                   />
+				<include name="xins.ico"                       />
+			</tarfileset>
+			<tarfileset
+			dir="${basedir}/build/lf"
+			prefix="${name}-${version}"
+			mode="644">
+				<patternset refid="release.text.files"/>
+				<include name="bin/xins.bat" />
+				<include name="demo/rundemo.bat" />
+			</tarfileset>
+			<tarfileset
+			dir="${basedir}/build/lf"
+			prefix="${name}-${version}"
+			mode="755">
+				<include name="bin/xins" />
+				<include name="demo/rundemo" />
+			</tarfileset>
+		</tar>
+		<gzip src="build/${package-basename}.tar" destfile="build/${package-basename}.tgz" />
+		<delete file="build/${package-basename}.tar" />
+		<delete dir="build/lf" />
+	</target>
+
+	<target
+	name="do-upload-package-www"
+	depends="-init-release"
+	description="Uploads the package to the web site"
+	unless="no-upload">
+		<echo message="Uploading ${title} ${version} package to ${www.target}/" />
+		<scp
+		file="build/${package-basename}.tgz"
+		todir="${www.target}/"
+		password="${sf.password}"
+		trust="true" />
+	</target>
+
+	<target
+	name="do-upload-package-ftp"
+	depends="-init-release"
+	description="Uploads the package to the SourceForge FTP server"
+	unless="no-ftp">
+		<echo message="Uploading ${title} ${version} package to SourceForge FTP server" />
+		<ftp server="upload.sf.net" remotedir="incoming"
+		     userid="anonymous" password="${sf.user}@users.sourceforge.net">
+			<fileset dir="build" includes="${package-basename}.tgz" />
+		</ftp>
+	</target>
+
+	<target
+	name="do-upload-package"
+	depends="do-upload-package-www,do-upload-package-ftp"
+	description="Uploads the package to both the web site and to the SourceForge FTP server" />
+
+	<target
+	name="upload-package"
+	depends="-init-release,package,do-upload-package"
+	description="Creates and uploads package to the web server" />
+
+	<target name="installer" depends="-init-release">
+		<get src="http://xins.sourceforge.net/VERSION"
+		     dest="../VERSION" />
+		<loadfile srcfile="../VERSION" property="exe.version">
+			<filterchain>
+				<striplinebreaks/>
+			</filterchain>
+		</loadfile>
+		<delete file="../VERSION" />
+		<available property="release.file.exists" file="build/${name}-${exe.version}.tgz" />
+		<antcall target="-download-release" />
+		<gunzip src="build/${name}-${exe.version}.tgz" dest="../${name}-${exe.version}.tar" />
+		<untar src="../${name}-${exe.version}.tar" dest=".." />
+		<delete file="../${name}-${exe.version}.tar" />
+		<!--property name="exe.version" value="1.2.5" /-->
+		<dirname property="project.home" file="${basedir}" />
+		<replace file="src/tools/installer/${name}.iss"
+		         token="%%VERSION%%"
+		         value="${exe.version}" />
+		<replace file="src/tools/installer/${name}.iss"
+		         token="%%PROJECT_HOME%%"
+		         value="${project.home}" />
+                <replaceregexp file="src/tools/installer/${name}.iss"
+		               match="VersionInfoVersion=([.\d]+)([^\s]*)"
+		               replace="VersionInfoVersion=\1" />
+		<exec executable="C:\Program Files\Inno Setup 5\Compil32.exe"
+		      os="Windows 2000, Windows XP, Windows Vista">
+			<arg value="/cc" />
+			<arg path="src/tools/installer/${name}.iss" />
+		</exec>
+		<exec executable="/usr/bin/wine"
+		      os="Linux,Unix,FreeBSD">
+			<arg value="~/.wine/drive_c/Program Files/Inno Setup 5/Compil32.exe" />
+			<arg value="/cc" />
+			<arg path="src/tools/installer/${name}.iss" />
+		</exec>
+		<delete file="src/tools/installer/${name}.iss" />
+		<cvs cvsRoot=":ext:${sf.user}@${name}.cvs.sourceforge.net:/cvsroot/xins"
+		     command="update"
+		     dest="src/tools/installer" />
+	</target>
+	<target name="-download-release" unless="release.file.exists">
+		<mkdir dir="build" />
+		<get src="http://xins.sf.net/${name}-${exe.version}.tgz"
+		dest="build/${name}-${exe.version}.tgz"
+		usetimestamp="true" />
+	</target>
+	<target name="-ftp-upload-installer" unless="no-ftp">
+		<echo message="Uploading ${title} ${exe.version} installer to SourceForge FTP server" />
+		<ftp server="upload.sf.net" remotedir="incoming"
+		     userid="anonymous" password="${sf.user}@users.sourceforge.net">
+			<fileset dir=".." includes="${name}-${exe.version}.exe" />
+		</ftp>
+	</target>
+
+	<target name="-check-release-version" depends="-init" unless="force">
+		<condition property="version.suffix.set">
+			<equals arg1="${version.suffix}" arg2="-dev" />
+		</condition>
+		<fail unless="version.suffix.set" message="Version suffix is not set to -dev. If you do want to release, please set 'force'." />
+	</target>
+
+	<target name="-check-directories" depends="-init">
+		<available property="docs.installed" file="../${name}-docs" type="dir" />
+		<fail message="../${name}-docs not found, please check it out from CVS." unless="docs.installed" />
+		<available property="examples.installed" file="../${name}-examples" type="dir" />
+		<fail message="../${name}-examples not found, please check it out from CVS." unless="examples.installed" />
+		<property environment="env" />
+		<fail unless="env.DOCBOOK_XSLT_HOME">
+Please point the environment variable DOCBOOK_XSLT_HOME to the correct directory.
+If necessary, download docbook-xsl 1.70.1 (or higher) from
+http://sourceforge.net/project/showfiles.php?group_id=21935&amp;package_id=16608
+		</fail>
+	</target>
+
+	<target name="-nodiffs-check" unless="force">
+		<tempfile destdir="${java.io.tmpdir}" prefix="${name}-release-diff." property="diff-file" suffix=".diff" />
+		<cvs cvsRoot=":ext:${sf.user}@${name}.cvs.sourceforge.net:/cvsroot/xins"
+		     failonerror="true" command="diff" output="${diff-file}" quiet="true" />
+		<loadfile srcfile="${diff-file}" property="diff-contents" />
+		<property name="diff-contents" value="" />
+		<echo message="Diff contents: &quot;${diff-contents}&quot;." />
+		<condition property="diff-contents-empty">
+			<equals arg1="${diff-contents}" arg2="" />
+		</condition>
+		<fail unless="diff-contents-empty" message="There are differences with the CVS repository (result of 'cvs diff' is non-empty). See: ${diff-file}" />
+		<delete file="${diff-file}" />
+	</target>
+
+	<target name="-pre-commit-version" depends="-init" unless="major.release">
+		<propertyfile file="${version.file}" comment=" Version number for XINS.&#10;">
+			<entry key="version.suffix" operation="=" value="" />
+		</propertyfile>
+		<cvs cvsRoot=":ext:${sf.user}@${name}.cvs.sourceforge.net:/cvsroot/xins"
+		     failonerror="true">
+			<commandline>
+				<argument value="commit" />
+				<argument value="-m" />
+				<argument value="Unmarked -dev." />
+				<argument value="${version.file}" />
+			</commandline>
+		</cvs>
+	</target>
+
+	<target
+	name="-pre-release-checks"
+	depends="-init-release,-check-release-version,-check-directories,-nodiffs-check,tests,-pre-commit-version">
+	</target>
+
+	<target
+	name="-prepare-release"
+	depends="-pre-release-checks">
+		<taskdef name="uppercase" classname="org.xins.common.ant.UppercaseTask" classpath="build/classes/java-common" />
+		<uppercase property="dot.version.minor.uppercase" text="${dot.version.minor}" />
+		<property name="tagname" value="RELEASE_${version.major}_${version.middle}${dot.version.minor.uppercase}${version.build}" />
+		<echo message="Tagging ${tagname}" />
+		<cvs cvsRoot=":ext:${sf.user}@${name}.cvs.sourceforge.net:/cvsroot/xins"
+		     failonerror="true" command="tag ${tagname}" quiet="true" />
+		<cvs dest="../xins-docs" cvsRoot=":ext:${sf.user}@${name}.cvs.sourceforge.net:/cvsroot/xins"
+		     failonerror="true" command="tag ${tagname}" quiet="true" />
+		<cvs dest="../xins-examples" cvsRoot=":ext:${sf.user}@${name}.cvs.sourceforge.net:/cvsroot/xins"
+		     failonerror="true" command="tag ${tagname}" quiet="true" />
+	</target>
+
+	<target
+	name="upload-changes"
+	depends="-init-release"
+	description="Uploads the change history file to the web site"
+	unless="no-upload">
+		<echo message="Uploading ${title} ${version} change log to ${www.target}" />
+		<copy file="CHANGES" tofile="build/changes-${version}.txt" />
+		<scp
+		file="build/changes-${version}.txt"
+		todir="${www.target}"
+		password="${sf.password}"
+		trust="true" />
+	</target>
+
+	<target name="upload-homepage" depends="-init-release" unless="no-upload">
+		<property name="docs.dir" value="../${name}-docs/" />
+		<available property="docs.avail" file="${docs.dir}/build.xml" type="file" />
+		<fail unless="docs.avail" message="Unable to find build.xml in ${docs.dir}. Unable to upload homepage." />
+		<condition property="dev.version">
+			<equals arg1="version.suffix" arg2="-dev" />
+		</condition>
+		<antcall target="-update-build-docs" />
+		<ant dir="../${name}-docs" target="upload-homepage" inheritall="false">
+			<property name="version" value="${version}" />
+			<property name="sf.user" value="${sf.user}" />
+			<property name="sf.password" value="${sf.password}" />
+		</ant>
+	</target>
+
+	<target name="-update-build-docs" depends="-init-release" unless="dev.version">
+		<replaceregexp file="${docs.dir}/build.xml" 
+		match="property name=&quot;version&quot;        value=&quot;.*&quot;"
+		replace="property name=&quot;version&quot;        value=&quot;${version}&quot;"
+		byline="true" />
+	</target>	
+
+	<target name="-post-commit-version" depends="-init-release" unless="major.release">
+		<propertyfile file="${version.file}" comment=" Version number for XINS.&#10;">
+			<entry key="version.build"      type="int" operation="+" value="1"      />
+			<entry key="version.suffix"                operation="=" value="-dev"   />
+		</propertyfile>
+		<cvs cvsRoot=":ext:${sf.user}@${name}.cvs.sourceforge.net:/cvsroot/xins" failonerror="true">
+			<commandline>
+				<argument value="commit" />
+				<argument value="-m" />
+				<argument value="Bumped version, marked -dev." />
+				<argument value="${version.file}" />
+			</commandline>
+		</cvs>
+	</target>
+
+	<target
+	name="release"
+	depends="-junit-task,-checkstyle-task,-j2h-task,-init-release,-prepare-release,upload-changes,upload-package,upload-javadoc,upload-checkstyle,upload-j2h,upload-logdoc,-post-commit-version, upload-homepage"
+	description="Performs a release" />
+
+	<target name="test-netbeans-debug" depends="-junit-task,classes-tests" if="netbeans.home" description="Debug in NetBeans IDE">
+		<nbjpdastart name="XINS tests" addressproperty="jpda.address" transport="dt_socket">
+			<classpath refid="tests.classpath" />
+			<sourcepath>
+				<pathelement location="src/java-client-framework" />
+				<pathelement location="src/java-server-framework" />
+				<pathelement location="src/java-common" />
+				<pathelement location="src/tests" />
+			</sourcepath>
+		</nbjpdastart>
+
+		<mkdir dir="build/testresults" />
+		<mkdir dir="build/testresults/xml" />
+
+		<junit fork="true" printsummary="true" showoutput="true" dir="${basedir}" failureproperty="tests.failed">
+			<sysproperty key="user.dir" value="${basedir}"/>
+			<jvmarg value="-Xdebug" />
+			<jvmarg value="-Xnoagent" />
+			<jvmarg value="-Djava.compiler=none" />
+			<jvmarg value="-Xrunjdwp:transport=dt_socket,address=${jpda.address}"/>
+      <formatter usefile="false" type="brief"/>
+			<formatter type="xml" />
+			<test name="${testclass}" todir="build/testresults/xml" outfile="testresults"/>
+			<classpath refid="tests.classpath" />
+		</junit>
+	</target>
+
+	<target name="xsltdoc">
+		<path id="classpath">
+			<pathelement location="lib/saxon9he.jar" />
+			<pathelement path="${java.class.path}" />
+		</path>
+		<delete dir="docs/xsltdoc" />
+		<copy todir="docs/xsltdoc">
+			<fileset dir="src/css/xsltdoc">
+				<filename name="*.css" />
+			</fileset>
+		</copy>
+		<xslt force="true" style="src/xslt/xsltdoc/xsltdoc.xsl" in="src/config/xsltdoc/config.xml" out="docs/xsltdoc/log.xml">
+			<classpath refid="classpath" />
+		</xslt>
+	</target>
+
+	<target name="profile" depends="java">
+		<property name="profile.dir" value="../xins-examples/xins-project"/>
+		<ant antfile="apis/petstore/nbbuild.xml" target="profile" dir="${profile.dir}" />
+	</target>
+
+	<target name="profile-perftests">
+		<antcall target="classes-tests" />
+		<path id="api.classpath">
+			<fileset includes="logdoc.jar xins-common.jar xins-client.jar xins-server.jar" dir="build"/>
+			<fileset includes="commons-codec.jar commons-httpclient.jar commons-logging.jar commons-net.jar jakarta-oro.jar log4j.jar servlet.jar xmlenc.jar junit.jar" dir="lib"/>
+			<fileset includes="allinone-capi.jar" dir="src/tests/build/capis"/>
+			<path location="src/tests/build/classes-api/allinone"/>
+			<path location="src/tests/build/classes-types/allinone"/>
+			<path location="build/classes/tests"/>
+		</path>		
+		<fail unless="profiler.info.jvm">This target should be executed using the Profile -> Profile Main Project menu item.</fail>
+		<property name="xins.properties" value="src/tests/xins.properties" />
+		<available property="xins.properties.available" file="${xins.properties}" type="file" />
+		<fail message="Please, set the xins.properties variable correctly" unless="xins.properties.available" />
+		<nbprofiledirect>
+			<classpath refid="api.classpath" />
+		</nbprofiledirect>
+		<java fork="true" classname="junit.textui.TestRunner" jvm="${profiler.info.jvm}">
+			<sysproperty key="user.dir" value="${basedir}"/>
+			<jvmarg value="-Dorg.xins.server.config=${xins.properties}" />
+			<jvmarg value="${profiler.info.jvmargs.agent}" />
+			<jvmarg line="${profiler.info.jvmargs}" />
+			<arg value="-noloading"/>
+			<arg value="${perftestclass}"/>
+			<classpath refid="api.classpath" />
+		</java>
+	</target>
+
+	<!-- Package XINS to be put in the Maven repository -->
+	<target name="maven" depends="-load-sfproperties,-init">
+		<property name="stable.version" value="2.1" />
+		<mkdir dir="build/maven" />
+
+		<!-- Creates the JAR files -->
+		<antcall target="-maven-module">
+			<param name="maven.module" value="logdoc" />
+			<param name="xins_version" value="${stable.version}" />
+			<param name="maven.module.dir" value="java-common" />
+			<param name="maven.module.includes" value="org/xins/logdoc/**" />
+		</antcall>
+		<antcall target="-maven-module">
+			<param name="maven.module" value="xins-common" />
+			<param name="xins_version" value="${stable.version}" />
+			<param name="maven.module.dir" value="java-common" />
+			<param name="maven.module.includes" value="org/xins/common/**" />
+		</antcall>
+		<antcall target="-maven-module">
+			<param name="maven.module" value="xins-server" />
+			<param name="xins_version" value="${stable.version}" />
+			<param name="maven.module.dir" value="java-server-framework" />
+		</antcall>
+		<antcall target="-maven-module">
+			<param name="maven.module" value="xins-client" />
+			<param name="xins_version" value="${stable.version}" />
+			<param name="maven.module.dir" value="java-client-framework" />
+		</antcall>
+
+		<scp
+		todir="${www.target}/maven"
+		password="${sf.password}"
+		trust="true">
+			<fileset dir="build/maven" includes="*-${stable.version}.jar" />
+		</scp>
+		<echo>
+Go to http://jira.codehaus.org/secure/CreateIssue.jspa?pid=10367&amp;issuetype=3
+Description: New version of XINS for Maven2 repository
+URL: http://${www.host}/
+Name ref: http://sourceforge.net/users/agoubard/
+
+Hi,
+
+Here are new JAR file that I'd like to have uploaded in Maven:
+
+http://${www.host}/maven/xins-server-${stable.version}.jar
+http://${www.host}/maven/xins-common-${stable.version}.jar
+http://${www.host}/maven/xins-client-${stable.version}.jar
+http://${www.host}/maven/logdoc-${stable.version}.jar
+
+Kind regards,
+Anthony
+		</echo>
+	</target>
+
+	<target
+	name="-maven-module"
+	depends="-javadoc-sourcepath">
+
+		<property name="maven.module.includes" value="org/xins/**" />
+
+		<!-- source code -->
+		<jar destfile="build/maven/${maven.module}-${xins_version}-sources.jar">
+			<fileset dir="../xins-${xins_version}/src/${maven.module.dir}">
+				<include name="${maven.module.includes}" />
+				<exclude name="**/*.xml" />
+				<exclude name="**/*.html" />
+			</fileset>
+		</jar>
+
+		<!-- Javadoc -->
+		<property name="javadoc.private" value="no" />
+		<property name="javadoc.destdir" value="docs/javadoc" />
+		<property name="javadoc.title"   value="${title} ${xins_version}" />
+		<property name="javadoc.footer"  value="See &lt;a target=&quot;_top&quot; href='${www.url}'&gt;${www.url}&lt;/a&gt;." />
+		<property name="javadoc.maven.destdir" value="${javadoc.destdir}-${maven.module}" />
+
+		<mkdir dir="${javadoc.maven.destdir}" />
+		<javadoc
+		sourcepath="${javadoc.sourcepath}"
+		destdir="${javadoc.maven.destdir}"
+		source="1.3"
+		version="yes"
+		use="yes"
+		author="yes"
+		private="${javadoc.private}"
+		windowtitle="${javadoc.title}"
+		doctitle="${javadoc.title}"
+		bottom="${javadoc.footer}">
+			<packageset dir="../xins-${xins_version}/src/${maven.module.dir}" includes="${maven.module.includes}" />
+
+			<group title="XINS/Java Logdoc"           packages="org.xins.logdoc*" />
+			<group title="XINS/Java Common Library"   packages="org.xins.common*" />
+			<group title="XINS/Java Client Framework" packages="org.xins.client*" />
+			<group title="XINS/Java Server Framework" packages="org.xins.server*" />
+
+			<classpath>
+				<fileset dir="lib"             includes="*.jar" />
+				<fileset dir="${ant.home}/lib" includes="*.jar" />
+			</classpath>
+
+			<link offline="true" packagelistloc="src/package-lists/servlet/"            href="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/"   />
+			<link offline="true" packagelistloc="src/package-lists/j2se/"               href="http://java.sun.com/j2se/1.4.2/docs/api"               />
+			<link offline="true" packagelistloc="src/package-lists/log4j/"              href="http://jakarta.apache.org/log4j/docs/api/"             />
+			<link offline="true" packagelistloc="src/package-lists/commons-logging/"    href="http://jakarta.apache.org/commons/logging/api/"        />
+			<link offline="true" packagelistloc="src/package-lists/commons-httpclient/" href="http://jakarta.apache.org/commons/httpclient/apidocs/" />
+			<link offline="true" packagelistloc="src/package-lists/oro/"                href="http://jakarta.apache.org/oro/api/"                    />
+			<link offline="true" packagelistloc="src/package-lists/xmlenc/"             href="http://xmlenc.sourceforge.net/javadoc/0.52/"           />
+			<link offline="true" packagelistloc="src/package-lists/ant/"                href="http://xmlenc.sourceforge.net/ant-1.6.2-docs/"         />
+			<link offline="true" packagelistloc="src/package-lists/json/"               href="http://www.json.org/javadoc/"                          />
+			<link offline="true" packagelistloc="src/package-lists/xins/"               href="http://www.xins.org/javadoc/${xins_version}/"          />
+		</javadoc>
+		<copy
+		file="src/css/javadoc/style.css"
+		tofile="${javadoc.maven.destdir}/stylesheet.css"
+		overwrite="true" />
+		<jar destfile="build/maven/${maven.module}-${xins_version}-javadoc.jar">
+			<fileset dir="${javadoc.maven.destdir}" />
+		</jar>
+
+		<!-- distribution jar -->
+		<jar destfile="build/maven/${maven.module}-${xins_version}.jar">
+			<fileset dir="build/maven">
+				<include name="${maven.module}-${xins_version}-sources.jar" />
+				<include name="${maven.module}-${xins_version}-javadoc.jar" />
+			</fileset>
+			<zipfileset file="../xins-${xins_version}/build/${maven.module}.jar" fullpath="${maven.module}-${xins_version}.jar" />
+			<zipfileset file="src/tools/maven/${maven.module}.pom" fullpath="pom.xml" />
+		</jar>
+	</target>
+</project>

@@ -1,0 +1,6 @@
+# 
+# extra ACLs for the property file.
+#
+allow 168.194.0.1 _GetVersion
+
+deny 127.0.0.1 _DisableFunction

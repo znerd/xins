@@ -1,0 +1,73 @@
+<!--
+ XINS Type DTD. This DTD should be added to all type files added to your
+ project by adding the following lines at the top of the .typ file :
+<!DOCTYPE type PUBLIC "-//XINS//DTD Type 1.5//EN" "http://www.xins.org/dtd/type_1_5.dtd">
+-->
+<!ELEMENT type (description, (pattern | enum | properties | int8 | int16 | int32 | int64 | float32 | float64 | base64 | hex | set | list)?)>
+<!ATTLIST type
+          name       NMTOKEN #REQUIRED
+          rcsversion CDATA #IMPLIED
+          rcsdate    CDATA #IMPLIED
+>
+<!ELEMENT description (#PCDATA|em)*>
+<!ELEMENT em (#PCDATA)>
+<!ELEMENT pattern (#PCDATA)>
+<!ELEMENT enum (item*)>
+<!ELEMENT item EMPTY>
+<!ATTLIST item
+          name    CDATA #IMPLIED
+          value   CDATA #REQUIRED
+>
+<!ELEMENT properties EMPTY>
+<!ATTLIST properties
+          nameType    CDATA #IMPLIED
+          valueType   CDATA #REQUIRED
+>
+<!ELEMENT int8 EMPTY>
+<!ATTLIST int8
+          min    NMTOKEN #IMPLIED
+          max    NMTOKEN #IMPLIED
+>
+<!ELEMENT int16 EMPTY>
+<!ATTLIST int16
+          min    NMTOKEN #IMPLIED
+          max    NMTOKEN #IMPLIED
+>
+<!ELEMENT int32 EMPTY>
+<!ATTLIST int32
+          min    NMTOKEN #IMPLIED
+          max    NMTOKEN #IMPLIED
+>
+<!ELEMENT int64 EMPTY>
+<!ATTLIST int64
+          min    NMTOKEN #IMPLIED
+          max    NMTOKEN #IMPLIED
+>
+<!ELEMENT float32 EMPTY>
+<!ATTLIST float32
+          min    NMTOKEN #IMPLIED
+          max    NMTOKEN #IMPLIED
+>
+<!ELEMENT float64 EMPTY>
+<!ATTLIST float64
+          min    NMTOKEN #IMPLIED
+          max    NMTOKEN #IMPLIED
+>
+<!ELEMENT base64 EMPTY>
+<!ATTLIST base64
+          min    NMTOKEN #IMPLIED
+          max    NMTOKEN #IMPLIED
+>
+<!ELEMENT hex EMPTY>
+<!ATTLIST hex
+          min    NMTOKEN #IMPLIED
+          max    NMTOKEN #IMPLIED
+>
+<!ELEMENT set EMPTY>
+<!ATTLIST set
+          type   CDATA #IMPLIED
+>
+<!ELEMENT list EMPTY>
+<!ATTLIST list
+          type   CDATA #IMPLIED
+>

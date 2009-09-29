@@ -1,0 +1,34 @@
+<!--
+ XINS api DTD. This DTD should be added to the api.xml file of the
+ project by adding the following lines at the top of the file :
+<!DOCTYPE api PUBLIC "-//XINS//DTD XINS API 2.2//EN" "http://www.xins.org/dtd/api_2_2.dtd">
+-->
+<!ELEMENT api (description, function*, type*, resultcode*, category*)>
+<!ATTLIST api
+          name       NMTOKEN #REQUIRED
+          freeze     NMTOKEN #IMPLIED
+          owner      CDATA   #IMPLIED
+          rcsversion CDATA   #IMPLIED
+          rcsdate    CDATA   #IMPLIED
+>
+<!ELEMENT description (#PCDATA|em)*>
+<!ELEMENT em (#PCDATA)>
+<!ELEMENT function EMPTY>
+<!ATTLIST function
+          name       NMTOKEN #REQUIRED
+          freeze     NMTOKEN #IMPLIED
+>
+<!ELEMENT type EMPTY>
+<!ATTLIST type
+          name       CDATA   #REQUIRED
+          freeze     NMTOKEN #IMPLIED
+>
+<!ELEMENT resultcode EMPTY>
+<!ATTLIST resultcode
+          name       CDATA   #REQUIRED
+          freeze     NMTOKEN #IMPLIED
+>
+<!ELEMENT category EMPTY>
+<!ATTLIST category
+          name      NMTOKEN #REQUIRED
+>
