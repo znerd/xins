@@ -1,0 +1,28 @@
+This is XINS: "XML Interface for Network Services".
+
+This software is available under the terms of a BSD-style license, see
+the accompanied COPYRIGHT file.
+
+This is a fork of the regular XINS distribution, see:
+
+   http://xins.sourceforge.net/
+
+The most important changes compared to the mainstream XINS branch are:
+- no more support for Java 1.4 and lower
+- Java 5 support (generics, foreach-loop, etc.)
+- deprecation of various classes and methods
+- removal of classes and methods previously marked deprecated
+- various library upgrades
+- various utility methods added to allow less code for users
+- improved logging
+- API documentation improvements
+- upgraded to XSLT 2.0
+
+If you want to file a bug report or a feature request, please do so here:
+
+   http://github.com/znerd/xins/issues
+
+
+--
+Ernst de Haan
+ernst@ernstdehaan.com
