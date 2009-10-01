@@ -86,7 +86,7 @@ public class XINSHttpSession implements HttpSession {
    }
 
    /**
-    * @Deprecated
+    * @deprecated
     *    Since XINS 3.0, use {@link #getAttributes()} instead.
     */
    @Deprecated
