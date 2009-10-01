@@ -77,11 +77,12 @@ public class ServletClassLoader {
     *    if the file cannot be read or is incorrect.
     */
    public static ClassLoader getServletClassLoader(File warFile, int mode) throws IOException {
+
       if (mode == USE_CURRENT_CLASSPATH) {
          return ServletClassLoader.class.getClassLoader();
       }
 
-      List urlList = new ArrayList();
+      List<URL> urlList = new ArrayList<URL>();
 
       // Add the WAR file so that it can locate web pages included in the WAR file
       urlList.add(warFile.toURI().toURL());
@@ -91,7 +92,7 @@ public class ServletClassLoader {
          urlList.add(classesURL);
       }
 
-      List standardLibs = new ArrayList();
+      List<String> standardLibs = new ArrayList<String>();
       if (mode == USE_XINS_LIB) {
          String classLocation = ServletClassLoader.class.getProtectionDomain().getCodeSource().getLocation().toString();
          String commonJar = classLocation.substring(6).replace('/', File.separatorChar);
@@ -138,6 +139,8 @@ public class ServletClassLoader {
          }
          jarStream.close();
       }
+
+      // TODO: Use a utility method to convert a List to an array
       URL[] urls = new URL[urlList.size()];
       for (int i=0; i<urlList.size(); i++) {
          urls[i] = (URL) urlList.get(i);
