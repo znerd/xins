@@ -921,7 +921,7 @@ public class Element implements Cloneable {
 
    /**
     * Describes the differences between this object and the argument. This is
-    * an equivalent to the {@link #equals()} method that returns a
+    * an equivalent to the {@link #equals(Object)} method that returns a
     * human-readable description of the differences. If there are no
     * differences, then <code>null</code> is returned.
     *
