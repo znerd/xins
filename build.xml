@@ -71,12 +71,13 @@ ${version.file}</fail>
 		<property name="www.url"             value="http://www.xins.org/" />
 
 		<!-- Java compiler-related properties -->
-		<property name="javac.sourceversion" value="1.5"        />
-		<property name="javac.targetvm"      value="1.5"        />
-		<property name="javac.debug"         value="true"       />
-		<property name="javac.deprecation"   value="true"       />
-		<property name="javac.optimize"      value="false"      />
-		<property name="tests.deprecation"   value="false"      />
+		<property name="javac.sourceversion" value="1.5"    />
+		<property name="javac.targetvm"      value="1.5"    />
+		<property name="javac.debug"         value="true"   />
+		<property name="javac.deprecation"   value="true"   />
+		<property name="javac.optimize"      value="false"  />
+		<property name="javac.compilerargs"  value="-Xlint" />
+		<property name="tests.deprecation"   value="false"  />
 
 		<!-- Javadoc-related properties -->
 		<property name="javadoc.srcdir.j2se" value="${java.home}/src" />
@@ -110,6 +111,7 @@ ${version.file}</fail>
 		optimize="${javac.optimize}"
 		source="${javac.sourceversion}"
 		target="${javac.targetvm}">
+			<compilerarg value="${javac.compilerargs}" />
 			<classpath>
 				<fileset dir="lib" includes="*.jar" />
 			</classpath>
@@ -185,6 +187,7 @@ ${version.file}</fail>
 		optimize="${javac.optimize}"
 		source="${javac.sourceversion}"
 		target="${javac.targetvm}">
+			<compilerarg value="${javac.compilerargs}" />
 			<src path="src/java-common" />
 			<classpath>
 				<path refid="path.common" />
@@ -228,6 +231,7 @@ ${version.file}</fail>
 		optimize="${javac.optimize}"
 		source="${javac.sourceversion}"
 		target="${javac.targetvm}">
+			<compilerarg value="${javac.compilerargs}" />
 			<src path="build/src/java-${src.side}" />
 			<include name="org/xins/${side}/Library.java" />
 			<classpath>
@@ -243,6 +247,7 @@ ${version.file}</fail>
 		optimize="${javac.optimize}"
 		source="${javac.sourceversion}"
 		target="${javac.targetvm}">
+			<compilerarg value="${javac.compilerargs}" />
 			<src path="src/java-${src.side}" />
 			<src path="build/src/java-${src.side}" />
 			<exclude name="org/xins/${side}/Library.java" />

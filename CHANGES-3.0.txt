@@ -88,3 +88,4 @@ Other:
 * Added DTDs for XINS 3.0.
 * Simplied 'xins' shell script and 'xins.bat' batch file.
 * Marked all XSLT stylesheets as XSLT version 2.0 (instead of 1.0).
+* XINS own build(-dev).xml now passes Xlint compilerarg to javac.
