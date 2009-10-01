@@ -120,6 +120,7 @@ public class XINSHttpSession implements HttpSession {
    }
 
    @Deprecated
+   @SuppressWarnings("deprecation")
    public javax.servlet.http.HttpSessionContext getSessionContext() {
       throw new UnsupportedOperationException();
    }
