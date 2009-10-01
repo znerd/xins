@@ -95,11 +95,8 @@ ${version.file}</fail>
 
 	<target name="clean" description="Removes all generated files">
 		<delete dir="build" />
-		<delete dir="docs/javadoc" />
-		<delete dir="docs/javadoc-private" />
-		<delete dir="docs/logdoc" />
-		<delete dir="docs/xsltdoc" />
 		<delete dir="src/tests/build" />
+		<delete dir="docs" />
 	</target>
 
 	<target name="java-logdoc" depends="-init" description="Compiles the XINS/Java logdoc code">
