@@ -6,12 +6,16 @@
  */
 package org.xins.common.servlet.container;
 
+import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.collections.iterators.IteratorEnumeration;
 
 /**
  * A user session.
@@ -31,7 +35,7 @@ public class XINSHttpSession implements HttpSession {
    /**
     * The session attributes.
     */
-   private Hashtable _attributes = new Hashtable();
+   private Map<String,Object> _attributes = new HashMap<String,Object>();
 
    /**
     * The creation time of the session.
@@ -81,8 +85,18 @@ public class XINSHttpSession implements HttpSession {
       setAttribute(name, value);
    }
 
+   /**
+    * @Deprecated
+    *    Since XINS 3.0, use {@link #getAttributes()} instead.
+    */
+   @Deprecated
    public Enumeration getAttributeNames() {
-      return _attributes.keys();
+      return new IteratorEnumeration(getAttributes().keySet().iterator());
+   }
+
+   /** @since XINS 3.0 */
+   public Map<String,Object> getAttributes() {
+      return Collections.unmodifiableMap(_attributes);
    }
 
    public long getCreationTime() {

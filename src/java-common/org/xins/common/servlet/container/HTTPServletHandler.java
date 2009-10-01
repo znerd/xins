@@ -58,7 +58,7 @@ public class HTTPServletHandler {
    /**
     * Mapping between the path and the servlet.
     */
-   private Map _servlets = new HashMap();
+   private Map<String,LocalServletHandler> _servlets = new HashMap<String,LocalServletHandler>();
 
    /**
     * Creates a new HTTPSevletHandler with no Servlet. Use the addServlet

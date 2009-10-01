@@ -17,6 +17,8 @@ package org.xins.logdoc;
  */
 public final class UnsupportedLocaleException extends RuntimeException {
 
+   private static final long serialVersionUID = -991987123777189023L;
+
    /**
     * The locale that is unsupported. The value of this field cannot be
     * <code>null</code>.

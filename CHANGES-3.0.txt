@@ -61,6 +61,8 @@ XINS/Java Common Library:
 * CallConfig class now abstract and has a protected constructor.
 * Replaced Element.addChild(Element) with add(Element).
 * Replaced Element.addText(String) with add(String).
+* Deprecated XINSHttpSession.getAttributeNames, which returns an Enumeration,
+  in favour of the new getAttributes() method that returns a Map.
 
 XINS/Java Client Framework:
 * Client: Enabled parameter value filtering for messages 2100-2115.

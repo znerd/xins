@@ -230,7 +230,7 @@ class HTTPQueryHandler extends Thread {
       }
 
       // Read the headers
-      HashMap inHeaders = new HashMap();
+      HashMap<String,String> inHeaders = new HashMap<String,String>();
       boolean done = false;
       while (! done) {
          int nextEOL = request.indexOf(CRLF);
@@ -433,8 +433,9 @@ class HTTPQueryHandler extends Thread {
     * @throws ParseException
     *    if the header is incorrect
     */
-   private static void parseHeader(HashMap headers, String header)
+   private static void parseHeader(HashMap<String,String> headers, String header)
    throws ParseException{
+
       int index = header.indexOf(':');
       if (index < 1) {
          throw new ParseException();
@@ -452,7 +453,7 @@ class HTTPQueryHandler extends Thread {
 
       // XXX: Only one header supported
       if (headers.get(key) != null) {
-         throw new ParseException();
+         throw new ParseException("Duplicate header \"" + key + "\".");
       }
 
       // Store the key-value combo
@@ -472,7 +473,7 @@ class HTTPQueryHandler extends Thread {
     *    the header value for the specified key or <code>null</code> if the
     *    key is not in the haeders.
     */
-   String getHeader(HashMap headers, String key) {
+   String getHeader(HashMap<String,String> headers, String key) {
       return (String) headers.get(key.toUpperCase());
    }
 

@@ -134,6 +134,8 @@ public abstract class AbstractLog {
     */
    private static final class CustomLevel extends Level {
 
+      private static final long serialVersionUID = 1909887126346631322L;
+
       /**
        * Constructs a new <code>CustomLevel</code> object.
        *
