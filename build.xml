@@ -444,14 +444,14 @@ ${version.file}</fail>
 				<fileset dir="${ant.home}/lib" includes="*.jar" />
 			</classpath>
 
-			<link offline="true" packagelistloc="src/package-lists/servlet/"            href="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/"   />
-			<link offline="true" packagelistloc="src/package-lists/j2se/"               href="http://java.sun.com/j2se/1.4.2/docs/api"               />
+			<link offline="true" packagelistloc="src/package-lists/servlet/"            href="http://tomcat.apache.org/tomcat-6.0-doc/api/"          />
+			<link offline="true" packagelistloc="src/package-lists/j2se/"               href="http://java.sun.com/javase/6/docs/api"                 />
 			<link offline="true" packagelistloc="src/package-lists/log4j/"              href="http://jakarta.apache.org/log4j/docs/api/"             />
 			<link offline="true" packagelistloc="src/package-lists/commons-logging/"    href="http://jakarta.apache.org/commons/logging/api/"        />
 			<link offline="true" packagelistloc="src/package-lists/commons-httpclient/" href="http://jakarta.apache.org/commons/httpclient/apidocs/" />
 			<link offline="true" packagelistloc="src/package-lists/oro/"                href="http://jakarta.apache.org/oro/api/"                    />
 			<link offline="true" packagelistloc="src/package-lists/xmlenc/"             href="http://xmlenc.sourceforge.net/javadoc/0.52/"           />
-			<link offline="true" packagelistloc="src/package-lists/ant/"                href="http://xmlenc.sourceforge.net/ant-1.6.2-docs/"         />
+			<link offline="true" packagelistloc="src/package-lists/ant/"                href="http://api.dpml.net/ant/1.7.0/"                        />
 			<link offline="true" packagelistloc="src/package-lists/json/"               href="http://www.json.org/javadoc/"                          />
 		</javadoc>
 		<copy

@@ -330,7 +330,7 @@ ${sf.file}</fail>
 		<!-- Create TAR GZ file for Javadoc -->
 		<echo message="Creating TAR GZ file for Javadoc HTML" />
 		<tar tarfile="build/javadoc.tar" longfile="gnu">
-			<tarfileset dir="docs/javadoc"         mode="664" dirmode="775" prefix="javadoc/${version}" />
+			<tarfileset dir="docs/javadoc" mode="664" dirmode="775" prefix="javadoc/${version}" />
 		</tar>
 		<gzip src="build/javadoc.tar" destfile="build/javadoc.tgz" />
 		<delete file="build/javadoc.tar" />
