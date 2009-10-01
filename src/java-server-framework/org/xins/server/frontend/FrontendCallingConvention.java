@@ -549,12 +549,12 @@ public class FrontendCallingConvention extends CustomCallingConvention {
                Element builderParam = new Element("parameter");
                builderParam.setAttribute("name", "session." + nextProperty);
                builderParam.setText(propValue.toString());
-               builder.addChild(builderParam);
+               builder.add(builderParam);
             } else if ("org.jdom.Element".equals(propValue.getClass().getName())) {
                //org.jdom.Element propElem = (org.jdom.Element) propValue;
-               // TODO dataSection.addChild(Utils.convertFromJDOM(propValue));
+               // TODO dataSection.add(Utils.convertFromJDOM(propValue));
             } else if (propValue instanceof Element) {
-               dataSection.addChild((Element) propValue);
+               dataSection.add((Element) propValue);
             } else if (propValue instanceof List) {
                Iterator itPropValue = ((List) propValue).iterator();
                while (itPropValue.hasNext()) {
@@ -563,9 +563,9 @@ public class FrontendCallingConvention extends CustomCallingConvention {
                      // continue
                   } else if ("org.jdom.Element".equals(nextPropertyInList.getClass().getName())) {
                      //org.jdom.Element propElem = (org.jdom.Element) nextPropertyInList;
-                     // TODO dataSection.addChild(Utils.convertFromJDOM(nextPropertyInList));
+                     // TODO dataSection.add(Utils.convertFromJDOM(nextPropertyInList));
                   } else if (nextPropertyInList instanceof Element) {
-                     dataSection.addChild((Element) nextPropertyInList);
+                     dataSection.add((Element) nextPropertyInList);
                   }
                }
             }
@@ -579,7 +579,7 @@ public class FrontendCallingConvention extends CustomCallingConvention {
          Element builderParam = new Element("parameter");
          builderParam.setAttribute("name", "input." + nextParameter);
          builderParam.setText(httpRequest.getParameter(nextParameter));
-         builder.addChild(builderParam);
+         builder.add(builderParam);
       }
 
       // Store all the returned parameters also in the XML
@@ -590,7 +590,7 @@ public class FrontendCallingConvention extends CustomCallingConvention {
                Element builderParam = new Element("parameter");
                builderParam.setAttribute("name", nextParameter);
                builderParam.setText(parameters.get(nextParameter));
-               builder.addChild(builderParam);
+               builder.add(builderParam);
             }
          }
       }
@@ -613,16 +613,16 @@ public class FrontendCallingConvention extends CustomCallingConvention {
                      Element incorrectParamComboElement = (Element) incorrectParamCombo.next();
                      String paramName = incorrectParamComboElement.getAttribute("name");
                      Element fieldError = createFieldError(elementName, paramName);
-                     errorSection.addChild(fieldError);
+                     errorSection.add(fieldError);
                   }
                } else {
                   String paramName = incorrectParamElement.getAttribute("param");
                   Element fieldError = createFieldError(elementName, paramName);
-                  errorSection.addChild(fieldError);
+                  errorSection.add(fieldError);
                }
             }
-            dataSection.addChild(errorSection);
-            builder.addChild(dataSection);
+            dataSection.add(errorSection);
+            builder.add(dataSection);
             return builder;
          } else {
             addParameter(builder, "error.type", "FunctionError");
@@ -635,10 +635,10 @@ public class FrontendCallingConvention extends CustomCallingConvention {
       if (resultElement != null) {
          Iterator itChildren = resultElement.getChildElements().iterator();
          while (itChildren.hasNext()) {
-            dataSection.addChild((Element) itChildren.next());
+            dataSection.add((Element) itChildren.next());
          }
       }
-      builder.addChild(dataSection);
+      builder.add(dataSection);
       return builder;
    }
 
@@ -672,7 +672,7 @@ public class FrontendCallingConvention extends CustomCallingConvention {
    /**
     * Adds a parameter element to the XML result.
     *
-    * @param builder
+    * @param xml
     *    the {@link Element} to which the parameter should be added.
     *
     * @param name
@@ -681,11 +681,12 @@ public class FrontendCallingConvention extends CustomCallingConvention {
     * @param value
     *    the value of the parameter, cannot be <code>null</code>.
     */
-   private void addParameter(Element builder, String name, String value) {
-         Element builderParam = new Element("parameter");
-         builderParam.setAttribute("name", name);
-         builderParam.setText(value);
-         builder.addChild(builderParam);
+   private void addParameter(Element xml, String name, String value) {
+      Element param = new Element("parameter");
+      param.setAttribute("name", name);
+      param.add(value);
+
+      xml.add(param);
    }
 
    /**

@@ -87,7 +87,7 @@ class ControlResult extends FunctionResult {
          Element xml2 = new Element("property");
          xml2.setAttribute("name", nextKey);
          xml2.setText(nextValue.toString());
-         xml.addChild(xml2);
+         xml.add(xml2);
       }
       add(xml);
    }

@@ -120,8 +120,8 @@ public class CreateExampleTask extends Task {
          log("result: " + resultXML.toString(), Project.MSG_VERBOSE);
 
          Element combined = new Element("combined");
-         combined.addChild(requestXML);
-         combined.addChild(resultXML);
+         combined.add(requestXML);
+         combined.add(resultXML);
 
          String example = transformElement(combined);
          getProject().setUserProperty(_exampleProperty, example);
@@ -197,12 +197,12 @@ public class CreateExampleTask extends Task {
          // Handle the _data parameter
          } else if (paramName.equals("_data")) {
             String dataSectionXML = URLEncoding.decode(paramValue);
-            requestElem.addChild(xmlParser.parse(dataSectionXML));
+            requestElem.add(xmlParser.parse(dataSectionXML));
 
          // Handle the input parameters of the function
          } else if (paramName.charAt(0) != '_') {
             String paramXML = "<param name=\"" + paramName + "\">" + URLEncoding.decode(paramValue) + "</param>";
-            requestElem.addChild(xmlParser.parse(paramXML));
+            requestElem.add(xmlParser.parse(paramXML));
          }
       }
       return requestElem;

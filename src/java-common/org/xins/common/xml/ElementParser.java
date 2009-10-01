@@ -440,7 +440,7 @@ public class ElementParser {
             // Add the child to the parent
             if (_dataElementStack.size() > 0) {
                Element parent = (Element) _dataElementStack.peek();
-               parent.addChild(child);
+               parent.add(child);
 
                // Reset the state back from ERROR to PARSING
                _state = PARSING;
@@ -484,7 +484,7 @@ public class ElementParser {
          Element child = (Element) _dataElementStack.peek();
 
          // Add the text snippet
-         child.addText(new String(ch, start, length));
+         child.add(new String(ch, start, length));
 
          // Reset _state
          _state = currentState;

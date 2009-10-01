@@ -267,6 +267,7 @@ public class ElementBuilder {
     * @param text
     *    the character content for this element, or <code>null</code>.
     */
+   @SuppressWarnings("deprecation")
    public void setText(String text) {
 
       // Check state
