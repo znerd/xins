@@ -83,7 +83,8 @@ Libraries:
 * Upgraded ASM (used by PMD and Cobertura) to version 3.1 (now also
   includes asm-tree.jar file, needed by Cobertura).
 * Upgraded JUnit to version 4.5.
-* Upgraded to Saxon HE (Home Edition) 9.2.0.2.
+* Upgraded to Saxon HE (Home Edition) 9.2.0.2. Removed lib/saxon9-dom.jar,
+  that is now integrated in the regular saxon9he.jar file.
 * Upgraded Xerces from 2.6.2 to 2.9.1.
 
 Other:
