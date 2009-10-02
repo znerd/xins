@@ -63,6 +63,8 @@ XINS/Java Common Library:
 * Replaced Element.addText(String) with add(String).
 * Deprecated XINSHttpSession.getAttributeNames, which returns an Enumeration,
   in favour of the new getAttributes() method that returns a Map.
+* Deprecated ChainedMap class, in favour of LinkedHashMap, available since
+  J2SE v1.4.
 
 XINS/Java Client Framework:
 * Client: Enabled parameter value filtering for messages 2100-2115.

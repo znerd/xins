@@ -10,15 +10,17 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import org.xins.common.MandatoryArgumentChecker;
 import org.xins.common.Utils;
-import org.xins.common.collections.ChainedMap;
 import org.xins.common.collections.InvalidPropertyValueException;
 import org.xins.common.collections.MissingRequiredPropertyException;
 import org.xins.common.collections.PropertyReader;
@@ -129,7 +131,7 @@ public class SessionManager extends Manageable {
       }
 
       // Fill the input parameters
-      Map inputParameters = new ChainedMap();
+      Map inputParameters = new LinkedHashMap();
       Enumeration params = request.getParameterNames();
       while (params.hasMoreElements()) {
          String name = (String) params.nextElement();
@@ -168,7 +170,7 @@ public class SessionManager extends Manageable {
          }
          try {
             Map specInputParameters = _api.getAPISpecification().getFunction(functionName).getInputParameters();
-            Map clonedInputParameters = new ChainedMap();
+            Map clonedInputParameters = new LinkedHashMap();
             clonedInputParameters.putAll(inputParameters);
             Iterator itInputParameters = clonedInputParameters.entrySet().iterator();
             while (itInputParameters.hasNext()) {
@@ -240,9 +242,9 @@ public class SessionManager extends Manageable {
    public Map getProperties() {
       HttpSession session = (HttpSession) _currentSession.get();
       if (session == null) {
-         return new ChainedMap();
+         return new LinkedHashMap();
       }
-      Map properties = new ChainedMap();
+      Map properties = new LinkedHashMap();
       Enumeration enuAttributes = session.getAttributeNames();
       while (enuAttributes.hasMoreElements()) {
          String nextAttribute = (String) enuAttributes.nextElement();

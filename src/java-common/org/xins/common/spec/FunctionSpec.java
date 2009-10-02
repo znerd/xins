@@ -10,11 +10,11 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.xins.common.MandatoryArgumentChecker;
-import org.xins.common.collections.ChainedMap;
 import org.xins.common.text.ParseException;
 import org.xins.common.xml.Element;
 import org.xins.common.xml.ElementParser;
@@ -43,7 +43,7 @@ public final class FunctionSpec {
     * The input parameters of the function.
     * The key is the name of the parameter, the value is the {@link FunctionSpec} object.
     */
-   private Map _inputParameters = new ChainedMap();
+   private Map _inputParameters = new LinkedHashMap();
 
    /**
     * The input param combos of the function.
@@ -53,18 +53,18 @@ public final class FunctionSpec {
    /**
     * The input data section elements of the function.
     */
-   private Map _inputDataSectionElements = new ChainedMap();
+   private Map _inputDataSectionElements = new LinkedHashMap();
 
    /**
     * The defined error code that the function can return.
     */
-   private Map _errorCodes = new ChainedMap();
+   private Map _errorCodes = new LinkedHashMap();
 
    /**
     * The output parameters of the function.
     * The key is the name of the parameter, the value is the <code>Parameter</code> object.
     */
-   private Map _outputParameters = new ChainedMap();
+   private Map _outputParameters = new LinkedHashMap();
 
    /**
     * The output param combos of the function.
@@ -74,7 +74,7 @@ public final class FunctionSpec {
    /**
     * The output data section elements of the function.
     */
-   private Map _outputDataSectionElements = new ChainedMap();
+   private Map _outputDataSectionElements = new LinkedHashMap();
 
    /**
     * Creates a new <code>Function</code> by parsing the function specification file.
@@ -479,7 +479,7 @@ public final class FunctionSpec {
    throws IllegalArgumentException, InvalidSpecificationException {
 
       MandatoryArgumentChecker.check("reference", reference, "topElement", topElement, "dataSection", dataSection);
-      Map dataSectionElements = new ChainedMap();
+      Map dataSectionElements = new LinkedHashMap();
 
       // The <data> may have a "contains" attribute.
       String dataContainsAttr = topElement.getAttribute("contains");
@@ -550,7 +550,7 @@ public final class FunctionSpec {
             }
 
             List attributesList = nextElement.getChildElements("attribute");
-            Map attributes = new ChainedMap();
+            Map attributes = new LinkedHashMap();
             Iterator itAttributes = attributesList.iterator();
             while (itAttributes.hasNext()) {
                ParameterSpec attribute = parseParameter(reference, (Element) itAttributes.next());
@@ -627,7 +627,7 @@ public final class FunctionSpec {
    throws IllegalArgumentException, InvalidSpecificationException {
       MandatoryArgumentChecker.check("reference", reference, "topElement", topElement);
       List parametersList = topElement.getChildElements("param");
-      Map parameters = new ChainedMap();
+      Map parameters = new LinkedHashMap();
       Iterator itParameters = parametersList.iterator();
       while (itParameters.hasNext()) {
          Element nextParameter = (Element) itParameters.next();
@@ -676,7 +676,7 @@ public final class FunctionSpec {
          }
          List paramDefs = nextParamCombo.getChildElements(referenceTag);
          Iterator itParamDefs = paramDefs.iterator();
-         Map paramComboParameters = new ChainedMap();
+         Map paramComboParameters = new LinkedHashMap();
          while (itParamDefs.hasNext()) {
             Element paramDef = (Element) itParamDefs.next();
             String parameterName = paramDef.getAttribute("name");

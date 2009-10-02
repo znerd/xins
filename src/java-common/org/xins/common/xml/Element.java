@@ -9,6 +9,7 @@ package org.xins.common.xml;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,7 +17,6 @@ import java.util.Set;
 import org.xins.common.Log;
 import org.xins.common.MandatoryArgumentChecker;
 import org.xins.common.Utils;
-import org.xins.common.collections.ChainedMap;
 import org.xins.common.collections.ProtectedList;
 import org.xins.common.text.ParseException;
 import org.xins.common.text.TextUtils;
@@ -73,13 +73,13 @@ public class Element implements Cloneable {
     * The children, both elements and text. This field is lazily initialized and is
     * initially <code>null</code>.
     */
-   private ArrayList _children;
+   private ArrayList<Object> _children;
 
    /**
     * The attributes. This field is lazily initialized and is initially
     * <code>null</code>.
     */
-   private ChainedMap _attributes;
+   private LinkedHashMap<QualifiedName,String> _attributes;
 
    /**
     * The character content for this element. Can be <code>null</code>.
@@ -337,7 +337,7 @@ public class Element implements Cloneable {
       // Check if there are any attributes yet, since the collection is lazily
       // initialized
       } else if (_attributes == null) {
-         _attributes = new ChainedMap();
+         _attributes = new LinkedHashMap<QualifiedName,String>();
       }
 
       // Reset or set the attribute
@@ -404,7 +404,7 @@ public class Element implements Cloneable {
     */
    public Map getAttributeMap() {
       if (_attributes == null) {
-         _attributes = new ChainedMap();
+         _attributes = new LinkedHashMap<QualifiedName,String>();
       }
       return _attributes;
    }
@@ -511,6 +511,7 @@ public class Element implements Cloneable {
     * @deprecated
     *    Since XINS 3.0, use {@link #add(Element)} instead.
     */
+   @Deprecated
    public void addChild(Element child) throws IllegalArgumentException {
       add(child);
    }
@@ -542,7 +543,7 @@ public class Element implements Cloneable {
 
       // Lazily initialize
       if (_children == null) {
-         _children = new ArrayList();
+         _children = new ArrayList<Object>();
       }
 
       _children.add(child);
@@ -616,8 +617,8 @@ public class Element implements Cloneable {
     *
     * @since XINS 3.0
     */
-   public List getChildren() {
-      ArrayList result = new ArrayList();;
+   public List<Object> getChildren() {
+      ArrayList<Object> result = new ArrayList<Object>();
       if (_children != null) {
          for (Object child : _children) {
             if (child instanceof Element) {
@@ -669,7 +670,7 @@ public class Element implements Cloneable {
       // Check preconditions
       MandatoryArgumentChecker.check("name", name);
 
-      ArrayList result = new ArrayList();
+      ArrayList<Element> result = new ArrayList<Element>();
 
       // Add all matching elements to the result
       if (_children != null) {
@@ -677,7 +678,7 @@ public class Element implements Cloneable {
             if (child instanceof Element) {
                Element e = (Element) child;
                if (name.equals(e.getLocalName())) {
-                  result.add(e.clone());
+                  result.add((Element) e.clone());
                }
             }
          }
@@ -736,6 +737,7 @@ public class Element implements Cloneable {
     * @deprecated
     *    Since XINS 3.0, use {@link #add(String)} instead.
     */
+   @Deprecated
    public void addText(String text)
    throws IllegalArgumentException {
       add(text);
@@ -766,7 +768,7 @@ public class Element implements Cloneable {
 
       // Lazily initialize _children
       if (_children == null) {
-         _children = new ArrayList();
+         _children = new ArrayList<Object>();
       }
 
       // Add a String child to _children and update _text
@@ -961,12 +963,12 @@ public class Element implements Cloneable {
       if (getAttributeCount() != that.getAttributeCount()) {
          return "this element contains " + getAttributeCount() + " attributes (" + TextUtils.list(getAttributeMap().keySet(), ", ", " and ", true) + "); other element contains " + that.getAttributeCount() + " attributes (" + TextUtils.list(that.getAttributeMap().keySet(), ", ", " and ", true);
       } else if (getAttributeCount() > 0) {
-         for (Map.Entry entry : (Set<Map.Entry>) _attributes.entrySet()) {
-            Object       key = entry.getKey();
-            Object thisValue = entry.getValue();
-            Object thatValue = that._attributes.get(key);
+         for (Map.Entry<QualifiedName,String> entry : (Set<Map.Entry<QualifiedName,String>>) _attributes.entrySet()) {
+            QualifiedName key = entry.getKey();
+            String  thisValue = entry.getValue();
+            String  thatValue = that._attributes.get(key);
             if (! thisValue.equals(thatValue)) {
-               return "attribute " + TextUtils.quote(key) + " on this element is " + TextUtils.quote(thisValue) + "; on other element it is " + TextUtils.quote(thatValue);
+               return "attribute " + TextUtils.quote(key.toString()) + " on this element is " + TextUtils.quote(thisValue) + "; on other element it is " + TextUtils.quote(thatValue);
             }
          }
       }
@@ -1014,12 +1016,12 @@ public class Element implements Cloneable {
 
       // Deep copy the children
       if (_children != null) {
-         clone._children = (ArrayList) _children.clone();
+         clone._children = (ArrayList<Object>) _children.clone();
       }
 
       // Deep copy the attributes
       if (_attributes != null) {
-         clone._attributes = (ChainedMap) _attributes.clone();
+         clone._attributes = (LinkedHashMap<QualifiedName,String>) _attributes.clone();
       }
 
       return clone;

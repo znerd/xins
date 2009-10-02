@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -40,7 +41,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.xins.common.MandatoryArgumentChecker;
 import org.xins.common.collections.BasicPropertyReader;
-import org.xins.common.collections.ChainedMap;
 import org.xins.common.collections.InvalidPropertyValueException;
 import org.xins.common.collections.MissingRequiredPropertyException;
 import org.xins.common.collections.PropertyReader;
@@ -148,7 +148,7 @@ public class FrontendCallingConvention extends CustomCallingConvention {
     * Redirection map. The key is the command and the value is the redirection
     * command.
     */
-   private Map _redirectionMap = new ChainedMap();
+   private Map _redirectionMap = new LinkedHashMap();
 
    /**
     * Conditional redirection map. The key is the command and the value is the

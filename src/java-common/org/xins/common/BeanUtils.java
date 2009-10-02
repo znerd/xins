@@ -15,12 +15,12 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import org.xins.common.collections.ChainedMap;
 import org.xins.common.collections.PropertyReader;
 import org.xins.common.collections.PropertyReaderConverter;
 import org.xins.common.service.Descriptor;
@@ -166,7 +166,7 @@ public class BeanUtils {
     * @return
     *    the converted object or <code>null</code> if the object cannot be converted.
     *
-    * @since XINS 2.0.
+    * @since XINS 2.0
     */
    public static Object convert(Object origValue, Class destClass) {
 
@@ -344,7 +344,7 @@ public class BeanUtils {
     * @return
     *    the result object filled with the values of the element object, never <code>null</code>.
     *
-    * @since XINS 2.0.
+    * @since XINS 2.0
     */
    public static Object xmlToObject(Element element, Object result,
          Map elementMapping, Map attributeMapping) {
@@ -532,14 +532,14 @@ public class BeanUtils {
     * @throws IllegalArgumentException
     *    if <code>source == null</code>.
     *
-    * @since XINS 2.0.
+    * @since XINS 2.0
     */
    public static Map getParameters(Object source) throws IllegalArgumentException {
 
       MandatoryArgumentChecker.check("source", source);
 
       // Go through all get methods of the source object
-      ChainedMap valuesMap = new ChainedMap();
+      LinkedHashMap valuesMap = new LinkedHashMap();
       Method[] sourceMethods = source.getClass().getMethods();
       for (int i = 0; i < sourceMethods.length; i++) {
          String getMethodName = sourceMethods[i].getName();
@@ -587,10 +587,10 @@ public class BeanUtils {
     * @throws IllegalArgumentException
     *    if <code>source == null</code>.
     *
-    * @since XINS 2.0.
+    * @since XINS 2.0
     */
    public static Map getParametersAsString(Object source) throws IllegalArgumentException {
-      ChainedMap stringMap = new ChainedMap();
+      LinkedHashMap stringMap = new LinkedHashMap();
       Map originalMap = getParameters(source);
       Iterator itParams = originalMap.entrySet().iterator();
       while (itParams.hasNext()) {
@@ -619,10 +619,10 @@ public class BeanUtils {
     * @throws IllegalArgumentException
     *    if <code>source == null</code>.
     *
-    * @since XINS 2.0.
+    * @since XINS 2.0
     */
    public static Map getParametersAsObject(Object source) throws IllegalArgumentException {
-      ChainedMap objectMap = new ChainedMap();
+      LinkedHashMap objectMap = new LinkedHashMap();
       Map originalMap = getParameters(source);
       Iterator itParams = originalMap.entrySet().iterator();
       while (itParams.hasNext()) {
@@ -671,7 +671,7 @@ public class BeanUtils {
     * @throws IllegalArgumentException
     *    if <code>properties == null || destination == null</code>.
     *
-    * @since XINS 2.0.
+    * @since XINS 2.0
     */
    public static Object setParameters(Map properties, Object destination) throws IllegalArgumentException {
 

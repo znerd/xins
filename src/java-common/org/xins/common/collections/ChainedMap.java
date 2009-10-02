@@ -26,6 +26,10 @@ import java.util.Set;
  * @author <a href="mailto:anthony.goubard@japplis.com">Anthony Goubard</a>
  *
  * @since XINS 1.3.0
+ *
+ * @deprecated
+ *    Since XINS 3.0, use the {@link java.util.LinkedHashMap} class, available
+ *    since J2SE v1.4.
  */
 public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
 

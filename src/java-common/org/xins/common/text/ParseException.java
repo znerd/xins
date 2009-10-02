@@ -16,6 +16,8 @@ package org.xins.common.text;
  */
 public final class ParseException extends Exception {
 
+   private static final long serialVersionUID = -701230123463647121L;
+
    /**
     * Description of the parse error. Can be <code>null</code>.
     */

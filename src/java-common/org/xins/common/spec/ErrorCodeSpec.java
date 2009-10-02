@@ -8,11 +8,11 @@ package org.xins.common.spec;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.xins.common.MandatoryArgumentChecker;
-import org.xins.common.collections.ChainedMap;
 import org.xins.common.text.ParseException;
 import org.xins.common.xml.Element;
 import org.xins.common.xml.ElementParser;
@@ -54,7 +54,7 @@ public final class ErrorCodeSpec {
    /**
     * The output parameters of the function.
     */
-   private Map _outputParameters = new ChainedMap();
+   private Map _outputParameters = new LinkedHashMap();
 
    /**
     * The output data section elements of the function.

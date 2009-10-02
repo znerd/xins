@@ -13,11 +13,11 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.xins.common.MandatoryArgumentChecker;
-import org.xins.common.collections.ChainedMap;
 import org.xins.common.text.ParseException;
 import org.xins.common.xml.Element;
 import org.xins.common.xml.ElementParser;
@@ -51,7 +51,7 @@ public final class APISpec {
    /**
     * The functions of the API, cannot be <code>null</code>.
     */
-   private Map _functions = new ChainedMap();
+   private Map _functions = new LinkedHashMap();
 
    /**
     * Creates a new instance of <code>APISpec</code>.
