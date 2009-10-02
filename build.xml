@@ -80,8 +80,8 @@ ${version.file}</fail>
 		<property name="tests.deprecation"   value="false"  />
 
 		<!-- Javadoc-related properties -->
-		<property name="javadoc.srcdir.j2se" value="${java.home}/src" />
-		<property name="javadoc.srcdir.xins" value="src/java-common:build/src/java-common:src/java-server-framework:build/src/java-server-framework:src/java-client-framework:build/src/java-client-framework" />
+		<property name="javadoc.srcdir.javase" value="${java.home}/src" />
+		<property name="javadoc.srcdir.xins"   value="src/java-common:build/src/java-common:src/java-server-framework:build/src/java-server-framework:src/java-client-framework:build/src/java-client-framework" />
 
 		<!-- Unit- and performance-testing-related properties -->
 		<property name="testclass"     value="org.xins.tests.AllTests"     />
@@ -389,7 +389,7 @@ ${version.file}</fail>
 
 	<target name="-jdksrc-avail">
 		<available
-		file="${javadoc.srcdir.j2se}"
+		file="${javadoc.srcdir.javase}"
 		type="dir"
 		property="jdksrc.available" />
 	</target>
@@ -406,7 +406,7 @@ ${version.file}</fail>
 	name="-javadoc-sourcepath-jdksrc"
 	depends="-jdksrc-avail"
 	if="jdksrc.available">
-		<property name="javadoc.sourcepath" value="${javadoc.srcdir.xins}:${javadoc.srcdir.j2se}" />
+		<property name="javadoc.sourcepath" value="${javadoc.srcdir.xins}:${javadoc.srcdir.javase}" />
 		<echo level="verbose" message="JDK source code available." />
 	</target>
 
@@ -445,7 +445,7 @@ ${version.file}</fail>
 			</classpath>
 
 			<link offline="true" packagelistloc="src/package-lists/servlet/"            href="http://tomcat.apache.org/tomcat-6.0-doc/api/"          />
-			<link offline="true" packagelistloc="src/package-lists/j2se/"               href="http://java.sun.com/javase/6/docs/api"                 />
+			<link offline="true" packagelistloc="src/package-lists/javase/"             href="http://java.sun.com/javase/6/docs/api"                 />
 			<link offline="true" packagelistloc="src/package-lists/log4j/"              href="http://jakarta.apache.org/log4j/docs/api/"             />
 			<link offline="true" packagelistloc="src/package-lists/commons-logging/"    href="http://jakarta.apache.org/commons/logging/api/"        />
 			<link offline="true" packagelistloc="src/package-lists/commons-httpclient/" href="http://jakarta.apache.org/commons/httpclient/apidocs/" />

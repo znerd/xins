@@ -330,22 +330,10 @@ ${apis.list}]]></echo>
 		access="public"
 		windowtitle="Call interface for ${api} API"
 		doctitle="Call interface for ${api} API">
-			<link
-			href="http://www.xins.org/javadoc/${xins_version}/"
-			offline="true"
-			packagelistloc="${xins_home}/docs/javadoc/" />
-			<link
-			href="http://java.sun.com/j2se/1.4.2/docs/api"
-			offline="true"
-			packagelistloc="${xins_home}/src/package-lists/j2se/" />
-			<link
-			href="http://jakarta.apache.org/log4j/docs/api/"
-			offline="true"
-			packagelistloc="${xins_home}/src/package-lists/log4j/" />
-			<link
-			href="http://xmlenc.sourceforge.net/javadoc/${xmlenc_version}/"
-			offline="true"
-			packagelistloc="${xins_home}/src/package-lists/xmlenc/" />
+			<link href="http://www.xins.org/javadoc/${xins_version}/"             offline="true" packagelistloc="${xins_home}/docs/javadoc/"             />
+			<link href="http://java.sun.com/javase/6/docs/api"                    offline="true" packagelistloc="${xins_home}/src/package-lists/javase/" />
+			<link href="http://jakarta.apache.org/log4j/docs/api/"                offline="true" packagelistloc="${xins_home}/src/package-lists/log4j/"  />
+			<link href="http://xmlenc.sourceforge.net/javadoc/${xmlenc_version}/" offline="true" packagelistloc="${xins_home}/src/package-lists/xmlenc/" />
 			<classpath>
 				<path refid="xins.classpath" />
 			</classpath>
@@ -386,26 +374,11 @@ ${apis.list}]]></echo>
 		windowtitle="Unit tests of the ${api} API"
 		doctitle="Unit tests of the ${api} API">
 			<packageset dir="${javaTestDir}" />
-			<link
-			href="http://www.xins.org/javadoc/${xins_version}/"
-			offline="true"
-			packagelistloc="${xins_home}/docs/javadoc/" />
-			<link
-			href="http://java.sun.com/j2se/1.4.2/docs/api"
-			offline="true"
-			packagelistloc="${xins_home}/src/package-lists/j2se/" />
-			<link
-			href="http://junit.sourceforge.net/javadoc/"
-			offline="true"
-			packagelistloc="${xins_home}/src/package-lists/junit/" />
-			<link
-			href="http://jakarta.apache.org/log4j/docs/api/"
-			offline="true"
-			packagelistloc="${xins_home}/src/package-lists/log4j/" />
-			<link
-			href="http://xmlenc.sourceforge.net/javadoc/${xmlenc_version}/"
-			offline="true"
-			packagelistloc="${xins_home}/src/package-lists/xmlenc/" />
+			<link href="http://www.xins.org/javadoc/${xins_version}/"             offline="true" packagelistloc="${xins_home}/docs/javadoc/" />
+			<link href="http://java.sun.com/javase/6/docs/api"                    offline="true" packagelistloc="${xins_home}/src/package-lists/javase/" />
+			<link href="http://junit.sourceforge.net/javadoc/"                    offline="true" packagelistloc="${xins_home}/src/package-lists/junit/" />
+			<link href="http://jakarta.apache.org/log4j/docs/api/"                offline="true" packagelistloc="${xins_home}/src/package-lists/log4j/" />
+			<link href="http://xmlenc.sourceforge.net/javadoc/${xmlenc_version}/" offline="true" packagelistloc="${xins_home}/src/package-lists/xmlenc/" />
 			<classpath>
 				<path refid="xins.classpath" />
 				<path refid="javadoc.test.classpath" />
@@ -473,22 +446,10 @@ ${apis.list}]]></echo>
 		access="package"
 		windowtitle="Implementation of ${api} API"
 		doctitle="Implementation of ${api} API">
-			<link
-			href="http://www.xins.org/javadoc/${version.major}.${version.middle}${dot.version.minor}${version.build}/"
-			offline="true"
-			packagelistloc="${xins_home}/docs/javadoc/" />
-			<link
-			href="http://java.sun.com/j2se/1.4.2/docs/api"
-			offline="true"
-			packagelistloc="${xins_home}/src/package-lists/j2se/" />
-			<link
-			href="http://jakarta.apache.org/log4j/docs/api/"
-			offline="true"
-			packagelistloc="${xins_home}/src/package-lists/log4j/" />
-			<link
-			href="http://xmlenc.sourceforge.net/javadoc/${xmlenc_version}/"
-			offline="true"
-			packagelistloc="${xins_home}/src/package-lists/xmlenc/" />
+			<link href="http://www.xins.org/javadoc/${version.major}.${version.middle}${dot.version.minor}${version.build}/" offline="true" packagelistloc="${xins_home}/docs/javadoc/"             />
+			<link href="http://java.sun.com/javase/6/docs/api"                                                               offline="true" packagelistloc="${xins_home}/src/package-lists/javase/" />
+			<link href="http://jakarta.apache.org/log4j/docs/api/"                                                           offline="true" packagelistloc="${xins_home}/src/package-lists/log4j/"  />
+			<link href="http://xmlenc.sourceforge.net/javadoc/${xmlenc_version}/"                                            offline="true" packagelistloc="${xins_home}/src/package-lists/xmlenc/" />
 			<classpath refid="classes.api.classpath" />
 		</javadoc>
 		<copy
