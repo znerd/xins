@@ -160,7 +160,6 @@ ${sf.file}</fail>
 		deprecation="${tests.deprecation}"
 		source="${javac.targetvm}"
 		target="${javac.targetvm}">
-			<compilerarg value="${javac.compilerargs}" />
 			<src path="src/tests" />
 			<classpath refid="tests.classpath" />
 		</javac>

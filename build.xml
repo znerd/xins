@@ -76,7 +76,7 @@ ${version.file}</fail>
 		<property name="javac.debug"         value="true"   />
 		<property name="javac.deprecation"   value="true"   />
 		<property name="javac.optimize"      value="false"  />
-		<property name="javac.compilerargs"  value="-Xlint" />
+		<property name="javac.compilerargs"  value="-Xlint -Xmaxwarns 9999" />
 		<property name="tests.deprecation"   value="false"  />
 
 		<!-- Javadoc-related properties -->
@@ -111,7 +111,7 @@ ${version.file}</fail>
 		optimize="${javac.optimize}"
 		source="${javac.sourceversion}"
 		target="${javac.targetvm}">
-			<compilerarg value="${javac.compilerargs}" />
+			<compilerarg line="${javac.compilerargs}" />
 			<classpath>
 				<fileset dir="lib" includes="*.jar" />
 			</classpath>
@@ -187,7 +187,7 @@ ${version.file}</fail>
 		optimize="${javac.optimize}"
 		source="${javac.sourceversion}"
 		target="${javac.targetvm}">
-			<compilerarg value="${javac.compilerargs}" />
+			<compilerarg line="${javac.compilerargs}" />
 			<src path="src/java-common" />
 			<classpath>
 				<path refid="path.common" />
@@ -231,7 +231,7 @@ ${version.file}</fail>
 		optimize="${javac.optimize}"
 		source="${javac.sourceversion}"
 		target="${javac.targetvm}">
-			<compilerarg value="${javac.compilerargs}" />
+			<compilerarg line="${javac.compilerargs}" />
 			<src path="build/src/java-${src.side}" />
 			<include name="org/xins/${side}/Library.java" />
 			<classpath>
@@ -247,7 +247,7 @@ ${version.file}</fail>
 		optimize="${javac.optimize}"
 		source="${javac.sourceversion}"
 		target="${javac.targetvm}">
-			<compilerarg value="${javac.compilerargs}" />
+			<compilerarg line="${javac.compilerargs}" />
 			<src path="src/java-${src.side}" />
 			<src path="build/src/java-${src.side}" />
 			<exclude name="org/xins/${side}/Library.java" />
