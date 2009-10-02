@@ -127,13 +127,7 @@ public class HexConverterTests extends TestCase {
 
       // Test with zero-size byte array
       input1 = new byte[0];
-      try {
-         HexConverter.toHexString(input1);
-         fail("Expected HexConverter.toHexString(new byte[0]) to throw IllegalArgumentException.");
-         return;
-      } catch (IllegalArgumentException exception) {
-         // as expected
-      }
+      assertEquals("", HexConverter.toHexString(input1)); // XXX: Before XINS 3.0, this would have thrown an IllegalArgumentException
 
       // Test with other data
       input1 = new byte[] { (byte) 56, (byte) 10, (byte) 230};
