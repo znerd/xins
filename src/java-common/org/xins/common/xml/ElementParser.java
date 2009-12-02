@@ -294,7 +294,7 @@ public class ElementParser {
        * The stack of child elements within the data section. The top element
        * is always <code>&lt;data/&gt;</code>.
        */
-      private Stack _dataElementStack;
+      private Stack<Element> _dataElementStack;
 
       /**
        * The level for the element pointer within the XML document. Initially
@@ -311,7 +311,7 @@ public class ElementParser {
 
          _state            = PARSING;
          _level            = -1;
-         _dataElementStack = new Stack();
+         _dataElementStack = new Stack<Element>();
       }
 
       /**
@@ -435,11 +435,11 @@ public class ElementParser {
          } else {
 
             // Get the Element for which we process the end tag
-            Element child = (Element) _dataElementStack.pop();
+            Element child = _dataElementStack.pop();
 
             // Add the child to the parent
             if (_dataElementStack.size() > 0) {
-               Element parent = (Element) _dataElementStack.peek();
+               Element parent = _dataElementStack.peek();
                parent.add(child);
 
                // Reset the state back from ERROR to PARSING
@@ -481,7 +481,7 @@ public class ElementParser {
          _state = ERROR;
 
          // Get the Element within which we found a text snippet
-         Element child = (Element) _dataElementStack.peek();
+         Element child = _dataElementStack.peek();
 
          // Add the text snippet
          child.add(new String(ch, start, length));
