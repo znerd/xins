@@ -27,13 +27,9 @@ import org.xins.common.text.ParseException;
  *    Since XINS 3.0,
  *    because {@link Element} instances are modifiable (since XINS 2.0).
  */
+@Deprecated
 public class ElementBuilder {
 
-   // TODO: Document the states. A user of this class should be aware of the
-   //       fact that addChild(...) cannot be called if startElement(...) was
-   //       just called, for example.
-
-   // TODO: Add one or more examples in the class comment.
    /**
     * Initial state for the builder.
     */
@@ -380,6 +376,7 @@ public class ElementBuilder {
     *    Since XINS 3.0,
     *    because {@link Element} instances are modifiable (since XINS 2.0).
     */
+   @Deprecated
    private static final class State {
 
       /**
