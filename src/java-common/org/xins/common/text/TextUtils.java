@@ -548,7 +548,7 @@ public final class TextUtils {
     *
     * @since XINS 3.0
     */
-   public static String list(Collection input, String between, String beforeLast, boolean quote)
+   public static String list(Collection<String> input, String between, String beforeLast, boolean quote)
    throws IllegalArgumentException {
 
       // Check preconditions
