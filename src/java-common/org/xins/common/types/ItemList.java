@@ -52,7 +52,7 @@ public class ItemList {
     *    if <code>false</code> an object can be added several times in the list.
     */
    public ItemList(boolean setType) {
-      _list = new java.util.ArrayList(10);
+      _list = new java.util.ArrayList<Object>(10);
       _setType = setType;
    }
 
@@ -93,10 +93,10 @@ public class ItemList {
     *
     * @since XINS 2.0
     */
-   public final Collection get() {
+   public final Collection<Object> get() {
 
       if (_setType) {
-         Set set = new HashSet();
+         HashSet<Object> set = new HashSet<Object>();
          set.addAll(_list);
          return Collections.unmodifiableSet(set);
       } else {
