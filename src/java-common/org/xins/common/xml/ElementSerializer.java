@@ -146,10 +146,10 @@ public final class ElementSerializer {
    public void output(XMLOutputter out, Element element)
    throws NullPointerException, IOException {
 
-      String namespacePrefix = element.getNamespacePrefix();
-      String namespaceURI    = element.getNamespaceURI();
-      String localName       = element.getLocalName();
-      Map namespaces         = new HashMap();
+      String namespacePrefix        = element.getNamespacePrefix();
+      String namespaceURI           = element.getNamespaceURI();
+      String localName              = element.getLocalName();
+      Map<String,String> namespaces = new HashMap<String,String>();
 
       // Write an element with namespace
       if (namespacePrefix != null) {
