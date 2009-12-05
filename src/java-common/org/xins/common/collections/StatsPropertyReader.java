@@ -119,6 +119,7 @@ public final class StatsPropertyReader implements PropertyReader {
     *    and supports the
     *    <a href="http://java.sun.com/j2se/1.5.0/docs/guide/language/foreach.html">Java 5 foreach-operator</a>.
     */
+   @Deprecated
    public Iterator getNames() {
       return names().iterator();
    }

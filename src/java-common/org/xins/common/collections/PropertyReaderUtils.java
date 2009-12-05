@@ -649,6 +649,7 @@ public final class PropertyReaderUtils {
     *    Since XINS 2.2.
     *    Renamed to {@link #parsePropertyReader(InputStream)}.
     */
+   @Deprecated
    public static PropertyReader createPropertyReader(InputStream in)
    throws IllegalArgumentException, IOException {
       return parsePropertyReader(in);

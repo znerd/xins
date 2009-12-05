@@ -56,6 +56,7 @@ public interface PropertyReader extends Serializable {
     *    and supports the
     *    <a href="http://java.sun.com/j2se/1.5.0/docs/guide/language/foreach.html">Java 5 foreach-operator</a>.
     */
+   @Deprecated
    public Iterator<String> getNames();
 
    /**

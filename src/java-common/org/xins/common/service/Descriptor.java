@@ -67,6 +67,7 @@ implements Serializable {
     *    Since XINS 3.0. Use {@link #targets()} instead, see the 
     *    <a href="#examplecode">example code</a> in the class description.
     */
+   @Deprecated
    public final Iterator<TargetDescriptor> iterateTargets() {
       return targets().iterator();
    }
