@@ -204,7 +204,7 @@ public abstract class Type {
     * @deprecated
     *    Since XINS 3.0. Implement {@link #checkValueImpl(String)} instead.
     */
-   @Deprected
+   @Deprecated
    protected boolean isValidValueImpl(String string) {
       return true;
    }
