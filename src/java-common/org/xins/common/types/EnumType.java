@@ -28,27 +28,27 @@ public abstract class EnumType extends Type {
    /**
     * Map that links symbolic names to enumeration values.
     */
-   private final Map _namesToValues;
+   private final Map<String,String> _namesToValues;
 
    /**
     * Map that links enumeration values to their symbolic names.
     */
-   private final Map _valuesToNames;
+   private final Map<String,String> _valuesToNames;
 
    /**
     * Map that links symbolic names to enumeration item objects.
     */
-   protected final Map _namesToItems;
+   protected final Map<String,EnumItem> _namesToItems;
 
    /**
     * Map that links enumeration values to enumeration item objects.
     */
-   protected final Map _valuesToItems;
+   protected final Map<String,EnumItem> _valuesToItems;
 
    /**
-    * List of the <code>EnumItem</code>.
+    * List of the <code>EnumItem</code> instances.
     */
-   private final List _items;
+   private final List<EnumItem> _items;
 
    /**
     * The list of accepted values.
@@ -80,11 +80,11 @@ public abstract class EnumType extends Type {
    throws IllegalArgumentException {
       super(name, EnumItem.class);
 
-      _namesToValues = new HashMap();
-      _valuesToNames = new HashMap();
-      _namesToItems  = new HashMap();
-      _valuesToItems = new HashMap();
-      _items = new ArrayList();
+      _namesToValues = new HashMap<String,String>();
+      _valuesToNames = new HashMap<String,String>();
+      _namesToItems  = new HashMap<String,EnumItem>();
+      _valuesToItems = new HashMap<String,EnumItem>();
+      _items         = new ArrayList<EnumItem>();
 
       int count = items == null ? 0 : items.length;
       String[] values = new String[count];
