@@ -17,6 +17,11 @@ package org.xins.common.types;
 public class PatternCompileException extends RuntimeException {
 
    /**
+    * Serial version UID. Used for serialization.
+    */
+   private static final long serialVersionUID = -234987621378228272L;
+
+   /**
     * Creates a new <code>PatternCompileException</code>.
     *
     * @param message

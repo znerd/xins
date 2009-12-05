@@ -19,6 +19,11 @@ import org.xins.common.MandatoryArgumentChecker;
 public final class FormatException extends RuntimeException {
 
    /**
+    * Serial version UID. Used for serialization.
+    */
+   private static final long serialVersionUID = 1027874263423437377L;
+
+   /**
     * The string that is considered invalid. Cannot be <code>null</code>.
     */
    private final String _string;

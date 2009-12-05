@@ -18,6 +18,11 @@ package org.xins.common.xml;
 public final class ElementSerializationException extends RuntimeException {
 
    /**
+    * Serial version UID. Used for serialization.
+    */
+   private static final long serialVersionUID = 3000981437846124217L;
+
+   /**
     * Constructs a new <code>ElementSerializationException</code>.
     *
     * @param message
