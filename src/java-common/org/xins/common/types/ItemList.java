@@ -29,7 +29,7 @@ public class ItemList {
    /**
     * The list that contains the items. Cannot be <code>null</code>.
     */
-   private final java.util.List _list;
+   private final java.util.List<Object> _list;
 
    /**
     * Indicates whether this list accepts equal objects.
@@ -65,15 +65,15 @@ public class ItemList {
     * @throws IllegalArgumentException
     *    if <code>items == null</code>.
     *
-    * @since XINS 2.0.
+    * @since XINS 2.0
     */
-   public final void add(Collection items) throws IllegalArgumentException {
+   public final void add(Collection<Object> items) throws IllegalArgumentException {
 
+      // Check preconditions
       MandatoryArgumentChecker.check("items", items);
 
-      Iterator itItems = items.iterator();
-      while (itItems.hasNext()) {
-         Object nextItem = itItems.next();
+      // Loop over all items
+      for (Object nextItem : items) {
 
          // A set can not have the same value twice
          if (!_setType || !_list.contains(nextItem)) {
@@ -91,7 +91,7 @@ public class ItemList {
     *    a List or a Set containing the items, never <code>null</code>.
     *    the collection returned cannot be modified.
     *
-    * @since XINS 2.0.
+    * @since XINS 2.0
     */
    public final Collection get() {
 
@@ -115,6 +115,7 @@ public class ItemList {
     */
    protected final void addItem(Object value) throws IllegalArgumentException {
 
+      // Check preconditions
       MandatoryArgumentChecker.check("value", value);
 
       // A set can not have the same value twice
