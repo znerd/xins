@@ -39,7 +39,7 @@ public class SAXParserProvider {
     * The cache of <code>SAXParser</code> instances, one per thread. This
     * field is never <code>null</code>.
     */
-   private static ThreadLocal CACHE;
+   private static ThreadLocal<SAXParser> CACHE;
 
    /**
     * Initializes this class.
@@ -49,7 +49,7 @@ public class SAXParserProvider {
       SAX_PARSER_FACTORY.setNamespaceAware(true);
       SAX_PARSER_FACTORY.setValidating(false);
 
-      CACHE = new ThreadLocal();
+      CACHE = new ThreadLocal<SAXParser>();
    }
 
    /**
@@ -68,14 +68,11 @@ public class SAXParserProvider {
     *    a {@link SAXParser} instance, never <code>null</code>.
     */
    public static SAXParser get() {
-      Object o = CACHE.get();
+      SAXParser parser = CACHE.get();
 
-      SAXParser parser;
-      if (o == null) {
+      if (parser == null) {
          parser = create();
          CACHE.set(parser);
-      } else {
-         parser = (SAXParser) o;
       }
 
       return parser;
