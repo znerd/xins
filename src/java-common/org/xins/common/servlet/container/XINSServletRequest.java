@@ -29,7 +29,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.xins.common.MandatoryArgumentChecker;
+import org.xins.common.Utils;
 import org.xins.common.text.FormatException;
+import org.xins.common.text.TextUtils;
 import org.xins.common.text.URLEncoding;
 
 /**
@@ -54,7 +57,7 @@ public class XINSServletRequest implements HttpServletRequest {
    /**
     * The HTTP sessions of the servlet container.
     */
-   private static Map SESSIONS = new HashMap();
+   private static Map<String,HttpSession> SESSIONS = new HashMap<String,HttpSession>();
 
    /**
     * The HTTP request method.
@@ -67,9 +70,10 @@ public class XINSServletRequest implements HttpServletRequest {
    private final String _url;
 
    /**
-    * The parameters retrieved from the URL.
+    * The parameters retrieved from the URL. Existing keys are either a
+    * <code>String</code> or an <code>ArrayList</code> of strings.
     */
-   private HashMap _parameters = new HashMap();
+   private HashMap<String,Object> _parameters = new HashMap<String,Object>();
 
    /**
     * The date when the request was created.
@@ -79,12 +83,12 @@ public class XINSServletRequest implements HttpServletRequest {
    /**
     * The attributes of the request.
     */
-   private Hashtable _attributes = new Hashtable();
+   private Hashtable<String,Object> _attributes = new Hashtable<String,Object>();
 
    /**
     * The HTTP headers of the request.
     */
-   private Hashtable _headers = new Hashtable();
+   private Hashtable<String,String> _headers = new Hashtable<String,String>();
 
    /**
     * The URL path.
@@ -164,21 +168,37 @@ public class XINSServletRequest implements HttpServletRequest {
     *    the content of the request, can be <code>null</code>.
     *
     * @param headers
-    *    the HTTP headers of the request. The key and the value of the Map
-    *    is a String. The keys should all be in upper case. Can be <code>null</code>.
+    *    the HTTP headers of the request, the keys must all be in upper case;
+    *    can be <code>null</code>.
+    *
+    * @throws IllegalArgumentException
+    *    if <code>method == null || url == null</code>
     *
     * @since XINS 1.5.0
     */
-   public XINSServletRequest(String method, String url, String data, Map headers) {
+   public XINSServletRequest(String method, String url, String data, Map<String,String> headers)
+   throws IllegalArgumentException {
+
+      // Check preconditions
+      MandatoryArgumentChecker.check("method", method, "url", url);
+
+      // Initialize the method, URL and post data (if any)
       _method   = method;
       _url      = url;
       _postData = data;
-      if (headers == null) {
-         _contentType = "application/x-www-form-urlencoded";
-      } else {
+
+      // Initialize the headers
+      if (headers != null) {
          _headers.putAll(headers);
          _contentType = (String) headers.get("CONTENT-TYPE");
       }
+
+      // Fallback to a default content-type
+      if (TextUtils.isEmpty(_contentType)) {
+         _contentType = "application/x-www-form-urlencoded";
+      }
+
+      // Parse the URL
       parseURL(url);
    }
 
@@ -229,18 +249,26 @@ public class XINSServletRequest implements HttpServletRequest {
                if (currValue == null) {
                   _parameters.put(paramName, paramValue);
                } else if (currValue instanceof String) {
-                  ArrayList values = new ArrayList();
-                  values.add(currValue);
+                  ArrayList<String> values = new ArrayList<String>();
+                  values.add((String) currValue);
                   values.add(paramValue);
                   _parameters.put(paramName, values);
                } else {
-                  ArrayList values = (ArrayList) currValue;
+                  ArrayList<String> values = (ArrayList<String>) currValue;
                   values.add(paramValue);
                }
-            } catch (FormatException fe) {
-               // Ignore parameter
-            } catch (IllegalArgumentException iae) {
-               // Ignore parameter
+
+            // Ignore parameter in case of a malformatted string
+            } catch (FormatException e) {
+               Utils.logIgnoredException(XINSServletRequest.class.getName(), "parseURL(String)",
+                                         XINSServletRequest.class.getName(), "parseURL(String)",
+                                         e);
+
+            // Ignore parameter in case of an illegal argument
+            } catch (IllegalArgumentException e) {
+               Utils.logIgnoredException(XINSServletRequest.class.getName(), "parseURL(String)",
+                                         XINSServletRequest.class.getName(), "parseURL(String)",
+                                         e);
             }
          }
       }
@@ -257,7 +285,7 @@ public class XINSServletRequest implements HttpServletRequest {
       } else if (values instanceof String) {
          return new String[] { (String) values };
       } else {
-         ArrayList list = (ArrayList) values;
+         ArrayList<String> list = (ArrayList<String>) values;
          return (String[]) list.toArray(new String[list.size()]);
       }
    }
@@ -341,11 +369,13 @@ public class XINSServletRequest implements HttpServletRequest {
       return _pathInfo;
    }
 
-   public Enumeration getParameterNames() {
+   public Enumeration<String> getParameterNames() {
       return Collections.enumeration(_parameters.keySet());
    }
 
-   public Map getParameterMap() {
+   // TODO: Document that the values in the map are either strings or lists of
+   //       strings
+   public Map<String,Object> getParameterMap() {
       return _parameters;
    }
 
@@ -361,7 +391,7 @@ public class XINSServletRequest implements HttpServletRequest {
       throw new UnsupportedOperationException();
    }
 
-   public Enumeration getAttributeNames() {
+   public Enumeration<String> getAttributeNames() {
       return _attributes.keys();
    }
 
@@ -415,7 +445,7 @@ public class XINSServletRequest implements HttpServletRequest {
       return _cookies;
    }
 
-   public Enumeration getHeaderNames() {
+   public Enumeration<String> getHeaderNames() {
       return _headers.keys();
    }
 
@@ -488,12 +518,12 @@ public class XINSServletRequest implements HttpServletRequest {
    }
 
    public HttpSession getSession() {
-      return (HttpSession) SESSIONS.get(getRemoteAddr() + getRemoteUser());
+      return SESSIONS.get(getRemoteAddr() + getRemoteUser());
    }
 
    public HttpSession getSession(boolean create) {
       String sessionKey = getRemoteAddr() + getRemoteUser();
-      HttpSession session = (HttpSession) SESSIONS.get(sessionKey);
+      HttpSession session = SESSIONS.get(sessionKey);
       if (session == null) {
          session = new XINSHttpSession();
          SESSIONS.put(sessionKey, session);
