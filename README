@@ -8,9 +8,9 @@ This is a fork of the regular XINS distribution, see:
    http://xins.sourceforge.net/
 
 The most important changes compared to the mainstream XINS branch are:
-- no more support for Java 1.4 and lower
-- Java 5 support (generics, foreach-loop, etc.)
-- deprecation of various classes and methods
+- Java 5 required (support for earlier versions dropped)
+- Java 5-features supported/used (generics, foreach-loop, etc.)
+- various classes and methods are deprecated
 - removal of classes and methods previously marked deprecated
 - various library upgrades
 - various utility methods added to allow less code for users
