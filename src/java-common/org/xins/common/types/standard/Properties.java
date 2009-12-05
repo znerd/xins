@@ -172,7 +172,7 @@ public class Properties extends Type {
    protected final void checkValueImpl(String value) throws TypeValueException {
 
       // Store the property keys
-      HashSet propertyKeys = new HashSet();
+      HashSet<String> propertyKeys = new HashSet<String>();
 
       // Separate the string by ampersands
       StringTokenizer tokenizer = new StringTokenizer(value, "&");
@@ -231,7 +231,7 @@ public class Properties extends Type {
       BasicPropertyReader pr = new BasicPropertyReader();
 
       // Store the property keys
-      HashSet propertyKeys = new HashSet();
+      HashSet<String> propertyKeys = new HashSet<String>();
 
       // Separate the string by ampersands
       StringTokenizer tokenizer = new StringTokenizer(string, "&");
