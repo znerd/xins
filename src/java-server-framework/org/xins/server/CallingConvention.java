@@ -514,6 +514,7 @@ abstract class CallingConvention extends Manageable {
     *    Since XINS 3.0.
     *    Use {@link #convertResultImpl(HttpServletRequest,FunctionRequest,HttpServletResponse,FunctionResult)} instead.
     */
+   @Deprecated
    protected void convertResultImpl(FunctionResult      xinsResult,
                                     HttpServletResponse httpResponse,
                                     HttpServletRequest  httpRequest)

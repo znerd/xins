@@ -1131,11 +1131,10 @@ public class FrontendCallingConvention extends CustomCallingConvention {
     *
     * @return
     *    the name of the parameter as specified in the function.
-    *
-    * @deprecated
-    *    no mapping should be needed and the forms should send directly the correct parameters.
     */
+   // TODO: Remove this method. No mapping should be needed and the forms should send the correct parameters directly.
    private String getRealParameter(String receivedParameter, String functionName) {
+
       String flatParameter = receivedParameter;
       if (receivedParameter.indexOf("_") != -1) {
          flatParameter = TextUtils.removeCharacter('_', receivedParameter);
@@ -1168,10 +1167,8 @@ public class FrontendCallingConvention extends CustomCallingConvention {
     *
     * @return
     *    the name of the parameter as received.
-    *
-    * @deprecated
-    *    no mapping should be needed and the forms should send directly the correct parameters.
     */
+   // TODO: Remove this method. No mapping should be needed and the forms should send the correct parameters directly.
    private String getOriginalParameter(String parameter) {
       Map inputs = (Map) _session.getProperty("_inputs");
       Iterator itParameterNames = inputs.keySet().iterator();

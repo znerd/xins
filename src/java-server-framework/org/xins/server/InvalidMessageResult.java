@@ -69,8 +69,10 @@ class InvalidMessageResult extends FunctionResult {
     * @param type
     *    the type which this parameter should be compliant with.
     *
-    * @deprecated since XINS 2.0, use {@link #addInvalidValueForType(String, String, String)}.
+    * @deprecated
+    *    Since XINS 2.0, use {@link #addInvalidValueForType(String, String, String)}.
     */
+   @Deprecated
    public void addInvalidValueForType(String parameter, String type) {
       Element invalidValue = new Element("invalid-value-for-type");
       invalidValue.setAttribute("param", parameter);

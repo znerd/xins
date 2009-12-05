@@ -429,10 +429,8 @@ public class SessionManager extends Manageable {
     *
     * @return
     *    the name of the parameter as specified in the function.
-    *
-    * @deprecated
-    *    no mapping should be needed and the forms should send directly the correct parameters.
     */
+   // TODO: Remove this method. No mapping should be needed and the forms should send the correct parameters directly.
    private String getRealParameter(String receivedParameter, String functionName) {
       String flatParameter = receivedParameter;
       if (receivedParameter.indexOf("_") != -1) {
