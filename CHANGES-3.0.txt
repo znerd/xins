@@ -89,6 +89,10 @@ Libraries:
   that is now integrated in the regular saxon9he.jar file.
 * Upgraded Xerces from 2.6.2 to 2.9.1.
 
+Serialization:
+* Added a serialVersionUID field to some classes, this may break compatibility
+  with older XINS versions.
+
 Other:
 * Added DTDs for XINS 3.0.
 * Simplied 'xins' shell script and 'xins.bat' batch file.
