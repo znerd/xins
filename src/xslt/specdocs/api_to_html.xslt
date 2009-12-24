@@ -178,17 +178,17 @@
 					</xsl:otherwise>
 				</xsl:choose>
 
-				<h2>Result codes</h2>
+				<h2>Error codes</h2>
 				<xsl:choose>
 					<xsl:when test="count(resultcode) = 0">
 						<p>
-							<em>This API defines no specific result codes.</em>
+							<em>This API defines no specific error codes.</em>
 						</p>
 					</xsl:when>
 					<xsl:otherwise>
 						<table class="functionlist">
 							<tr>
-								<th>Result code</th>
+								<th>Error code</th>
 								<th>Version</th>
 								<th>Status</th>
 								<th>Description</th>
@@ -530,9 +530,9 @@
 
 		<xsl:if test="not($resultcode_node)">
 			<xsl:message terminate="yes">
-				<xsl:text>Result code file '</xsl:text>
+				<xsl:text>Error code file '</xsl:text>
 				<xsl:value-of select="$resultcode_file" />
-				<xsl:text>' not found for the defined result code '</xsl:text>
+				<xsl:text>' not found for the defined error code '</xsl:text>
 				<xsl:value-of select="@name" />
 				<xsl:text>'.</xsl:text>
 			</xsl:message>

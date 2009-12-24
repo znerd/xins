@@ -223,8 +223,8 @@
 			</xsl:if>
 		</xsl:variable>
 		<xsl:variable name="resultcode" select="@resultcode" />
-		<!-- TODO: Check that the result code is not defined in 2 places? -->
-		<!-- TODO: Check that the result code exists? -->
+		<!-- TODO: Check that the error code is not defined in 2 places? -->
+		<!-- TODO: Check that the error code exists? -->
 
 		<xsl:if test="string-length($resultcode) &lt; 1">
 			<xsl:variable name="examplenode" select="current()" />
@@ -373,7 +373,7 @@
 		</xsl:if>
 
 		<!--
-		Same applies to result code with required output parameters.
+		Same applies to error code with required output parameters.
 		-->
 		<xsl:if test="string-length($resultcode) &gt; 0 and not(starts-with($resultcode, '_'))">
 			<xsl:variable name="rcd_file">
@@ -401,14 +401,14 @@
 				</xsl:if>
 			</xsl:for-each>
 
-			<!-- Tests also that the result code is defined correctly -->
+			<!-- Tests also that the error code is defined correctly -->
 			<xsl:if test="not($api_node/resultcode[@name=$resultcode])">
 				<xsl:message terminate="yes">
 					<xsl:text>The error code '</xsl:text>
 					<xsl:value-of select="$resultcode" />
 					<xsl:text>' defined in the example </xsl:text>
 					<xsl:value-of select="$examplenum" />
-					<xsl:text> is not defined in the api.xml as a result code.</xsl:text>
+					<xsl:text> is not defined in the api.xml as an error code.</xsl:text>
 				</xsl:message>
 			</xsl:if>
 			<xsl:if test="not(/function/output/resultcode-ref[@name=$resultcode])">
@@ -529,7 +529,7 @@
 						<xsl:if test="string-length($resultcode) &gt; 0">
 							<xsl:text> </xsl:text>
 							<span class="attr">
-								<!-- TODO: Get result code description for referenced result codes as well -->
+								<!-- TODO: Get error code description for referenced error codes as well -->
 								<xsl:attribute name="title">
 									<xsl:call-template name="firstline">
 										<xsl:with-param name="text" select="parent::function/output/resultcode[@value=$resultcode]/description/text()" />
@@ -874,7 +874,7 @@
 	</xsl:template>
 
 	<xsl:template name="resultcodes">
-		<h3>Result codes</h3>
+		<h3>Error codes</h3>
 		<em>An error code is returned when an error occurs during the execution of the implementation.</em>
 		<table class="resultcodes">
 			<tr>
@@ -948,7 +948,7 @@
 
 		<tr class="default">
 			<td class="value">
-				<span title="This result code is generic, not specific to this API">
+				<span title="This error code is generic, not specific to this API">
 					<xsl:value-of select="$value" />
 				</span>
 			</td>
