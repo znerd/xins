@@ -48,7 +48,7 @@
 				<xsl:apply-templates select="description" />
 				<xsl:choose>
 					<xsl:when test="api">
-						<p>This project defines the following APIs:</p>
+						<p id="ThisProjectDefines" class="ProjectContainsAPIs">This project defines the following APIs:</p>
 						<table class="apilist">
 							<tr>
 								<th>API</th>
@@ -59,9 +59,9 @@
 						</table>
 					</xsl:when>
 					<xsl:otherwise>
-						<em>
+						<p id="ThisProjectDefines" class="ProjectContainsNoAPIs">
 							<xsl:text>This project does not define any APIs.</xsl:text>
-						</em>
+						</p>
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:call-template name="footer">
@@ -72,8 +72,6 @@
 	</xsl:template>
 
 	<xsl:template match="api">
-		<!-- This test is not guaranteed to work with all XSLT
-		     processors. -->
 		<xsl:variable name="new_api_file" select="concat($apis_dir, '/', @name, '/spec/api.xml')" />
 		<xsl:variable name="api_file">
 			<xsl:choose>
@@ -86,7 +84,7 @@
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="api_node" select="document($api_file)/api" />
-		<xsl:variable name="functioncount" select="count($api_node/function)" />
+		<xsl:variable name="functionCount" select="count($api_node/function)" />
 
 		<xsl:if test="not($api_node/@name = @name)">
 			<xsl:message terminate="yes">
@@ -99,29 +97,19 @@
 				<xsl:text>'.</xsl:text>
 			</xsl:message>
 		</xsl:if>
-		<tr>
-			<td>
-				<a>
-					<xsl:attribute name="href">
-						<xsl:value-of select="@name" />
-						<xsl:text>/index.html</xsl:text>
-					</xsl:attribute>
-					<xsl:value-of select="@name" />
-				</a>
-			</td>
 
-			<td>
-				<xsl:apply-templates select="$api_node/description" />
-			</td>
+		<xsl:variable name="apiName" select="@name" />
+		<xsl:variable name="apiLink" select="concat($apiName, '/index.html')" />
 
-			<td>
-				<xsl:value-of select="$functioncount" />
-			</td>
+		<tr id="api-{$apiName}">
+			<td class="apiName"       ><a href="{$apiLink}"><xsl:value-of select="@name"   /></a></td>
+			<td class="apiDescription"><xsl:apply-templates select="$api_node/description"     /></td>
+			<td class="functionCount" ><xsl:value-of select="$functionCount"                   /></td>
 		</tr>
 	</xsl:template>
 
 	<xsl:template match="project/description">
-		<p>
+		<p id="projectDescription">
 			<xsl:apply-templates />
 		</p>
 	</xsl:template>
