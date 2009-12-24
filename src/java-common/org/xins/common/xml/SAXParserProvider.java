@@ -95,7 +95,7 @@ public class SAXParserProvider {
                return new InputSource(new ByteArrayInputStream(new byte[0]));
             }
          });
-      } catch (Exception cause) {
+      } catch (Throwable cause) {
 
          Log.log_1550(cause);
          String exceptionMessage = cause.getMessage();

@@ -65,6 +65,7 @@ XINS/Java Common Library:
   in favour of the new getAttributes() method that returns a Map.
 * Deprecated ChainedMap class, in favour of LinkedHashMap, available since
   J2SE v1.4.
+* Changed SAXParserProvider to not only handle an Exception, but Throwable.
 
 XINS/Java Client Framework:
 * Client: Enabled parameter value filtering for messages 2100-2115.
@@ -87,7 +88,8 @@ Libraries:
 * Upgraded JUnit to version 4.5.
 * Upgraded to Saxon HE (Home Edition) 9.2.0.2. Removed lib/saxon9-dom.jar,
   that is now integrated in the regular saxon9he.jar file.
-* Upgraded Xerces from 2.6.2 to 2.9.1.
+* Removed Xerces library (xercesImpl.jar, xml-apis.jar), relying on the
+  Xerces distribution as part of Java SE platform.
 
 Serialization:
 * Added a serialVersionUID field to some classes, this may break compatibility
