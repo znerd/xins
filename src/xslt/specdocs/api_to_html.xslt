@@ -280,7 +280,7 @@
 					</xsl:otherwise>
 				</xsl:choose>
 
-				<h2>Logdoc</h2>
+				<h2>Log documentation</h2>
 				<xsl:choose>
 					<xsl:when test="$project_node/api[@name = $api]/impl">
 						<xsl:for-each select="$project_node/api[@name = $api]/impl">
@@ -295,18 +295,18 @@
 							<xsl:choose>
 								<xsl:when test="$impl_node/logdoc and @name and string-length($implName) &gt; 0">
 									<a href="logdoc{$implName2}/index.html" title="Logdoc used for the {$implName} implementation.">
-										<xsl:text>Logdoc for </xsl:text>
+										<xsl:text>Log messages for </xsl:text>
 										<xsl:value-of select="$implName" />
 										<xsl:text> implementation.</xsl:text>
 									</a>
 								</xsl:when>
 								<xsl:when test="$impl_node/logdoc">
-									<a href="logdoc/index.html" title="Logdoc used by the default implementation">Logdoc specifications</a>
+									<a href="logdoc/index.html" title="Logdoc used by the default implementation">Defined log messages</a>
 								</xsl:when>
 								<xsl:when test="@name and string-length($implName) &gt; 0">
 									<p>
 										<em>
-											<xsl:text>No Logdoc have been defined for the &quot;</xsl:text>
+											<xsl:text>No log messages have been defined for the &quot;</xsl:text>
 											<xsl:value-of select="$implName" />
 											<xsl:text>&quot; implementation.</xsl:text>
 										</em>
@@ -314,7 +314,7 @@
 								</xsl:when>
 								<xsl:otherwise>
 									<p>
-										<em>No logdoc have been defined for the default implementation.</em>
+										<em>No log messages have been defined for the default implementation.</em>
 									</p>
 								</xsl:otherwise>
 							</xsl:choose>
