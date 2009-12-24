@@ -48,7 +48,7 @@
 				<xsl:apply-templates select="description" />
 				<xsl:choose>
 					<xsl:when test="api">
-						<p>This project defines the following API specifications:</p>
+						<p>This project defines the following APIs:</p>
 						<table class="apilist">
 							<tr>
 								<th>API</th>
@@ -60,7 +60,7 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<em>
-							<xsl:text>This project does not define any API specifications.</xsl:text>
+							<xsl:text>This project does not define any APIs.</xsl:text>
 						</em>
 					</xsl:otherwise>
 				</xsl:choose>
