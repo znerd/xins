@@ -93,6 +93,9 @@ Serialization:
 * Added a serialVersionUID field to some classes, this may break compatibility
   with older XINS versions.
 
+Generation of specdocs:
+* Visited links now also show underlined when hovered over.
+
 Other:
 * Added DTDs for XINS 3.0.
 * Simplied 'xins' shell script and 'xins.bat' batch file.

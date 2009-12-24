@@ -36,10 +36,7 @@ h3 {
 	font-size: 110%
 }
 
-table tr td {
-	vertical-align: top;
-}
-
+table tr td,
 table tr th {
 	vertical-align: top;
 }
@@ -363,7 +360,6 @@ a {
 
 a:visited {
 	color: #0000bb;
-	text-decoration: none;
 }
 
 a img {
