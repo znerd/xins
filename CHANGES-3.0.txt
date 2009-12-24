@@ -98,6 +98,7 @@ Generation of specdocs:
 * Using term 'error code' instead of 'result code'.
 * Improved messages related to Logdoc definitions in generated file for API.
 * Minor changes to text in generated index.html file.
+* Showing ellipsis instead of API_PATH in function example requests.
 
 Other:
 * Added DTDs for XINS 3.0.

@@ -443,9 +443,7 @@
 			<th>Request:</th>
 			<td>
 				<span class="url">
-					<span class="protocol">http</span>
-					<xsl:text>://</xsl:text>
-					<span class="host">API_PATH</span>
+					<span class="ellipsis">&#8230;</span>
 					<xsl:text>?</xsl:text>
 					<span class="functionparam">
 						<span class="name">_function</span>
