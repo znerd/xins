@@ -7,9 +7,8 @@
 package org.xins.server;
 
 import java.util.StringTokenizer;
-
-import org.apache.oro.text.regex.Perl5Matcher;
-import org.apache.oro.text.regex.Perl5Pattern;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.xins.common.MandatoryArgumentChecker;
 import org.xins.common.Utils;
@@ -70,12 +69,12 @@ public final class AccessRule implements AccessRuleContainer {
    /**
     * The function name pattern. Cannot be <code>null</code>.
     */
-   private final Perl5Pattern _functionNameRegex;
+   private final Pattern _functionNameRegex;
 
    /**
     * The calling convention name pattern. Cannot be <code>null</code>.
     */
-   private final Perl5Pattern _conventionNameRegex;
+   private final Pattern _conventionNameRegex;
 
    /**
     * String representation of this object. Cannot be <code>null</code>.
@@ -117,8 +116,8 @@ public final class AccessRule implements AccessRuleContainer {
     */
    private AccessRule(boolean      allow,
                       IPFilter     ipFilter,
-                      Perl5Pattern functionNameRegex,
-                      Perl5Pattern conventionNameRegex,
+                      Pattern functionNameRegex,
+                      Pattern conventionNameRegex,
                       String       asString)
    throws IllegalArgumentException {
 
@@ -182,14 +181,14 @@ public final class AccessRule implements AccessRuleContainer {
       SimplePatternParser parser   = new SimplePatternParser();
       // Determine the function the access is to be checked for
       String functionPatternString = nextToken(descriptor, tokenizer);
-      Perl5Pattern functionPattern = parser.parseSimplePattern(functionPatternString);
+      Pattern      functionPattern = parser.parseSimplePattern(functionPatternString);
 
       // Determine the function the access is to be checked for
       String conventionPatternString = "*";
       if (tokenizer.hasMoreTokens()) {
          conventionPatternString = tokenizer.nextToken();
       }
-      Perl5Pattern conventionPattern = parser.parseSimplePattern(conventionPatternString);
+      Pattern conventionPattern = parser.parseSimplePattern(conventionPatternString);
 
       // Construct a description
       String asString = sAllow + ' ' + filter.toString() + ' ' +
@@ -348,12 +347,11 @@ public final class AccessRule implements AccessRuleContainer {
       MandatoryArgumentChecker.check("ip", ip, "functionName", functionName);
 
       // First check if the IP filter matches
-      Perl5Matcher patternMatcher = new Perl5Matcher();
-      if (_ipFilter.match(ip)) {
+      if (_ipFilter.matcher(ip).find()) {
 
          // Then check if the function name matches
-         if (patternMatcher.matches(functionName, _functionNameRegex) &&
-               (conventionName == null || patternMatcher.matches(conventionName, _conventionNameRegex))) {
+         if (_functionNameRegex.matcher(functionName).find() &&
+               (conventionName == null || _conventionNameRegex.matcher(conventionName).find())) {
             return _allow ? Boolean.TRUE : Boolean.FALSE;
          }
       }

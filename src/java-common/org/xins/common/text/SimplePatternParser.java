@@ -75,7 +75,12 @@ public class SimplePatternParser {
     *
     * @throws ParseException
     *    if provided simplePattern is invalid or could not be parsed.
+    *
+    * @deprecated
+    *    Since XINS 3.0, Jakarta ORO is no longer used; instead, the regular
+    *    expression framework available since Java SE 1.4 is used.
     */
+   @Deprecated
    public Perl5Pattern parseSimplePattern(String simplePattern)
    throws IllegalArgumentException, ParseException {
 

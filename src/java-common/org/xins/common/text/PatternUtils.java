@@ -20,7 +20,12 @@ import org.xins.common.Utils;
  * @author <a href="mailto:anthony.goubard@japplis.com">Anthony Goubard</a>
  *
  * @since XINS 2.0
+ *
+ * @deprecated
+ *    Since XINS 3.0, Jakarta ORO is no longer used; instead, the regular
+ *    expression framework available since Java SE 1.4 is used.
  */
+@Deprecated
 public final class PatternUtils {
 
    /**
@@ -50,14 +55,12 @@ public final class PatternUtils {
     * @throws ProgrammingException
     *    if the pattern cannot be complied.
     *
-    * @since XINS 2.0.
+    * @since XINS 2.0
     */
    public static Pattern createPattern(String regexp) throws IllegalArgumentException, ProgrammingException {
       MandatoryArgumentChecker.check("regexp", regexp);
       try {
-         Pattern pattern = PATTERN_COMPILER.compile(regexp,
-               Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK);
-         return pattern;
+         return PATTERN_COMPILER.compile(regexp, Perl5Compiler.READ_ONLY_MASK | Perl5Compiler.CASE_INSENSITIVE_MASK);
       } catch (MalformedPatternException exception) {
          throw Utils.logProgrammingError(exception);
       }

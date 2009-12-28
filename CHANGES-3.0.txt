@@ -66,6 +66,8 @@ XINS/Java Common Library:
 * Deprecated ChainedMap class, in favour of LinkedHashMap, available since
   J2SE v1.4.
 * Changed SAXParserProvider to not only handle an Exception, but Throwable.
+* Changed some code to use Java SE regex framework instead of Jakarta ORO
+  (TODO, work in progress).
 
 XINS/Java Client Framework:
 * Client: Enabled parameter value filtering for messages 2100-2115.
@@ -76,6 +78,8 @@ XINS/Java Server Framework:
 * Calling convention provides original FunctionRequest to convertResultImpl.
 * Changed signature of SOAPCallingConvention.setDataElementAttribute.
 * Enabled parameter value filtering for messages 3520-3523, 3540.
+* Changed some code to use Java SE regex framework instead of Jakarta ORO
+  (TODO, work in progress).
 
 Libraries:
 * Upgraded to Juxy 0.8.

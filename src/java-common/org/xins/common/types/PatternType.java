@@ -6,10 +6,9 @@
  */
 package org.xins.common.types;
 
-import org.apache.oro.text.regex.MalformedPatternException;
-import org.apache.oro.text.regex.Pattern;
-import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.oro.text.regex.Perl5Matcher;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.xins.common.MandatoryArgumentChecker;
 import org.xins.common.Utils;
@@ -25,11 +24,6 @@ import org.xins.common.text.TextUtils;
  * @since XINS 1.0.0
  */
 public abstract class PatternType extends Type {
-
-   /**
-    * Perl 5 pattern compiler.
-    */
-   private static final Perl5Compiler PATTERN_COMPILER = new Perl5Compiler();
 
    /**
     * Pattern string. This is the uncompiled version of {@link #_pattern}.
@@ -62,21 +56,19 @@ public abstract class PatternType extends Type {
     */
    protected PatternType(String name, String pattern)
    throws IllegalArgumentException, PatternCompileException {
+
+      // Explicitly invoke superclass constructor
       super(name, String.class);
 
-      if (pattern == null) {
-         throw new IllegalArgumentException("pattern == null");
-      }
+      // Check preconditions
+      MandatoryArgumentChecker.check("pattern", pattern);
 
       // Compile the regular expression to a Pattern object
       try {
-         synchronized (PATTERN_COMPILER) {
-            _pattern = PATTERN_COMPILER.compile(pattern,
-                                                Perl5Compiler.READ_ONLY_MASK);
-         }
+         _pattern = Pattern.compile(pattern);
 
       // Handle pattern compilation error
-      } catch (MalformedPatternException cause) {
+      } catch (PatternSyntaxException cause) {
          PatternCompileException e = new PatternCompileException(pattern);
          e.initCause(cause);
          throw e;
@@ -91,8 +83,8 @@ public abstract class PatternType extends Type {
 
       // Determine if the value matches the pattern
       try {
-         Perl5Matcher patternMatcher = new Perl5Matcher();
-         if (! patternMatcher.matches(value, _pattern)) {
+         Matcher patternMatcher = _pattern.matcher(value);
+         if (! patternMatcher.find()) {
             throw new TypeValueException(this, value, "String does not match pattern.");
          }
 
