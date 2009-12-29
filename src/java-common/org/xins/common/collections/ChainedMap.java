@@ -32,6 +32,7 @@ import java.util.Set;
  *    since J2SE v1.4.
  */
 @Deprecated
+@SuppressWarnings(value = "unchecked")
 public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
 
    /**
