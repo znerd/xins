@@ -39,7 +39,7 @@
 				<link rel="stylesheet" href="style.css" type="text/css" />
 				<link rel="icon" href="favicon.ico" type="image/vnd.microsoft.icon" />
 			</head>
-			<body>
+			<body id="body-ProjectPage">
 				<xsl:call-template name="header">
 					<xsl:with-param name="active">apilist</xsl:with-param>
 				</xsl:call-template>
