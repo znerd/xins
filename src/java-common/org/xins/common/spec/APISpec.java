@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -51,7 +52,7 @@ public final class APISpec {
    /**
     * The functions of the API, cannot be <code>null</code>.
     */
-   private Map _functions = new LinkedHashMap();
+   private Map<String,FunctionSpec> _functions = new LinkedHashMap<String,FunctionSpec>();
 
    /**
     * Creates a new instance of <code>APISpec</code>.
@@ -153,9 +154,8 @@ public final class APISpec {
     * @return
     *    the function specifications, never <code>null</code>.
     */
-   public Map getFunctions() {
-
-      return _functions;
+   public Map<String,FunctionSpec> getFunctions() {
+      return Collections.unmodifiableMap(_functions);
    }
 
    /**
@@ -178,8 +178,7 @@ public final class APISpec {
 
       MandatoryArgumentChecker.check("functionName", functionName);
 
-      FunctionSpec function = (FunctionSpec) _functions.get(functionName);
-
+      FunctionSpec function = _functions.get(functionName);
       if (function == null) {
          throw new EntityNotFoundException("Function \"" + functionName + "\" not found.");
       }
