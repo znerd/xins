@@ -561,9 +561,9 @@ public final class TextUtils {
       }
 
       // First one
-      Iterator<Object> iterator = input.iterator();
-      Object               item = iterator.next();
-      String             result = quote ? quote(item) : String.valueOf(item);
+      Iterator iterator = input.iterator();
+      Object       item = iterator.next();
+      String     result = quote ? quote(item) : String.valueOf(item);
 
       // All in between
       for (int i = 1; i < (itemCount - 1); i++) {
