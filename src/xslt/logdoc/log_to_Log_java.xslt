@@ -62,7 +62,7 @@
    /**
     * Associations from name to translation bundle.
     */
-   private static final java.util.HashMap TRANSLATION_BUNDLES_BY_NAME;
+   private static final java.util.HashMap<String,TranslationBundle> TRANSLATION_BUNDLES_BY_NAME;
 
    /**
     * The active translation bundle.
@@ -80,7 +80,7 @@
    static {
 
       // Reference all translation bundles by name
-      TRANSLATION_BUNDLES_BY_NAME = new java.util.HashMap();]]></xsl:text>
+      TRANSLATION_BUNDLES_BY_NAME = new java.util.HashMap<String,TranslationBundle>();]]></xsl:text>
 			<xsl:for-each select="translation-bundle">
 				<xsl:text>
       TRANSLATION_BUNDLES_BY_NAME.put("</xsl:text>
@@ -134,16 +134,19 @@
          super();
       }
 
+	  @Override
       public String toString() {
          return getClass().getName();
       }
 
+	  @Override
       protected boolean isLocaleSupported(String locale) {
 
          // Return true if the bundle exists
          return TRANSLATION_BUNDLES_BY_NAME.containsKey(locale);
       }
 
+	  @Override
       protected void setLocale(String newLocale) {
          TRANSLATION_BUNDLE = (TranslationBundle) TRANSLATION_BUNDLES_BY_NAME.get(newLocale);
       }

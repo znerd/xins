@@ -647,8 +647,8 @@ public final class FunctionSpec {
     *    the list of the input or output parameters or attributes, cannot be <code>null</code>.
     *
     * @param paramCombo
-    *    <code>true</code> if a param-combo should be parsed, <code>false</code>
-    *    if an attribute-combo should be parsed.
+    *    <code>true</code> if a param-combo should be parsed,
+    *    <code>false</code> if an attribute-combo should be parsed.
     *
     * @return
     *    the list of the param-combo elements or an empty array if no
@@ -660,44 +660,52 @@ public final class FunctionSpec {
     * @throws InvalidSpecificationException
     *    if the format of the param-combo is incorrect.
     */
-   static List parseCombos(Element topElement, Map parameters, boolean paramCombo)
+   static List<ComboSpec> parseCombos(Element topElement, Map parameters, boolean paramCombo)
    throws IllegalArgumentException, InvalidSpecificationException {
+
+      // Check preconditions
       MandatoryArgumentChecker.check("topElement", topElement, "parameters", parameters);
-      String comboTag = paramCombo ? "param-combo" : "attribute-combo";
-      String referenceTag = paramCombo ? "param-ref" : "attribute-ref";
-      List paramCombosList = topElement.getChildElements(comboTag);
-      List paramCombos = new ArrayList(paramCombosList.size());
-      Iterator itParamCombos = paramCombosList.iterator();
-      while (itParamCombos.hasNext()) {
-         Element nextParamCombo = (Element) itParamCombos.next();
-         String type = nextParamCombo.getAttribute("type");
+
+      String          comboTag = paramCombo ? "param-combo" : "attribute-combo";
+      String            refTag = paramCombo ? "param-ref"   : "attribute-ref";
+      List<Element> comboElems = topElement.getChildElements(comboTag);
+      List<ComboSpec>   combos = new ArrayList<ComboSpec>(comboElems.size());
+
+      for (Element comboElem : comboElems) {
+
+         // Get the type of the combo
+         String type = comboElem.getAttribute("type");
          if (type == null) {
             throw new InvalidSpecificationException("No type defined for " + comboTag + ".");
          }
-         List paramDefs = nextParamCombo.getChildElements(referenceTag);
-         Iterator itParamDefs = paramDefs.iterator();
-         Map paramComboParameters = new LinkedHashMap();
-         while (itParamDefs.hasNext()) {
-            Element paramDef = (Element) itParamDefs.next();
-            String parameterName = paramDef.getAttribute("name");
-            if (parameterName == null) {
+
+         // Get the parameters for the combo
+         Map<String,ParameterSpec> params = new LinkedHashMap<String,ParameterSpec>();
+         for (Element paramElem : comboElem.getChildElements(refTag)) {
+
+            // Get parameter name
+            String paramName = paramElem.getAttribute("name");
+            if (paramName == null) {
                throw new InvalidSpecificationException("Missing name for a parameter in " + comboTag + ".");
             }
-            ParameterSpec parameter = (ParameterSpec) parameters.get(parameterName);
+
+            // Get corresponding parameter specification
+            ParameterSpec parameter = (ParameterSpec) parameters.get(paramName);
             if (parameter == null) {
-               throw new InvalidSpecificationException("Incorrect parameter name \"" +
-                     parameterName + "\" in " + comboTag + ".");
+               throw new InvalidSpecificationException("Invalid parameter name \"" + paramName + "\" in " + comboTag + ".");
             }
-            paramComboParameters.put(parameterName, parameter);
+
+            // Add the parameter
+            params.put(paramName, parameter);
          }
-         if (paramCombo) {
-            ParamComboSpec paramComboSpec = new ParamComboSpec(type, paramComboParameters);
-            paramCombos.add(paramComboSpec);
-         } else {
-            AttributeComboSpec paramComboSpec = new AttributeComboSpec(type, paramComboParameters);
-            paramCombos.add(paramComboSpec);
-         }
+
+         // Create an appropriate ComboSpec object, and add it to the list
+         ComboSpec comboSpec = paramCombo
+                             ? new     ParamComboSpec(type, params)
+                             : new AttributeComboSpec(type, params);
+         combos.add(comboSpec);
       }
-      return paramCombos;
+
+      return combos;
    }
 }
