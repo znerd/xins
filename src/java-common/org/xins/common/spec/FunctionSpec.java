@@ -9,6 +9,7 @@ package org.xins.common.spec;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,40 +42,38 @@ public final class FunctionSpec {
 
    /**
     * The input parameters of the function.
-    * The key is the name of the parameter, the value is the {@link FunctionSpec} object.
     */
-   private Map _inputParameters = new LinkedHashMap();
+   private Map<String,ParameterSpec> _inputParameters = new LinkedHashMap<String,ParameterSpec>();
 
    /**
     * The input param combos of the function.
     */
-   private List _inputParamCombos = new ArrayList();
+   private List<ParamComboSpec> _inputParamCombos = new ArrayList<ParamComboSpec>();
 
    /**
     * The input data section elements of the function.
     */
-   private Map _inputDataSectionElements = new LinkedHashMap();
+   private Map<String,DataSectionElementSpec> _inputDataSectionElements = new LinkedHashMap<String,DataSectionElementSpec>();
 
    /**
     * The defined error code that the function can return.
     */
-   private Map _errorCodes = new LinkedHashMap();
+   private Map<String,ErrorCodeSpec> _errorCodes = new LinkedHashMap<String,ErrorCodeSpec>();
 
    /**
     * The output parameters of the function.
-    * The key is the name of the parameter, the value is the <code>Parameter</code> object.
     */
-   private Map _outputParameters = new LinkedHashMap();
+   private Map<String,ParameterSpec> _outputParameters = new LinkedHashMap<String,ParameterSpec>();
 
    /**
     * The output param combos of the function.
     */
-   private List _outputParamCombos = new ArrayList();
+   private List<ParamComboSpec> _outputParamCombos = new ArrayList<ParamComboSpec>();
 
    /**
     * The output data section elements of the function.
     */
-   private Map _outputDataSectionElements = new LinkedHashMap();
+   private Map<String,DataSectionElementSpec> _outputDataSectionElements = new LinkedHashMap<String,DataSectionElementSpec>();
 
    /**
     * Creates a new <code>Function</code> by parsing the function specification file.
@@ -96,8 +95,14 @@ public final class FunctionSpec {
     */
    FunctionSpec(String functionName, Class  reference, String baseURL)
    throws IllegalArgumentException, InvalidSpecificationException {
+
+      // Check preconditions
       MandatoryArgumentChecker.check("functionName", functionName, "reference", reference, "baseURL", baseURL);
+
+      // Store the function name
       _functionName = functionName;
+
+      // Attempt to parse the function .fnc file
       try {
          Reader reader = APISpec.getReader(baseURL, functionName + ".fnc");
          parseFunction(reader, reference, baseURL);
@@ -113,7 +118,6 @@ public final class FunctionSpec {
     *    the name of the function, never <code>null</code>.
     */
    public String getName() {
-
       return _functionName;
    }
 
@@ -124,7 +128,6 @@ public final class FunctionSpec {
     *    the description of the function, never <code>null</code>.
     */
    public String getDescription() {
-
       return _description;
    }
 
@@ -146,10 +149,11 @@ public final class FunctionSpec {
    public ParameterSpec getInputParameter(String parameterName)
    throws EntityNotFoundException, IllegalArgumentException {
 
+      // Check preconditions
       MandatoryArgumentChecker.check("parameterName", parameterName);
 
+      // Find the (required) input parameter
       ParameterSpec parameter = (ParameterSpec) _inputParameters.get(parameterName);
-
       if (parameter == null) {
          throw new EntityNotFoundException("Input parameter \"" + parameterName + "\" not found.");
       }
@@ -164,9 +168,8 @@ public final class FunctionSpec {
     * @return
     *    the input parameters, never <code>null</code>.
     */
-   public Map getInputParameters() {
-
-      return _inputParameters;
+   public Map<String,ParameterSpec> getInputParameters() {
+      return Collections.unmodifiableMap(_inputParameters);
    }
 
    /**
@@ -187,10 +190,11 @@ public final class FunctionSpec {
    public ParameterSpec getOutputParameter(String parameterName)
    throws IllegalArgumentException, EntityNotFoundException {
 
+      // Check preconditions
       MandatoryArgumentChecker.check("parameterName", parameterName);
 
+      // Find the (required) parameter
       ParameterSpec parameter = (ParameterSpec) _outputParameters.get(parameterName);
-
       if (parameter == null) {
          throw new EntityNotFoundException("Output parameter \"" + parameterName + "\" not found.");
       }
@@ -205,9 +209,8 @@ public final class FunctionSpec {
     * @return
     *    the output parameters, never <code>null</code>.
     */
-   public Map getOutputParameters() {
-
-      return _outputParameters;
+   public Map<String,ParameterSpec> getOutputParameters() {
+      return Collections.unmodifiableMap(_outputParameters);
    }
 
    /**
@@ -228,9 +231,11 @@ public final class FunctionSpec {
    public ErrorCodeSpec getErrorCode(String errorCodeName)
    throws IllegalArgumentException, EntityNotFoundException {
 
+      // Check preconditions
       MandatoryArgumentChecker.check("errorCodeName", errorCodeName);
-      ErrorCodeSpec errorCode = (ErrorCodeSpec) _errorCodes.get(errorCodeName);
 
+      // Find the (required) error code
+      ErrorCodeSpec errorCode = _errorCodes.get(errorCodeName);
       if (errorCode == null) {
          throw new EntityNotFoundException("Error code \"" + errorCodeName + "\" not found.");
       }
@@ -244,11 +249,10 @@ public final class FunctionSpec {
     * The key is the name of the error code, the value is the {@link ErrorCodeSpec} object.
     *
     * @return
-    *    The error code specifications, never <code>null</code>.
+    *    the error code specifications, never <code>null</code>.
     */
-   public Map getErrorCodes() {
-
-      return _errorCodes;
+   public Map<String,ErrorCodeSpec> getErrorCodes() {
+      return Collections.unmodifiableMap(_errorCodes);
    }
 
    /**
@@ -270,10 +274,11 @@ public final class FunctionSpec {
    public DataSectionElementSpec getInputDataSectionElement(String elementName)
    throws IllegalArgumentException, EntityNotFoundException {
 
+      // Check preconditions
       MandatoryArgumentChecker.check("elementName", elementName);
 
+      // Find the (required) input data section element
       DataSectionElementSpec element = (DataSectionElementSpec) _inputDataSectionElements.get(elementName);
-
       if (element == null) {
          throw new EntityNotFoundException("Input data section element \"" + elementName + "\" not found.");
       }
@@ -289,7 +294,6 @@ public final class FunctionSpec {
     *    the input data section elements, never <code>null</code>.
     */
    public Map getInputDataSectionElements() {
-
       return _inputDataSectionElements;
    }
 
@@ -312,10 +316,11 @@ public final class FunctionSpec {
    public DataSectionElementSpec getOutputDataSectionElement(String elementName)
    throws IllegalArgumentException, EntityNotFoundException {
 
+      // Check preconditions
       MandatoryArgumentChecker.check("elementName", elementName);
 
+      // Find the (required) output data section element
       DataSectionElementSpec element = (DataSectionElementSpec) _outputDataSectionElements.get(elementName);
-
       if (element == null) {
          throw new EntityNotFoundException("Output data section element \"" + elementName + "\" not found.");
       }
@@ -330,8 +335,7 @@ public final class FunctionSpec {
     * @return
     *    the output data section elements, never <code>null</code>.
     */
-   public Map getOutputDataSectionElements() {
-
+   public Map<String,DataSectionElementSpec> getOutputDataSectionElements() {
       return _outputDataSectionElements;
    }
 
@@ -342,9 +346,8 @@ public final class FunctionSpec {
     *    the list of the input param combos specification
     *    ({@link ParamComboSpec}), never <code>null</code>.
     */
-   public List getInputParamCombos() {
-
-      return _inputParamCombos;
+   public List<ParamComboSpec> getInputParamCombos() {
+      return Collections.unmodifiableList(_inputParamCombos);
    }
 
    /**
@@ -354,9 +357,8 @@ public final class FunctionSpec {
     *    the list of the output param combos specification
     *    ({@link ParamComboSpec}), never <code>null</code>.
     */
-   public List getOutputParamCombos() {
-
-      return _outputParamCombos;
+   public List<ParamComboSpec> getOutputParamCombos() {
+      return Collections.unmodifiableList(_outputParamCombos);
    }
 
    /**
@@ -394,8 +396,7 @@ public final class FunctionSpec {
       }
       List descriptionElementList = function.getChildElements("description");
       if (descriptionElementList.isEmpty()) {
-         throw new InvalidSpecificationException("[Function: " + _functionName
-               + "] No definition specified.");
+         throw new InvalidSpecificationException("[Function: " + _functionName + "] No definition specified.");
       }
       Element descriptionElement = (Element) descriptionElementList.get(0);
       _description = descriptionElement.getText();
@@ -407,7 +408,7 @@ public final class FunctionSpec {
          _inputParameters = parseParameters(reference, inputElement);
 
          // Param combos
-         _inputParamCombos = parseCombos(inputElement, _inputParameters, true);
+         _inputParamCombos = parseParamCombos(inputElement, _inputParameters);
 
          // Data section
          List dataSections = inputElement.getChildElements("data");
@@ -428,8 +429,7 @@ public final class FunctionSpec {
             Element nextErrorCode = (Element) itErrorCodes.next();
             String errorCodeName = nextErrorCode.getAttribute("name");
             if (errorCodeName == null) {
-               throw new InvalidSpecificationException("[Function: " + _functionName
-                     + "] Missing name attribute for a error code.");
+               throw new InvalidSpecificationException("[Function: " + _functionName + "] Missing name attribute for a error code.");
             }
             if (errorCodeName.indexOf('/') != -1) {
                errorCodeName = errorCodeName.substring(errorCodeName.indexOf('/') + 1);
@@ -442,7 +442,7 @@ public final class FunctionSpec {
          _outputParameters = parseParameters(reference, outputElement);
 
          // Param combos
-         _outputParamCombos = parseCombos(outputElement, _outputParameters, true);
+         _outputParamCombos = parseParamCombos(outputElement, _outputParameters);
 
          // Data section
          List dataSections = outputElement.getChildElements("data");
@@ -466,8 +466,8 @@ public final class FunctionSpec {
     *    the data section, cannot be <code>null</code>.
     *
     * @return
-    *    the top elements of the data section, or an empty array there is no
-    *    data section.
+    *    the top-level elements of the data section,
+    *    or an empty map if there is no data section.
     *
     * @throws IllegalArgumentException
     *    if <code>reference == null || topElement == null || dataSection == null</code>.
@@ -475,11 +475,13 @@ public final class FunctionSpec {
     * @throws InvalidSpecificationException
     *    if the specification is incorrect.
     */
-   static Map parseDataSectionElements(Class reference, Element topElement, Element dataSection)
+   static Map<String,DataSectionElementSpec> parseDataSectionElements(Class reference, Element topElement, Element dataSection)
    throws IllegalArgumentException, InvalidSpecificationException {
 
+      // Check preconditions
       MandatoryArgumentChecker.check("reference", reference, "topElement", topElement, "dataSection", dataSection);
-      Map dataSectionElements = new LinkedHashMap();
+
+      Map<String,DataSectionElementSpec> dataSectionElements = new LinkedHashMap<String,DataSectionElementSpec>();
 
       // The <data> may have a "contains" attribute.
       String dataContainsAttr = topElement.getAttribute("contains");
@@ -489,13 +491,11 @@ public final class FunctionSpec {
       }
 
       // Gets the sub elements of this element
-      List dataSectionContains = topElement.getChildElements("contains");
-      if (!dataSectionContains.isEmpty()) {
-         Element containsElement = (Element) dataSectionContains.get(0);
-         List contained = containsElement.getChildElements("contained");
-         Iterator itContained = contained.iterator();
-         while (itContained.hasNext()) {
-            Element containedElement = (Element) itContained.next();
+      List<Element> dataSectionContains = topElement.getChildElements("contains");
+      if (! dataSectionContains.isEmpty()) {
+         Element containsElement = dataSectionContains.get(0);
+         List<Element> contained = containsElement.getChildElements("contained");
+         for (Element containedElement : contained) {
             String name = containedElement.getAttribute("element");
             DataSectionElementSpec dataSectionElement = getDataSectionElement(reference, name, dataSection);
             dataSectionElements.put(name, dataSectionElement);
@@ -549,17 +549,15 @@ public final class FunctionSpec {
                }
             }
 
-            List attributesList = nextElement.getChildElements("attribute");
-            Map attributes = new LinkedHashMap();
-            Iterator itAttributes = attributesList.iterator();
-            while (itAttributes.hasNext()) {
-               ParameterSpec attribute = parseParameter(reference, (Element) itAttributes.next());
+            Map<String,ParameterSpec> attributes = new LinkedHashMap<String,ParameterSpec>();
+            for (Element attributeElem : nextElement.getChildElements("attribute")) {
+               ParameterSpec attribute = parseParameter(reference, attributeElem);
                attributes.put(attribute.getName(), attribute);
             }
 
-            List attributeCombos = parseCombos(nextElement, attributes, false);
-            DataSectionElementSpec result = new DataSectionElementSpec(nextName,
-                  description, isPcdataEnable, subElements, attributes, attributeCombos);
+            List<AttributeComboSpec> attributeCombos = parseAttributeCombos(nextElement, attributes);
+            DataSectionElementSpec            result = new DataSectionElementSpec(nextName, description, isPcdataEnable, subElements, attributes, attributeCombos);
+
             return result;
          }
       }
@@ -623,35 +621,32 @@ public final class FunctionSpec {
     * @throws InvalidSpecificationException
     *    if the specification is incorrect.
     */
-   static Map parseParameters(Class reference, Element topElement)
+   static Map<String,ParameterSpec> parseParameters(Class reference, Element topElement)
    throws IllegalArgumentException, InvalidSpecificationException {
+
+      // Check preconditions
       MandatoryArgumentChecker.check("reference", reference, "topElement", topElement);
-      List parametersList = topElement.getChildElements("param");
-      Map parameters = new LinkedHashMap();
-      Iterator itParameters = parametersList.iterator();
-      while (itParameters.hasNext()) {
-         Element nextParameter = (Element) itParameters.next();
-         ParameterSpec parameter = parseParameter(reference, nextParameter);
+
+      Map<String,ParameterSpec> parameters = new LinkedHashMap<String,ParameterSpec>();
+      for (Element paramElem : topElement.getChildElements("param")) {
+         ParameterSpec parameter = parseParameter(reference, paramElem);
          parameters.put(parameter.getName(), parameter);
       }
+
       return parameters;
    }
 
    /**
-    * Parses the param-combo element.
+    * Parses a param-combo element.
     *
     * @param topElement
-    *    the input or output element, cannot be <code>null</code>.
+    *    the param-combo {@link Element}, cannot be <code>null</code>.
     *
     * @param parameters
-    *    the list of the input or output parameters or attributes, cannot be <code>null</code>.
-    *
-    * @param paramCombo
-    *    <code>true</code> if a param-combo should be parsed,
-    *    <code>false</code> if an attribute-combo should be parsed.
+    *    the list of the (input or output) parameters, cannot be <code>null</code>.
     *
     * @return
-    *    the list of the param-combo elements or an empty array if no
+    *    the list of the param-combo elements or an empty list if no
     *    param-combo is defined, never <code>null</code>.
     *
     * @throws IllegalArgumentException
@@ -660,50 +655,104 @@ public final class FunctionSpec {
     * @throws InvalidSpecificationException
     *    if the format of the param-combo is incorrect.
     */
-   static List<ComboSpec> parseCombos(Element topElement, Map parameters, boolean paramCombo)
+   static List<ParamComboSpec> parseParamCombos(Element topElement, Map<String,ParameterSpec> parameters)
    throws IllegalArgumentException, InvalidSpecificationException {
 
       // Check preconditions
       MandatoryArgumentChecker.check("topElement", topElement, "parameters", parameters);
 
-      String          comboTag = paramCombo ? "param-combo" : "attribute-combo";
-      String            refTag = paramCombo ? "param-ref"   : "attribute-ref";
-      List<Element> comboElems = topElement.getChildElements(comboTag);
-      List<ComboSpec>   combos = new ArrayList<ComboSpec>(comboElems.size());
+      String             comboTag = "param-combo";
+      String               refTag = "param-ref";
+      List<ParamComboSpec> combos = new ArrayList<ParamComboSpec>();
 
-      for (Element comboElem : comboElems) {
+      // Loop over the appropriate child elements 
+      for (Element comboElem : topElement.getChildElements(comboTag)) {
 
-         // Get the type of the combo
          String type = comboElem.getAttribute("type");
          if (type == null) {
             throw new InvalidSpecificationException("No type defined for " + comboTag + ".");
          }
 
-         // Get the parameters for the combo
-         Map<String,ParameterSpec> params = new LinkedHashMap<String,ParameterSpec>();
-         for (Element paramElem : comboElem.getChildElements(refTag)) {
+         Map<String,ParameterSpec> comboParams = new LinkedHashMap<String,ParameterSpec>();
 
-            // Get parameter name
-            String paramName = paramElem.getAttribute("name");
-            if (paramName == null) {
-               throw new InvalidSpecificationException("Missing name for a parameter in " + comboTag + ".");
+         for (Element refElem : comboElem.getChildElements(refTag)) {
+
+            String refName = refElem.getAttribute("name");
+            if (refName == null) {
+               throw new InvalidSpecificationException("Missing name in " + comboTag + ".");
             }
 
-            // Get corresponding parameter specification
-            ParameterSpec parameter = (ParameterSpec) parameters.get(paramName);
-            if (parameter == null) {
-               throw new InvalidSpecificationException("Invalid parameter name \"" + paramName + "\" in " + comboTag + ".");
+            ParameterSpec paramSpec = (ParameterSpec) parameters.get(refName);
+            if (paramSpec == null) {
+               throw new InvalidSpecificationException("Invalid name \"" + refName + "\" in " + comboTag + ".");
             }
-
-            // Add the parameter
-            params.put(paramName, parameter);
+            comboParams.put(refName, paramSpec);
          }
 
-         // Create an appropriate ComboSpec object, and add it to the list
-         ComboSpec comboSpec = paramCombo
-                             ? new     ParamComboSpec(type, params)
-                             : new AttributeComboSpec(type, params);
-         combos.add(comboSpec);
+         ParamComboSpec paramComboSpec = new ParamComboSpec(type, comboParams);
+
+         combos.add(paramComboSpec);
+      }
+
+      return combos;
+   }
+
+   /**
+    * Parses an attribute-combo element.
+    *
+    * @param topElement
+    *    the attribute-combo {@link Element}, cannot be <code>null</code>.
+    *
+    * @param attributes
+    *    the list of the attributes, cannot be <code>null</code>.
+    *
+    * @return
+    *    the list of the attribute-combo elements or an empty list if no
+    *    attribute-combo is defined, never <code>null</code>.
+    *
+    * @throws IllegalArgumentException
+    *    if <code>topElement == null || attributes == null</code>.
+    *
+    * @throws InvalidSpecificationException
+    *    if the format of the param-combo is incorrect.
+    */
+   static List<AttributeComboSpec> parseAttributeCombos(Element topElement, Map<String,ParameterSpec> attributes)
+   throws IllegalArgumentException, InvalidSpecificationException {
+
+      // Check preconditions
+      MandatoryArgumentChecker.check("topElement", topElement, "attributes", attributes);
+
+      String                 comboTag = "attribute-combo";
+      String                   refTag = "attribute-ref";
+      List<AttributeComboSpec> combos = new ArrayList<AttributeComboSpec>();
+
+      // Loop over the appropriate child elements 
+      for (Element comboElem : topElement.getChildElements(comboTag)) {
+
+         String type = comboElem.getAttribute("type");
+         if (type == null) {
+            throw new InvalidSpecificationException("No type defined for " + comboTag + ".");
+         }
+
+         Map<String,ParameterSpec> comboParams = new LinkedHashMap<String,ParameterSpec>();
+
+         for (Element refElem : comboElem.getChildElements(refTag)) {
+
+            String refName = refElem.getAttribute("name");
+            if (refName == null) {
+               throw new InvalidSpecificationException("Missing name in " + comboTag + ".");
+            }
+
+            ParameterSpec paramSpec = (ParameterSpec) attributes.get(refName);
+            if (paramSpec == null) {
+               throw new InvalidSpecificationException("Invalid name \"" + refName + "\" in " + comboTag + ".");
+            }
+            comboParams.put(refName, paramSpec);
+         }
+
+         AttributeComboSpec paramComboSpec = new AttributeComboSpec(type, comboParams);
+
+         combos.add(paramComboSpec);
       }
 
       return combos;

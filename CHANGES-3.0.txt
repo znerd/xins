@@ -68,7 +68,8 @@ XINS/Java Common Library:
 * Changed SAXParserProvider to not only handle an Exception, but Throwable.
 * Changed some code to use Java SE regex framework instead of Jakarta ORO
   (TODO, work in progress).
-* Rewrote FunctionSpec.parseCombos method to use generics and to simplify it.
+* FunctionSpec class now simplified, and using generics.
+* Changed FunctionSpec methods to return unmodifiable collections/maps.
 
 XINS/Java Client Framework:
 * Client: Enabled parameter value filtering for messages 2100-2115.
