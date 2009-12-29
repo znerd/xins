@@ -135,7 +135,7 @@ public class LocalServletHandler {
     *    If the query is not handled correctly by the servlet.
     */
    public XINSServletResponse query(String url) throws IOException {
-      return query("GET", url, null, new HashMap());
+      return query("GET", url, null, new HashMap<String,String>());
    }
 
    /**
@@ -165,16 +165,17 @@ public class LocalServletHandler {
     *
     * @since XINS 1.5.0
     */
-   public XINSServletResponse query(String method,
-                                    String url,
-                                    String data,
-                                    Map headers)
+   public XINSServletResponse query(String             method,
+                                    String             url,
+                                    String             data,
+                                    Map<String,String> headers)
    throws IOException {
 
       Log.log_1504(url);
 
-      XINSServletRequest request = new XINSServletRequest(method, url, data, headers);
+      XINSServletRequest   request = new XINSServletRequest(method, url, data, headers);
       XINSServletResponse response = new XINSServletResponse();
+
       try {
          _apiServlet.service(request, response);
       } catch (ServletException ex) {

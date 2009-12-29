@@ -206,7 +206,7 @@ public class BeanUtils {
          // Convert a Collection (List,Set) to a ListItem
          } else if (origValue instanceof Collection && ItemList.class.isAssignableFrom(destClass)) {
             ItemList destValue = (ItemList) destClass.newInstance();
-            destValue.add((Collection) origValue);
+            destValue.add((Collection<Object>) origValue);
             return destValue;
 
          // Convert a ListItem to a collection

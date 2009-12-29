@@ -548,7 +548,7 @@ public final class TextUtils {
     *
     * @since XINS 3.0
     */
-   public static String list(Collection<String> input, String between, String beforeLast, boolean quote)
+   public static String list(Collection input, String between, String beforeLast, boolean quote)
    throws IllegalArgumentException {
 
       // Check preconditions
@@ -561,7 +561,7 @@ public final class TextUtils {
       }
 
       // First one
-      Iterator<String> iterator = input.iterator();
+      Iterator<Object> iterator = input.iterator();
       Object               item = iterator.next();
       String             result = quote ? quote(item) : String.valueOf(item);
 

@@ -21,7 +21,6 @@ import java.util.zip.CRC32;
 import org.xins.common.MandatoryArgumentChecker;
 import org.xins.common.Utils;
 import org.xins.common.text.HexConverter;
-import org.xins.common.text.PatternUtils;
 import org.xins.common.text.TextUtils;
 
 /**

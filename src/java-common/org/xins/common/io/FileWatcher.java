@@ -40,7 +40,7 @@ public class FileWatcher extends Thread {
     * objects.
     * Used to generate a unique ID for each instance.
     */
-   private static HashMap INSTANCE_COUNTERS = new HashMap();
+   private static HashMap<String,Integer> INSTANCE_COUNTERS = new HashMap<String,Integer>();
 
    /**
     * State in which this file watcher thread is not running.

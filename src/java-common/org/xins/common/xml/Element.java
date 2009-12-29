@@ -402,7 +402,7 @@ public class Element implements Cloneable {
     *    (not <code>null</code>) and each value in it is a <code>String</code>
     *    instance (not <code>null</code>).
     */
-   public Map getAttributeMap() {
+   public Map<QualifiedName,String> getAttributeMap() {
       if (_attributes == null) {
          _attributes = new LinkedHashMap<QualifiedName,String>();
       }
