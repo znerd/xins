@@ -178,21 +178,20 @@ public final class AccessRule implements AccessRuleContainer {
       String   sFilter = nextToken(descriptor, tokenizer);
       IPFilter filter  = IPFilter.parseIPFilter(sFilter);
 
-      SimplePatternParser parser   = new SimplePatternParser();
       // Determine the function the access is to be checked for
+      SimplePatternParser   parser = new SimplePatternParser();
       String functionPatternString = nextToken(descriptor, tokenizer);
-      Pattern      functionPattern = parser.parseSimplePattern(functionPatternString);
+      Pattern      functionPattern = parser.parse(functionPatternString);
 
       // Determine the function the access is to be checked for
       String conventionPatternString = "*";
       if (tokenizer.hasMoreTokens()) {
          conventionPatternString = tokenizer.nextToken();
       }
-      Pattern conventionPattern = parser.parseSimplePattern(conventionPatternString);
+      Pattern conventionPattern = parser.parse(conventionPatternString);
 
       // Construct a description
-      String asString = sAllow + ' ' + filter.toString() + ' ' +
-            functionPatternString + ' ' + conventionPatternString;
+      String asString = sAllow + ' ' + filter.toString() + ' ' + functionPatternString + ' ' + conventionPatternString;
 
       return new AccessRule(allow, filter, functionPattern, conventionPattern, asString);
    }
@@ -347,7 +346,7 @@ public final class AccessRule implements AccessRuleContainer {
       MandatoryArgumentChecker.check("ip", ip, "functionName", functionName);
 
       // First check if the IP filter matches
-      if (_ipFilter.matcher(ip).find()) {
+      if (_ipFilter.match(ip)) {
 
          // Then check if the function name matches
          if (_functionNameRegex.matcher(functionName).find() &&

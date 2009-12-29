@@ -6,10 +6,13 @@
  */
 package org.xins.common.text;
 
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
 import org.apache.oro.text.regex.MalformedPatternException;
-import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Pattern;
+
 import org.xins.common.MandatoryArgumentChecker;
 
 /**
@@ -32,11 +35,10 @@ import org.xins.common.MandatoryArgumentChecker;
  *
  * <h3>Examples</h3>
  *
- * <p>Examples of conversions from a simple pattern to a Perl 4 regular
- * expression:
+ * <p>Examples of conversions from a simple pattern to a regular expression:
  *
  * <table>
- *    <tr><th>Simple pattern</th><th>Perl 5 regex equivalent</th></tr>
+ *    <tr><th>Simple pattern</th><th>Regular expression equivalent</th></tr>
  *    <tr><td></td>              <td></td>                     </tr>
  *    <tr><td>*</td>             <td>.*</td>                   </tr>
  *    <tr><td>?</td>             <td>.</td>                    </tr>
@@ -79,27 +81,31 @@ public class SimplePatternParser {
     * @deprecated
     *    Since XINS 3.0, Jakarta ORO is no longer used; instead, the regular
     *    expression framework available since Java SE 1.4 is used.
+    *    Use {@link #parse(String)} instead.
     */
    @Deprecated
    public Perl5Pattern parseSimplePattern(String simplePattern)
    throws IllegalArgumentException, ParseException {
 
+      // Check preconditions
       MandatoryArgumentChecker.check("simplePattern", simplePattern);
 
-      simplePattern = convertToPerl5RegularExpression(simplePattern);
+      // Convert to text
+      simplePattern = toRegex(simplePattern);
 
+      // Compile the text to an object
       Perl5Pattern perl5pattern = null;
       Perl5Compiler perl5compiler = new Perl5Compiler();
 
       boolean parseError = false;
       try {
-         Pattern pattern = perl5compiler.compile(simplePattern);
+         Object pattern = perl5compiler.compile(simplePattern);
          if (pattern instanceof Perl5Pattern) {
             perl5pattern = (Perl5Pattern) pattern;
          } else {
             parseError = true;
          }
-      } catch (MalformedPatternException mpe) {
+      } catch (MalformedPatternException e) {
          parseError = true;
       }
 
@@ -128,7 +134,7 @@ public class SimplePatternParser {
     * @throws ParseException
     *    if provided simplePattern is invalid or could not be parsed.
     */
-   private String convertToPerl5RegularExpression(String pattern)
+   private String toRegex(String pattern)
    throws NullPointerException, ParseException {
 
       // Short-circuit if the pattern is empty
@@ -178,5 +184,39 @@ public class SimplePatternParser {
       }
 
       return buffer.toString();
+   }
+
+   /**
+    * Converts the specified simple pattern to a regular expression pattern.
+    *
+    * @param simplePattern
+    *    the simple pattern, cannot be <code>null</code>.
+    *
+    * @return
+    *    the regular expression {@link Pattern} object, never <code>null</code>.
+    *
+    * @throws IllegalArgumentException
+    *    if <code>simplePattern == null</code>.
+    *
+    * @throws ParseException
+    *    if provided simplePattern is invalid or could not be parsed.
+    *
+    * @since XINS 3.0
+    */
+   public Pattern parse(String simplePattern)
+   throws IllegalArgumentException, ParseException {
+
+      // Check preconditions
+      MandatoryArgumentChecker.check("simplePattern", simplePattern);
+
+      // Convert to text
+      String regex = toRegex(simplePattern);
+
+      // Compile the text to an object
+      try {
+         return Pattern.compile(regex);
+      } catch (PatternSyntaxException e) {
+         throw new ParseException("An error occurred while parsing the pattern '" + simplePattern + "'.", e);
+      }
    }
 }
