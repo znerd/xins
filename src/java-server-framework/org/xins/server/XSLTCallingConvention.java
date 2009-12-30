@@ -96,7 +96,7 @@ public class XSLTCallingConvention extends StandardCallingConvention {
    /**
     * Cache for the XSLT templates. Never <code>null</code>.
     */
-   private Map _templateCache;
+   private Map<String, Templates> _templateCache;
 
    /**
     * Constructs a new <code>XSLTCallingConvention</code> object.
@@ -107,7 +107,7 @@ public class XSLTCallingConvention extends StandardCallingConvention {
       _factory = TransformerFactory.newInstance();
 
       // Initialize the template cache
-      _templateCache = new HashMap(89);
+      _templateCache = new HashMap<String, Templates>(89);
    }
 
    protected void initImpl(PropertyReader runtimeProperties)
@@ -277,7 +277,7 @@ public class XSLTCallingConvention extends StandardCallingConvention {
          // Load the template or get it from the cache.
          Templates templates;
          if (_cacheTemplates && _templateCache.containsKey(xsltLocation)) {
-            templates = (Templates) _templateCache.get(xsltLocation);
+            templates = _templateCache.get(xsltLocation);
          } else {
             Log.log_3443(xsltLocation);
             templates = _factory.newTemplates(new StreamSource(xsltLocation));

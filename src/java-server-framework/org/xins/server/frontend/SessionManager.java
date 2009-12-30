@@ -141,10 +141,10 @@ public class SessionManager extends Manageable {
          }
          inputParameters.put(name, value);
       }
-      setProperty("_inputs", inputParameters);
-      setProperty("_remoteIP", request.getRemoteAddr());
-      setProperty("_propertiesSet", new HashSet());
-      setProperty("_userAgent", request.getHeader("User-Agent"));
+      setProperty("_inputs",        inputParameters);
+      setProperty("_remoteIP",      request.getRemoteAddr());
+      setProperty("_propertiesSet", new HashSet<String>());
+      setProperty("_userAgent",     request.getHeader("User-Agent"));
    }
 
    /**

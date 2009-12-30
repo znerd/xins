@@ -99,7 +99,9 @@ public class BeanUtils {
    public static Object populate(Object source, Object destination, Properties propertiesMapping)
    throws IllegalArgumentException {
 
+      // Check preconditions
       MandatoryArgumentChecker.check("source", source, "destination", destination);
+      
       // Go through all get methods of the source object
       Method[] sourceMethods = source.getClass().getMethods();
       for (int i = 0; i < sourceMethods.length; i++) {
@@ -168,19 +170,22 @@ public class BeanUtils {
     *
     * @since XINS 2.0
     */
-   public static Object convert(Object origValue, Class destClass) {
+   public static Object convert(Object origValue, Class<?> destClass) {
 
+      // Short-circuit if the target class already matches
       if (origValue.getClass() == destClass) {
          return origValue;
       }
+      
       try {
-         // Convert a String or an EnumItem to another EnumItem.
+            
+         // Convert a String or an EnumItem to another EnumItem
          if (EnumItem.class.isAssignableFrom(destClass)) {
             String enumTypeClassName = destClass.getName().substring(0, destClass.getName().length() - 5);
-            Object enumType = Class.forName(enumTypeClassName).getDeclaredField("SINGLETON").get(null);
-            Method conversionMethod = enumType.getClass().getMethod("getItemByValue", STRING_CLASS);
-            Object[] convertParams = {origValue.toString()};
-            Object convertedObj = conversionMethod.invoke(null, convertParams);
+            Object          enumType = Class.forName(enumTypeClassName).getDeclaredField("SINGLETON").get(null);
+            Method  conversionMethod = enumType.getClass().getMethod("getItemByValue", STRING_CLASS);
+            Object[]   convertParams = {origValue.toString()};
+            Object      convertedObj = conversionMethod.invoke(null, convertParams);
             return convertedObj;
 
          // Convert whatever to a String

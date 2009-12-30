@@ -66,7 +66,7 @@ public final class ServletRequestPropertyReader extends AbstractPropertyReader {
    throws IllegalArgumentException, ParseException {
 
       // Initially allocate a complete HashMap already
-      super(new HashMap(20));
+      super(new HashMap<String,String>(20));
 
       // Check preconditions
       MandatoryArgumentChecker.check("request", request);

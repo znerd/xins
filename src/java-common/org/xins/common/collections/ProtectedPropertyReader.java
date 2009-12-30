@@ -55,7 +55,7 @@ extends AbstractPropertyReader {
     */
    public ProtectedPropertyReader(Object secretKey)
    throws IllegalArgumentException {
-      super(new HashMap(89));
+      super(new HashMap<String,String>(89));
 
       // Check preconditions
       MandatoryArgumentChecker.check("secretKey", secretKey);
