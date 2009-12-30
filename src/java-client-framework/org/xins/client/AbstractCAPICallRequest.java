@@ -43,7 +43,7 @@ public abstract class AbstractCAPICallRequest implements Serializable {
     * to an exception if the conversion to a string failed. This field is
     * lazily initialized and initially <code>null</code>.
     */
-   private Map _parameterValues;
+   private Map<String, String> _parameterValues;
 
    /**
     * The data section of the function if any, can be <code>null</code>.
@@ -99,7 +99,7 @@ public abstract class AbstractCAPICallRequest implements Serializable {
       } else {
 
          if (_parameterValues == null) {
-            _parameterValues = new HashMap();
+            _parameterValues = new HashMap<String, String>();
          }
          _parameterValues.put(name, value);
       }
@@ -120,12 +120,12 @@ public abstract class AbstractCAPICallRequest implements Serializable {
       if (_parameterValues != null && _parameterValues.size() > 0) {
 
          // Loop over all parameters in the map containing the types
-         Iterator iterator = _parameterValues.keySet().iterator();
+         Iterator<String> iterator = _parameterValues.keySet().iterator();
          while (iterator.hasNext()) {
 
             // Determine parameter name, type and value
-            String name  = (String) iterator.next();
-            String value = (String) _parameterValues.get(name);
+            String name  = iterator.next();
+            String value = _parameterValues.get(name);
 
             // Set the parameter on the request
             request.setParameter(name, value);
@@ -183,7 +183,7 @@ public abstract class AbstractCAPICallRequest implements Serializable {
       if (_parameterValues == null) {
          return null;
       } else {
-         return (String) _parameterValues.get(parameterName);
+         return _parameterValues.get(parameterName);
       }
    }
 

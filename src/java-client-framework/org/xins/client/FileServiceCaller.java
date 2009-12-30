@@ -56,7 +56,7 @@ class FileServiceCaller extends ServiceCaller {
     * The pool of the loaded XINS APIs. The key is the location of the WAR
     * file, as a {@link TargetDescriptor}, the value is the {@link LocalServletHandler}.
     */
-   private static HashMap SERVLETS = new HashMap();
+   private static HashMap<TargetDescriptor, LocalServletHandler> SERVLETS = new HashMap<TargetDescriptor, LocalServletHandler>();
 
    /**
     * Constructs a new <code>HTTPServiceCaller</code> object with the
@@ -194,7 +194,7 @@ class FileServiceCaller extends ServiceCaller {
 
       long start = System.currentTimeMillis();
       long duration;
-      LocalServletHandler servletHandler = (LocalServletHandler) SERVLETS.get(target);
+      LocalServletHandler servletHandler = SERVLETS.get(target);
       if (servletHandler == null) {
          String fileLocation = target.getURL();
          File warFile = new File(fileLocation.substring(7).replace('/', File.separatorChar));

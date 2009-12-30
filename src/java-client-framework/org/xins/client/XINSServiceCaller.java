@@ -140,7 +140,7 @@ public class XINSServiceCaller extends ServiceCaller {
     * The key of the {@link HashMap} is a {@link TargetDescriptor} and the value
     * is a {@link ServiceCaller}.
     */
-   private HashMap _serviceCallers;
+   private HashMap<TargetDescriptor, ServiceCaller> _serviceCallers;
 
    /**
     * Constructs a new <code>XINSServiceCaller</code> with the specified
@@ -235,7 +235,7 @@ public class XINSServiceCaller extends ServiceCaller {
 
       // Create the ServiceCaller for each descriptor
       if (_serviceCallers == null) {
-         _serviceCallers = new HashMap();
+         _serviceCallers = new HashMap<TargetDescriptor, ServiceCaller>();
       }
       if (descriptor != null) {
          for (TargetDescriptor nextTarget : descriptor.targets()) {
@@ -546,7 +546,7 @@ public class XINSServiceCaller extends ServiceCaller {
       HTTPCallResult httpResult;
       long duration;
       try {
-         ServiceCaller serviceCaller = (ServiceCaller) _serviceCallers.get(target);
+         ServiceCaller serviceCaller = _serviceCallers.get(target);
          httpResult = (HTTPCallResult) serviceCaller.doCallImpl(httpRequest, httpConfig, target);
 
       // Call failed due to a generic service calling error

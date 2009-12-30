@@ -71,7 +71,7 @@ public final class ServletRequestPropertyReader extends AbstractPropertyReader {
       // Check preconditions
       MandatoryArgumentChecker.check("request", request);
 
-      Map properties = getPropertiesMap();
+      Map<String, String> properties = getPropertiesMap();
 
       // Get the HTTP query string
       String query = request.getQueryString();
@@ -127,7 +127,7 @@ public final class ServletRequestPropertyReader extends AbstractPropertyReader {
     * @throws ParseException
     *    if a conflicting value is found for a certain parameter.
     */
-   private static void add(Map properties, String key, String value)
+   private static void add(Map<String, String> properties, String key, String value)
    throws NullPointerException, ParseException {
 
       Object existingValue = properties.get(key);

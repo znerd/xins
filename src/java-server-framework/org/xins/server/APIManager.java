@@ -200,12 +200,12 @@ public final class APIManager implements APIManagerMBean {
          while (itFunctions.hasNext()) {
             Function nextFunction = (Function) itFunctions.next();
             Element success = nextFunction.getStatistics().getSuccessfulElement();
-            HashMap statMap = statisticsToMap(success, nextFunction.getName());
+            HashMap<String, Comparable> statMap = statisticsToMap(success, nextFunction.getName());
             CompositeDataSupport statData = new CompositeDataSupport(statType, statMap);
             tabularData.put(statData);
             Element[] unsuccess = nextFunction.getStatistics().getUnsuccessfulElement(true);
             for (int i = 0; i < unsuccess.length; i++) {
-               HashMap statMap2 = statisticsToMap(unsuccess[i], nextFunction.getName());
+               HashMap<String, Comparable> statMap2 = statisticsToMap(unsuccess[i], nextFunction.getName());
                CompositeDataSupport statData2 = new CompositeDataSupport(statType, statMap2);
                tabularData.put(statData2);
             }
@@ -267,8 +267,8 @@ public final class APIManager implements APIManagerMBean {
     * @return
     *    a {@link HashMap} containing the statistics.
     */
-   private HashMap statisticsToMap(Element statElement, String functionName) {
-      HashMap statMap = new HashMap();
+   private HashMap<String, Comparable> statisticsToMap(Element statElement, String functionName) {
+      HashMap<String, Comparable> statMap = new HashMap<String, Comparable>();
       statMap.put("Function", functionName);
       statMap.put("Count", new Long(statElement.getAttribute("count")));
       if (!TextUtils.isEmpty(statElement.getAttribute("errorcode"))) {
