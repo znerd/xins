@@ -111,7 +111,7 @@ class CallingConventionManager extends Manageable {
     * List of the names of the calling conventions currently included in
     * XINS.
     */
-   private static final List CONVENTIONS = Arrays.asList(new String[] {
+   private static final List<String> CONVENTIONS = Arrays.asList(new String[] {
       STANDARD_CALLING_CONVENTION,
       XML_CALLING_CONVENTION,
       XSLT_CALLING_CONVENTION,
@@ -150,7 +150,7 @@ class CallingConventionManager extends Manageable {
    /**
     * The names of the possible calling conventions.
     */
-   private List _conventionNames;
+   private List<String> _conventionNames;
 
    /**
     * Map containing all calling conventions. The key is the name of the
@@ -158,7 +158,7 @@ class CallingConventionManager extends Manageable {
     * {@link #CREATION_FAILED} if the calling convention object could not be
     * constructed.
     */
-   private final HashMap _conventions;
+   private final HashMap<String, Object> _conventions;
 
    /**
     * Creates a <code>CallingConventionManager</code> for the specified API.
@@ -172,11 +172,11 @@ class CallingConventionManager extends Manageable {
       _api = api;
 
       // Fill the list of the convention names with the pre defined conventions
-      _conventionNames = new ArrayList();
+      _conventionNames = new ArrayList<String>();
       _conventionNames.addAll(CONVENTIONS);
 
       // Create a map to store the conventions in
-      _conventions = new HashMap(12);
+      _conventions = new HashMap<String, Object>(12);
 
    }
 
@@ -770,9 +770,9 @@ class CallingConventionManager extends Manageable {
       CallingConvention matching = null;
 
       // Determine which calling conventions match
-      Iterator itConventionNames = _conventionNames.iterator();
+      Iterator<String> itConventionNames = _conventionNames.iterator();
       while (itConventionNames.hasNext()) {
-         String name = (String) itConventionNames.next();
+         String name = itConventionNames.next();
          Object value = getCallingConvention2(name);
 
          // if the value is null, that's maybe an initialization problem
@@ -840,16 +840,16 @@ class CallingConventionManager extends Manageable {
     *    if this calling convention manager is not yet bootstrapped and
     *    initialized, see {@link #isUsable()}.
     */
-   final Set getSupportedMethods() throws IllegalStateException {
+   final Set<String> getSupportedMethods() throws IllegalStateException {
 
       // Make sure this Manageable object is bootstrapped and initialized
       assertUsable();
 
-      HashSet supportedMethods = new HashSet();
-      Iterator itConventionNames = _conventionNames.iterator();
+      HashSet<String> supportedMethods = new HashSet<String>();
+      Iterator<String> itConventionNames = _conventionNames.iterator();
       while (itConventionNames.hasNext()) {
 
-         String name = (String) itConventionNames.next();
+         String name = itConventionNames.next();
          Object convention = getCallingConvention2(name);
 
          // if the value is null, that's maybe an initialization problem

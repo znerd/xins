@@ -70,7 +70,7 @@ public abstract class AbstractCallExecutor extends LoggingThread {
 
       // Determine the unique ID of this instance
       int instanceID;
-      Class thisClass = getClass();
+      Class<? extends AbstractCallExecutor> thisClass = getClass();
       synchronized (INSTANCE_COUNTERS) {
          Integer  i = INSTANCE_COUNTERS.get(thisClass);
          instanceID = (i == null) ? 0 : i.intValue();

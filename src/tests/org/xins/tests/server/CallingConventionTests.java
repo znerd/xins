@@ -196,7 +196,7 @@ public class CallingConventionTests extends TestCase {
       assertTrue("Expected \"Accept\" header in response to HTTP OPTIONS request to have a non-empty value.", acceptHeader.trim().length() > 0);
 
       // Split the list of acceptable HTTP methods
-      List acceptValues = splitCommas(acceptHeader);
+      List<String> acceptValues = splitCommas(acceptHeader);
 
       // Make sure all expected HTTP methods are in the list
       for (int i = 0; i < yes.length; i++) {
@@ -209,12 +209,12 @@ public class CallingConventionTests extends TestCase {
       }
    }
 
-   private List splitCommas(String in) {
+   private List<String> splitCommas(String in) {
 
       // XXX: Before, this was the following code, but that is Java 1.4+ only:
       // return Arrays.asList(acceptHeader.split("[ ]*,[ ]*"));
 
-      List list = new ArrayList();
+      List<String> list = new ArrayList<String>();
       StringTokenizer st = new StringTokenizer(in, ",");
       while (st.hasMoreTokens()) {
          String item = (String) st.nextToken();

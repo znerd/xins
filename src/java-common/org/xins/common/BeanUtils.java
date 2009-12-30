@@ -534,12 +534,12 @@ public class BeanUtils {
     *
     * @since XINS 2.0
     */
-   public static Map getParameters(Object source) throws IllegalArgumentException {
+   public static Map<String, Object> getParameters(Object source) throws IllegalArgumentException {
 
       MandatoryArgumentChecker.check("source", source);
 
       // Go through all get methods of the source object
-      LinkedHashMap valuesMap = new LinkedHashMap();
+      LinkedHashMap<String, Object> valuesMap = new LinkedHashMap<String, Object>();
       Method[] sourceMethods = source.getClass().getMethods();
       for (int i = 0; i < sourceMethods.length; i++) {
          String getMethodName = sourceMethods[i].getName();
@@ -589,9 +589,9 @@ public class BeanUtils {
     *
     * @since XINS 2.0
     */
-   public static Map getParametersAsString(Object source) throws IllegalArgumentException {
-      LinkedHashMap stringMap = new LinkedHashMap();
-      Map originalMap = getParameters(source);
+   public static Map<String, String> getParametersAsString(Object source) throws IllegalArgumentException {
+      LinkedHashMap<String, String> stringMap = new LinkedHashMap<String, String>();
+      Map<String, Object> originalMap = getParameters(source);
       Iterator itParams = originalMap.entrySet().iterator();
       while (itParams.hasNext()) {
          Map.Entry nextParam = (Map.Entry) itParams.next();
@@ -621,9 +621,9 @@ public class BeanUtils {
     *
     * @since XINS 2.0
     */
-   public static Map getParametersAsObject(Object source) throws IllegalArgumentException {
-      LinkedHashMap objectMap = new LinkedHashMap();
-      Map originalMap = getParameters(source);
+   public static Map<String, Object> getParametersAsObject(Object source) throws IllegalArgumentException {
+      LinkedHashMap<String, Object> objectMap = new LinkedHashMap<String, Object>();
+      Map<String, Object> originalMap = getParameters(source);
       Iterator itParams = originalMap.entrySet().iterator();
       while (itParams.hasNext()) {
          Map.Entry nextParam = (Map.Entry) itParams.next();
@@ -710,7 +710,7 @@ public class BeanUtils {
     *    if the call to the method failed for any reason.
     */
    private static void invokeMethod(Object destination, String methodName, Object argument) throws Exception {
-      Class argumentClass = argument.getClass();
+      Class<? extends Object> argumentClass = argument.getClass();
       Class[] argsClasses = { argumentClass };
       if (argument instanceof Boolean) {
          try {
@@ -722,7 +722,7 @@ public class BeanUtils {
          try {
             destination.getClass().getMethod(methodName, argsClasses);
          } catch (NoSuchMethodException nsmex) {
-            argumentClass = (Class) argumentClass.getDeclaredField("TYPE").get(argument);
+            argumentClass = (Class<? extends Object>) argumentClass.getDeclaredField("TYPE").get(argument);
          }
       }
       Class[] argsClasses2 = { argumentClass };

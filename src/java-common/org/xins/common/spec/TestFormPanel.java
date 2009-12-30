@@ -35,7 +35,7 @@ public class TestFormPanel extends JPanel {
 
    private String functionName;
 
-   private java.util.List parameterComponents;
+   private java.util.List<JComponent> parameterComponents;
 
    private ActionListener submitListener;
 
@@ -91,7 +91,7 @@ public class TestFormPanel extends JPanel {
 
       Map inputParameters = functionSpec.getInputParameters();
       boolean hasInputDataSection = functionSpec.getInputDataSectionElements().size() > 0;
-      parameterComponents = new ArrayList();
+      parameterComponents = new ArrayList<JComponent>();
       //JPanel paramNamesPanel = new JPanel();
       //JPanel paramValuesPanel = new JPanel();
       tfBackground = UIManager.getColor("TextField.background");
@@ -220,9 +220,9 @@ public class TestFormPanel extends JPanel {
     */
    public String getParameters() {
       String result = "";
-      Iterator itParameters = parameterComponents.iterator();
+      Iterator<JComponent> itParameters = parameterComponents.iterator();
       while (itParameters.hasNext()) {
-         JComponent inputComponent = (JComponent) itParameters.next();
+         JComponent inputComponent = itParameters.next();
          String paramName = (String) inputComponent.getClientProperty("PARAM_NAME");
          String paramValue = "";
          if (inputComponent instanceof JTextComponent) {
