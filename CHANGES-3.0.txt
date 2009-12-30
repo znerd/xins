@@ -63,8 +63,8 @@ XINS/Java Common Library:
 * Replaced Element.addText(String) with add(String).
 * Deprecated XINSHttpSession.getAttributeNames, which returns an Enumeration,
   in favour of the new getAttributes() method that returns a Map.
-* Deprecated ChainedMap class, in favour of LinkedHashMap, available since
-  J2SE v1.4.
+* Deprecated ChainedMap, in favour of LinkedHashMap in J2SE 1.4.
+* ChainedMap supports generics.
 * Changed SAXParserProvider to not only handle an Exception, but Throwable.
 * Changed some code to use Java SE regex framework instead of Jakarta ORO
   (TODO, work in progress).

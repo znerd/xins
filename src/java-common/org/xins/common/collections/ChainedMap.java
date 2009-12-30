@@ -33,17 +33,17 @@ import java.util.Set;
  */
 @Deprecated
 @SuppressWarnings(value = "unchecked")
-public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
+public class ChainedMap<K,V> extends AbstractMap<K,V> implements Cloneable, Serializable {
 
    /**
     * The keys of the Map.
     */
-   private final List _keys = new ArrayList();
+   private final List<K> _keys = new ArrayList<K>();
 
    /**
     * The key/pair entries of the Map.
     */
-   private final List _entries = new ArrayList();
+   private final List<MapEntry<K,V>> _entries = new ArrayList<MapEntry<K,V>>();
 
    /**
     * Creates a new instance of <code>ChainedMap</code>.
@@ -53,23 +53,21 @@ public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
    }
 
    @Override
-   public Set entrySet() {
-      return new ChainedSet(_entries);
+   public Set<Map.Entry<K,V>> entrySet() {
+      return new ChainedSet<Map.Entry<K,V>>(_entries);
    }
 
    @Override
-   public Collection values() {
-      List values = new ArrayList();
-      Iterator itEntries = _entries.iterator();
-      while (itEntries.hasNext()) {
-         EntryMap entry = (EntryMap) itEntries.next();
+   public Collection<V> values() {
+      List<V> values = new ArrayList<V>();
+      for (MapEntry entry : _entries) {
          values.add(entry.getValue());
       }
       return values;
    }
 
    @Override
-   public Object put(Object key, Object value) {
+   public V put(K key, V value) {
 
       // Find the index of the current setting
       int oldKeyPos = _keys.indexOf(key);
@@ -77,13 +75,13 @@ public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
       // There is no current setting
       if (oldKeyPos == -1) {
          _keys.add(key);
-         _entries.add(new EntryMap(key, value));
+         _entries.add(new MapEntry<K,V>(key, value));
          return null;
 
       // There is a current setting
       } else {
-         Object oldValue = ((Map.Entry) _entries.get(oldKeyPos)).getValue();
-         _entries.set(oldKeyPos, new EntryMap(key, value));
+         V oldValue = _entries.get(oldKeyPos).getValue();
+         _entries.set(oldKeyPos, new MapEntry(key, value));
          return oldValue;
       }
    }
@@ -99,17 +97,17 @@ public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
     * @version $Revision: 1.18 $
     * @author <a href="mailto:anthony.goubard@japplis.com">Anthony Goubard</a>
     */
-   private static class EntryMap implements Map.Entry {
+   private static class MapEntry<K,V> implements Map.Entry<K,V> {
 
       /**
        * The key. Can be <code>null</code>.
        */
-      private final Object _key;
+      private final K _key;
 
       /**
        * The value. Can be <code>null</code>.
        */
-      private Object _value;
+      private V _value;
 
       /**
        * Creates a new <code>EntryMap</code> instance.
@@ -120,21 +118,21 @@ public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
        * @param value
        *    the value for the entry, can be <code>null</code>.
        */
-      public EntryMap(Object key, Object value) {
+      public MapEntry(K key, V value) {
          _key = key;
          _value = value;
       }
 
-       public Object getKey() {
+       public K getKey() {
           return _key;
        }
 
-       public Object getValue() {
+       public V getValue() {
           return _value;
        }
 
-       public Object setValue(Object value) {
-          Object oldValue = _value;
+       public V setValue(V value) {
+          V oldValue = _value;
           _value = value;
           return oldValue;
        }
@@ -150,7 +148,7 @@ public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
             return false;
          }
          Map.Entry e2 = (Map.Entry)o;
-         return (_key.equals(e2.getKey()))  &&
+         return (_key.equals(e2.getKey())) &&
                 (_value == null ? e2.getValue() == null : _value.equals(e2.getValue()));
       }
    }
@@ -162,12 +160,12 @@ public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
     * @version $Revision: 1.18 $ $Date: 2007/09/18 08:45:08 $
     * @author <a href="mailto:anthony.goubard@japplis.com">Anthony Goubard</a>
     */
-   private static class ChainedSet extends AbstractSet {
+   private static class ChainedSet<T> extends AbstractSet<T> {
 
       /**
        * The values of the set.
        */
-      private final List _values = new ArrayList();
+      private final List<T> _values = new ArrayList<T>();
 
       /**
        * Creates a new instance of <code>ChainedSet</code>.
@@ -183,10 +181,9 @@ public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
        *    the collection that contains the values of the set, cannot be
        *    <code>null</code>.
        */
-      public ChainedSet(Collection collection) {
-         Iterator itCollection = collection.iterator();
-         while (itCollection.hasNext()) {
-            _values.add(itCollection.next());
+      public ChainedSet(Collection<T> collection) {
+         for (T item : collection) {
+            _values.add(item);
          }
       }
 
@@ -196,7 +193,7 @@ public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
       }
 
       @Override
-      public Iterator iterator() {
+      public Iterator<T> iterator() {
          return _values.iterator();
       }
    }
