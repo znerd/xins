@@ -12,7 +12,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -108,7 +107,7 @@ public abstract class API extends Manageable {
     * <p />This field is initialized to a non-<code>null</code> value by the
     * constructor.
     */
-   private final List _manageableObjects;
+   private final List<Manageable> _manageableObjects;
 
    /**
     * Map that maps function names to <code>Function</code> instances.
@@ -117,12 +116,12 @@ public abstract class API extends Manageable {
     * <p />This field is initialized to a non-<code>null</code> value by the
     * constructor.
     */
-   private final Map _functionsByName;
+   private final Map<String, Function> _functionsByName;
 
    /**
     * List of all functions. This field cannot be <code>null</code>.
     */
-   private final List _functionList;
+   private final List<Function> _functionList;
 
    /**
     * The build-time settings. This field is initialized exactly once by
@@ -202,7 +201,7 @@ public abstract class API extends Manageable {
     * Mapping from function name to the call ID for all meta-functions. This
     * field is never <code>null</code>.
     */
-   private final HashMap _metaFunctionCallIDs;
+   private final HashMap<String, Counter> _metaFunctionCallIDs;
 
    /**
     * Flag indicating that the API is down for maintenance.
@@ -240,16 +239,16 @@ public abstract class API extends Manageable {
       _name                = name;
       _startupTimestamp    = System.currentTimeMillis();
       _lastStatisticsReset = _startupTimestamp;
-      _manageableObjects   = new ArrayList(20);
-      _functionsByName     = new HashMap(89);
-      _functionList        = new ArrayList(80);
+      _manageableObjects   = new ArrayList<Manageable>(20);
+      _functionsByName     = new HashMap<String, Function>(89);
+      _functionList        = new ArrayList<Function>(80);
       _emptyProperties     = new RuntimeProperties();
       _timeZone            = TimeZone.getDefault();
       _localIPAddress      = IPAddressUtils.getLocalHostIPAddress();
       _apiDisabled         = false;
 
       // Initialize mapping from meta-function to call ID
-      _metaFunctionCallIDs = new HashMap(89);
+      _metaFunctionCallIDs = new HashMap<String, Counter>(89);
       _metaFunctionCallIDs.put("_NoOp",             new Counter());
       _metaFunctionCallIDs.put("_GetFunctionList",  new Counter());
       _metaFunctionCallIDs.put("_GetStatistics",    new Counter());
@@ -285,7 +284,7 @@ public abstract class API extends Manageable {
     *
     * @since XINS 1.5.0.
     */
-   public final List getFunctionList() {
+   public final List<Function> getFunctionList() {
       return _functionList;
    }
 
@@ -435,7 +434,7 @@ public abstract class API extends Manageable {
       // Bootstrap all instances
       int count = _manageableObjects.size();
       for (int i = 0; i < count; i++) {
-         Manageable m = (Manageable) _manageableObjects.get(i);
+         Manageable m = _manageableObjects.get(i);
          String className = m.getClass().getName();
          Log.log_3213(_name, className);
          try {
@@ -476,7 +475,7 @@ public abstract class API extends Manageable {
       // Bootstrap all functions
       count = _functionList.size();
       for (int i = 0; i < count; i++) {
-         Function f = (Function) _functionList.get(i);
+         Function f = _functionList.get(i);
          String functionName = f.getName();
          Log.log_3220(_name, functionName);
          try {
@@ -649,7 +648,7 @@ public abstract class API extends Manageable {
       // Initialize all instances
       int count = _manageableObjects.size();
       for (int i = 0; i < count; i++) {
-         Manageable m = (Manageable) _manageableObjects.get(i);
+         Manageable m = _manageableObjects.get(i);
          String className = m.getClass().getName();
          Log.log_3416(_name, className);
          try {
@@ -687,7 +686,7 @@ public abstract class API extends Manageable {
       // Initialize all functions
       count = _functionList.size();
       for (int i = 0; i < count; i++) {
-         Function f = (Function) _functionList.get(i);
+         Function f = _functionList.get(i);
          String functionName = f.getName();
          Log.log_3421(_name, functionName);
          try {
@@ -887,7 +886,7 @@ public abstract class API extends Manageable {
       // Deinitialize instances
       int count = _manageableObjects.size();
       for (int i = 0; i < count; i++) {
-         Manageable m = (Manageable) _manageableObjects.get(i);
+         Manageable m = _manageableObjects.get(i);
 
          String className = m.getClass().getName();
 
@@ -905,7 +904,7 @@ public abstract class API extends Manageable {
       // Deinitialize functions
       count = _functionList.size();
       for (int i = 0; i < count; i++) {
-         Function f = (Function) _functionList.get(i);
+         Function f = _functionList.get(i);
 
          String functionName = f.getName();
 
@@ -963,7 +962,7 @@ public abstract class API extends Manageable {
     *    is no match.
     */
    final Function getFunction(String name) {
-      return (Function) _functionsByName.get(name);
+      return _functionsByName.get(name);
    }
 
    /**
@@ -1113,7 +1112,7 @@ public abstract class API extends Manageable {
          // Determine the call ID
          int callID;
          synchronized (_metaFunctionCallIDs) {
-            Counter counter = (Counter) _metaFunctionCallIDs.get(functionName);
+            Counter counter = _metaFunctionCallIDs.get(functionName);
             if (counter == null) {
                throw new NoSuchFunctionException(functionName);
             } else {
@@ -1333,7 +1332,7 @@ public abstract class API extends Manageable {
       for (int i = 0; i < count; i++) {
 
          // Get some details about the function
-         Function function = (Function) _functionList.get(i);
+         Function function = _functionList.get(i);
          String name    = function.getName();
          String version = function.getVersion();
          String enabled = function.isEnabled()
@@ -1400,7 +1399,7 @@ public abstract class API extends Manageable {
       // Function-specific statistics
       int count = _functionList.size();
       for (int i = 0; i < count; i++) {
-         Function function = (Function) _functionList.get(i);
+         Function function = _functionList.get(i);
          FunctionStatistics stats = function.getStatistics();
 
          Element functionElem = new Element("function");
@@ -1591,7 +1590,7 @@ public abstract class API extends Manageable {
       // Function-specific statistics
       int count = _functionList.size();
       for (int i = 0; i < count; i++) {
-         Function function = (Function) _functionList.get(i);
+         Function function = _functionList.get(i);
          function.getStatistics().resetStatistics();
       }
       return SUCCESSFUL_RESULT;

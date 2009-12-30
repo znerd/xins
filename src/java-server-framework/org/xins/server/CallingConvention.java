@@ -783,7 +783,7 @@ abstract class CallingConvention extends Manageable {
       MandatoryArgumentChecker.check("parameters", parameters);
 
       // Loop through all parameters
-      ArrayList toRemove = new ArrayList();
+      ArrayList<String> toRemove = new ArrayList<String>();
       for (String name : parameters.names()) {
 
          // Determine parameter value
@@ -799,9 +799,9 @@ abstract class CallingConvention extends Manageable {
       }
 
       // If there is anything to remove, then do so
-      Iterator itRemove = toRemove.iterator();
+      Iterator<String> itRemove = toRemove.iterator();
       while (itRemove.hasNext()) {
-         String name = (String) itRemove.next();
+         String name = itRemove.next();
          parameters.set(name, null);
       }
    }

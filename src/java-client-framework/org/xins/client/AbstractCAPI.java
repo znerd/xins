@@ -56,7 +56,7 @@ public abstract class AbstractCAPI {
     * already been checked against the XINS version at run-time. Never
     * <code>null</code>.
     */
-   private static final Set VERSION_COMPARISIONS_DONE = new HashSet();
+   private static final Set<Class<? extends AbstractCAPI>> VERSION_COMPARISIONS_DONE = new HashSet<Class<? extends AbstractCAPI>>();
 
    /**
     * The name of the API. This field cannot be <code>null</code>.
@@ -380,7 +380,7 @@ public abstract class AbstractCAPI {
     */
    private void checkXINSVersion() {
 
-      Class clazz = getClass();
+      Class<? extends AbstractCAPI> clazz = getClass();
       if (! VERSION_COMPARISIONS_DONE.contains(clazz)) {
 
          // Compare build- and run-time version of XINS

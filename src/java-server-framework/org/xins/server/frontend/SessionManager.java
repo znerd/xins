@@ -49,12 +49,12 @@ public class SessionManager extends Manageable {
    /**
     * The HTTP session of the current running Thread, never <code>null</code>.
     */
-   private ThreadLocal _currentSession = new ThreadLocal();
+   private ThreadLocal<HttpSession> _currentSession = new ThreadLocal<HttpSession>();
 
    /**
     * The list of pages that doesn't need to be logged in, cannot be <code>null</code>.
     */
-   private ArrayList _unrestrictedPages = new ArrayList();
+   private ArrayList<String> _unrestrictedPages = new ArrayList<String>();
 
    /**
     * The default page, cannot be <code>null</code>.
@@ -131,7 +131,7 @@ public class SessionManager extends Manageable {
       }
 
       // Fill the input parameters
-      Map inputParameters = new LinkedHashMap();
+      Map<String, String> inputParameters = new LinkedHashMap<String, String>();
       Enumeration params = request.getParameterNames();
       while (params.hasMoreElements()) {
          String name = (String) params.nextElement();
@@ -224,7 +224,7 @@ public class SessionManager extends Manageable {
     *    the session ID, can be <code>null</code>.
     */
    public String getSessionId() {
-      HttpSession session = (HttpSession) _currentSession.get();
+      HttpSession session = _currentSession.get();
       if (session == null) {
          return null;
       }
@@ -239,12 +239,12 @@ public class SessionManager extends Manageable {
     *    a map where the key is the property name and the value is the session
     *    property value.
     */
-   public Map getProperties() {
-      HttpSession session = (HttpSession) _currentSession.get();
+   public Map<String, Object> getProperties() {
+      HttpSession session = _currentSession.get();
       if (session == null) {
-         return new LinkedHashMap();
+         return new LinkedHashMap<String, Object>();
       }
-      Map properties = new LinkedHashMap();
+      Map<String, Object> properties = new LinkedHashMap<String, Object>();
       Enumeration enuAttributes = session.getAttributeNames();
       while (enuAttributes.hasMoreElements()) {
          String nextAttribute = (String) enuAttributes.nextElement();
@@ -269,7 +269,7 @@ public class SessionManager extends Manageable {
     */
    public void setProperty(String name, Object value) throws IllegalArgumentException {
       MandatoryArgumentChecker.check("name", name);
-      HttpSession session = (HttpSession) _currentSession.get();
+      HttpSession session = _currentSession.get();
       if (session != null) {
          if (value == null) {
             removeProperty(name);
@@ -319,7 +319,7 @@ public class SessionManager extends Manageable {
     */
    public Object getProperty(String name) throws IllegalArgumentException {
       MandatoryArgumentChecker.check("name", name);
-      HttpSession session = (HttpSession) _currentSession.get();
+      HttpSession session = _currentSession.get();
       if (session == null) {
          return null;
       }
@@ -342,7 +342,7 @@ public class SessionManager extends Manageable {
     */
    public boolean getBoolProperty(String name) throws IllegalArgumentException {
       MandatoryArgumentChecker.check("name", name);
-      HttpSession session = (HttpSession) _currentSession.get();
+      HttpSession session = _currentSession.get();
       if (session == null) {
          return false;
       }
@@ -362,7 +362,7 @@ public class SessionManager extends Manageable {
     */
    public void removeProperty(String name) throws IllegalArgumentException {
       MandatoryArgumentChecker.check("name", name);
-      HttpSession session = (HttpSession) _currentSession.get();
+      HttpSession session = _currentSession.get();
       if (session != null) {
          session.removeAttribute(name);
 
@@ -379,11 +379,11 @@ public class SessionManager extends Manageable {
     * Removes all session properties for the customer.
     */
    public void removeProperties() {
-      HttpSession session = (HttpSession) _currentSession.get();
+      HttpSession session = _currentSession.get();
       if (session != null) {
 
          // Removing the attributes directly throws a ConcurentModificationException in Tomcat
-         ArrayList attributeNames = new ArrayList();
+         ArrayList<String> attributeNames = new ArrayList<String>();
          Enumeration enuAttributes = session.getAttributeNames();
          while (enuAttributes.hasMoreElements()) {
             String nextAttribute = (String) enuAttributes.nextElement();
@@ -391,9 +391,9 @@ public class SessionManager extends Manageable {
                attributeNames.add(nextAttribute);
             }
          }
-         Iterator itAttributes = attributeNames.iterator();
+         Iterator<String> itAttributes = attributeNames.iterator();
          while (itAttributes.hasNext()) {
-            String nextAttribute = (String) itAttributes.next();
+            String nextAttribute = itAttributes.next();
             session.removeAttribute(nextAttribute);
          }
          registerProperty("*");
@@ -408,11 +408,11 @@ public class SessionManager extends Manageable {
     *    the name of the property set or remove in the function implementation, cannot be <code>null</code>.
     */
    private void registerProperty(String name) {
-      Set propertiesSet = (Set) getProperty("_propertiesSet");
+      Set<String> propertiesSet = (Set<String>) getProperty("_propertiesSet");
       if (propertiesSet != null) {
          propertiesSet.add(name);
       } else {
-         propertiesSet = new HashSet();
+         propertiesSet = new HashSet<String>();
          propertiesSet.add(name);
          setProperty("_propertiesSet", propertiesSet);
       }

@@ -26,13 +26,13 @@ public final class CallExceptionList {
     * The underlying collection to store the <code>CallException</code>
     * objects in.
     */
-   private final List _exceptions;
+   private final List<CallException> _exceptions;
 
    /**
     * Constructs a new <code>CallExceptionList</code> object.
     */
    public CallExceptionList() {
-      _exceptions = new ArrayList();
+      _exceptions = new ArrayList<CallException>();
    }
 
    /**
@@ -71,7 +71,7 @@ public final class CallExceptionList {
     */
    public CallException get(int index)
    throws IndexOutOfBoundsException {
-      return (CallException) _exceptions.get(index);
+      return _exceptions.get(index);
    }
 
    /**

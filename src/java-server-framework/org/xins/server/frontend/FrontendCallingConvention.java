@@ -148,13 +148,13 @@ public class FrontendCallingConvention extends CustomCallingConvention {
     * Redirection map. The key is the command and the value is the redirection
     * command.
     */
-   private Map _redirectionMap = new LinkedHashMap();
+   private Map<String, String> _redirectionMap = new LinkedHashMap<String, String>();
 
    /**
     * Conditional redirection map. The key is the command and the value is the
     * {@link Templates} that will return the name of the redirection command.
     */
-   private Map _conditionalRedirectionMap = new HashMap();
+   private Map<String, Templates> _conditionalRedirectionMap = new HashMap<String, Templates>();
 
    /**
     * Flag that indicates whether the templates should be cached. This field
@@ -165,7 +165,7 @@ public class FrontendCallingConvention extends CustomCallingConvention {
    /**
     * Cache for the XSLT templates. Never <code>null</code>.
     */
-   private Map _templateCache = new HashMap();
+   private Map<String, Templates> _templateCache = new HashMap<String, Templates>();
 
    /**
     * The template used for the Control command.
@@ -180,7 +180,7 @@ public class FrontendCallingConvention extends CustomCallingConvention {
    /**
     * The list of the real function names for this API.
     */
-   private List _functionList = new ArrayList();
+   private List<String> _functionList = new ArrayList<String>();
 
    /**
     * Creates a new <code>FrontendCallingConvention</code> instance.
@@ -789,7 +789,7 @@ public class FrontendCallingConvention extends CustomCallingConvention {
       // Load the template or get it from the cache.
       Templates template;
       if (_cacheTemplates && _templateCache.containsKey(xsltUrl)) {
-         template = (Templates) _templateCache.get(xsltUrl);
+         template = _templateCache.get(xsltUrl);
       } else {
          try {
             template = _factory.newTemplates(new StreamSource(xsltUrl));
@@ -933,7 +933,7 @@ public class FrontendCallingConvention extends CustomCallingConvention {
       }
 
       if (redirection == null && xinsResult.getErrorCode() == null && _conditionalRedirectionMap.get(functionName) != null) {
-         Templates conditionTemplate = (Templates) _conditionalRedirectionMap.get(functionName);
+         Templates conditionTemplate = _conditionalRedirectionMap.get(functionName);
          try {
             redirection = translate(xmlResult, conditionTemplate);
          } catch (Exception ex) {
@@ -943,7 +943,7 @@ public class FrontendCallingConvention extends CustomCallingConvention {
       }
 
       if (redirection == null && xinsResult.getErrorCode() == null) {
-         redirection = (String) _redirectionMap.get(functionName);
+         redirection = _redirectionMap.get(functionName);
       }
 
       // No redirection for this function
@@ -977,7 +977,7 @@ public class FrontendCallingConvention extends CustomCallingConvention {
     */
    private void initRedirections(PropertyReader bootstrapProperties) {
 
-      TreeMap conditionalRedirectionProperties = new TreeMap();
+      TreeMap<String, String> conditionalRedirectionProperties = new TreeMap<String, String>();
 
       // Get the commands automatically redirected to another one
       for (String nextProp : bootstrapProperties.names()) {
@@ -1046,7 +1046,7 @@ public class FrontendCallingConvention extends CustomCallingConvention {
     *    the XSLT created before, cannot be <code>null</code>.
     */
    private void finishConditionalTemplate(String command, String currentXSLT) {
-      String defaultRedirection = (String) _redirectionMap.get(command);
+      String defaultRedirection = _redirectionMap.get(command);
       if (defaultRedirection == null) {
          defaultRedirection = "-";
       }

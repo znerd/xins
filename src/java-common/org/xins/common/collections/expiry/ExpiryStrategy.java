@@ -73,7 +73,7 @@ public final class ExpiryStrategy {
    /**
     * The list of folders associated with this strategy.
     */
-   private final ArrayList _folders;
+   private final ArrayList<WeakReference<ExpiryFolder>> _folders;
 
    /**
     * The timer thread. Not <code>null</code>.
@@ -143,7 +143,7 @@ public final class ExpiryStrategy {
       _timeOut   = timeOut;
       _precision = precision;
       _slotCount = (int) slotCount;
-      _folders   = new ArrayList();
+      _folders   = new ArrayList<WeakReference<ExpiryFolder>>();
       String constructorDetail = "#" + _instanceNum + " [timeOut=" + timeOut
             + "L; precision=" + precision + "L]";
       _asString  = CLASSNAME + ' ' + constructorDetail;
@@ -258,7 +258,7 @@ public final class ExpiryStrategy {
       Log.log_1401(folder.getInstanceNum(), folder.getName(), _instanceNum);
 
       synchronized (_folders) {
-         _folders.add(new WeakReference(folder));
+         _folders.add(new WeakReference<ExpiryFolder>(folder));
       }
    }
 
@@ -285,8 +285,8 @@ public final class ExpiryStrategy {
 
       // Notify all the associated ExpiryFolder instances that we are stopping
       for (int i = 0; i < _folders.size(); i++) {
-         WeakReference ref = (WeakReference) _folders.get(i);
-         ExpiryFolder folder = (ExpiryFolder) ref.get();
+         WeakReference<ExpiryFolder> ref = _folders.get(i);
+         ExpiryFolder             folder = ref.get();
          if (folder != null) {
             folder.strategyStopped();
          }
@@ -309,8 +309,8 @@ public final class ExpiryStrategy {
       synchronized (_folders) {
          int count = _folders.size();
          for (int i = 0; i < count; i++) {
-            WeakReference ref = (WeakReference) _folders.get(i);
-            ExpiryFolder folder = (ExpiryFolder) ref.get();
+            WeakReference<ExpiryFolder> ref = _folders.get(i);
+            ExpiryFolder             folder = ref.get();
             if (folder != null) {
                folder.tick();
             } else {

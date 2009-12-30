@@ -21,7 +21,7 @@ public class HTTPCallerResult {
 
    private String _status;
    private String _body;
-   private HashMap _headers = new HashMap();
+   private HashMap<String, List> _headers = new HashMap<String, List>();
 
    HTTPCallerResult() {
    }
@@ -51,9 +51,9 @@ public class HTTPCallerResult {
       value = value.trim();
 
       // Store the value in the list associated by key
-      List list = (List) _headers.get(key);
+      List<String> list = _headers.get(key);
       if (list == null) {
-         list = new ArrayList();
+         list = new ArrayList<String>();
          _headers.put(key, list);
       }
       list.add(value);

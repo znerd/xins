@@ -120,7 +120,7 @@ class CheckLinks {
       // Check preconditions
       MandatoryArgumentChecker.check("descriptors", descriptors);
 
-      List threads = new ArrayList();
+      List<URLChecker> threads = new ArrayList<URLChecker>();
       if (descriptors.size() > 0) {
 
          // Get all the targets from the descriptor list
@@ -166,14 +166,14 @@ class CheckLinks {
     * @throws IllegalArgumentException
     *    if <code>descriptors == null</code>.
     */
-   private static List getTargetDescriptors(List<Descriptor> descriptors)
+   private static List<TargetDescriptor> getTargetDescriptors(List<Descriptor> descriptors)
    throws IllegalArgumentException {
 
       // Check preconditions
       MandatoryArgumentChecker.check("descriptors", descriptors);
 
       // Each descriptor in the list contains target descriptors
-      List<TargetDescriptor> targetDescriptors = new ArrayList();
+      List<TargetDescriptor> targetDescriptors = new ArrayList<TargetDescriptor>();
       for (Descriptor descriptor : descriptors) {
          targetDescriptors.addAll(descriptor.targets());
       }
@@ -199,17 +199,17 @@ class CheckLinks {
     * @throws IllegalArgumentException
     *    if <code>targetDescriptors == null</code>.
     */
-   private static List createAndRunUrlCheckers(List targetDescriptors)
+   private static List<URLChecker> createAndRunUrlCheckers(List<TargetDescriptor> targetDescriptors)
    throws IllegalArgumentException {
 
       // Check preconditions
       MandatoryArgumentChecker.check("targetDescriptors", targetDescriptors);
 
       // Iterate over all target descriptors
-      List     threads = new ArrayList();
-      Iterator targets = targetDescriptors.iterator();
+      List<URLChecker>     threads = new ArrayList<URLChecker>();
+      Iterator<TargetDescriptor> targets = targetDescriptors.iterator();
       while (targets.hasNext()) {
-         TargetDescriptor target = (TargetDescriptor) targets.next();
+         TargetDescriptor target = targets.next();
 
          // Create a thread for the target descriptor
          URLChecker urlThread = new URLChecker(target);
@@ -241,18 +241,18 @@ class CheckLinks {
     * @throws IllegalArgumentException
     *    if <code>targetDescriptors == null</code>.
     */
-   private static int getBiggestTimeout(List targetDescriptors)
+   private static int getBiggestTimeout(List<TargetDescriptor> targetDescriptors)
    throws IllegalArgumentException {
 
       // Check preconditions
       MandatoryArgumentChecker.check("targetDescriptors", targetDescriptors);
 
-      Iterator targets        = targetDescriptors.iterator();
+      Iterator<TargetDescriptor> targets        = targetDescriptors.iterator();
       int      biggestTimeout = -1;
 
       // Iterate over all target descriptors
       while (targets.hasNext()) {
-         TargetDescriptor target = (TargetDescriptor) targets.next();
+         TargetDescriptor target = targets.next();
 
          // Try to get the biggest time out of all the target descriptors
          if (biggestTimeout < target.getTotalTimeOut()) {
@@ -279,13 +279,13 @@ class CheckLinks {
     * @throws IllegalArgumentException
     *    if <code>threads == null</code>.
     */
-   private static void waitTillThreadsRunning(List threads, int timeout)
+   private static void waitTillThreadsRunning(List<URLChecker> threads, int timeout)
    throws IllegalArgumentException {
 
       // Check preconditions
       MandatoryArgumentChecker.check("threads", threads);
 
-      Iterator threadIterator = threads.iterator();
+      Iterator<URLChecker> threadIterator = threads.iterator();
       long threadTimeout      = timeout;
 
       // Storing the time approximately when the first thread was started
@@ -294,7 +294,7 @@ class CheckLinks {
 
          // Iterate over all the threads
          while (threadIterator.hasNext()) {
-            URLChecker urlThread = (URLChecker) threadIterator.next();
+            URLChecker urlThread = threadIterator.next();
             urlThread.join(threadTimeout);
 
             // If the previous thread was setup with a certain time-out
@@ -332,17 +332,17 @@ class CheckLinks {
     * @throws IllegalArgumentException
     *    if <code>threads == null</code>.
     */
-   private static void confirmThreadsStopped(List threads)
+   private static void confirmThreadsStopped(List<URLChecker> threads)
    throws IllegalArgumentException {
 
       // Check preconditions
       MandatoryArgumentChecker.check("threads", threads);
 
-      Iterator threadIterator = threads.iterator();
+      Iterator<URLChecker> threadIterator = threads.iterator();
 
       // Iterate over all the threads
       while (threadIterator.hasNext()) {
-         URLChecker urlThread = (URLChecker) threadIterator.next();
+         URLChecker urlThread = threadIterator.next();
 
          // Check if thread is still alive.
          if (urlThread.isAlive()) {
@@ -375,19 +375,19 @@ class CheckLinks {
     * @throws IllegalArgumentException
     *    if <code>builder == null || threads == null</code>.
     */
-   private static int addCheckElements(FunctionResult builder, List threads)
+   private static int addCheckElements(FunctionResult builder, List<URLChecker> threads)
    throws IllegalArgumentException {
 
       // Check preconditions
       MandatoryArgumentChecker.check("builder", builder, "threads", threads);
 
-      Iterator threadIterator = threads.iterator();
+      Iterator<URLChecker> threadIterator = threads.iterator();
       int      errorCount     = 0;
 
       // Iterate over the threads of target descriptors and create the
       // check element.
       while (threadIterator.hasNext()) {
-         URLChecker urlThread = (URLChecker) threadIterator.next();
+         URLChecker urlThread = threadIterator.next();
          Element eb = new Element("check");
          eb.setAttribute("url",      urlThread.getURL());
          eb.setAttribute("duration", Long.toString(urlThread.getDuration()));

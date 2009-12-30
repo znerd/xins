@@ -377,7 +377,7 @@ public class AccessRuleFile implements AccessRuleContainer {
    throws NullPointerException, ParseException, IOException {
 
       // Loop through the file, line by line
-      List rules = new ArrayList(25);
+      List<AccessRuleContainer> rules = new ArrayList<AccessRuleContainer>(25);
       int lineNumber = 0;
       String nextLine = "";
       while (reader.ready() && nextLine != null) {
@@ -424,7 +424,7 @@ public class AccessRuleFile implements AccessRuleContainer {
       }
 
       // Copy to the instance field
-      _rules = (AccessRuleContainer[]) rules.toArray(new AccessRuleContainer[rules.size()]);
+      _rules = rules.toArray(new AccessRuleContainer[rules.size()]);
    }
 
    /**

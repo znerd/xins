@@ -97,7 +97,7 @@ public final class ExpiryFolder {
     * {@link ExpiryStrategy#getTimeOut()} milliseconds, plus at maximum
     * {@link ExpiryStrategy#getPrecision()} milliseconds.
     */
-   private HashMap _recentlyAccessed;
+   private HashMap<Object, Entry> _recentlyAccessed;
 
    /**
     * Number of active slots. Always equals
@@ -116,12 +116,12 @@ public final class ExpiryFolder {
     * accessed. The further back in the array, the sooner the entries will
     * expire.
     */
-   private HashMap[] _slots;
+   private HashMap<Object,Entry>[] _slots;
 
    /**
     * The set of listeners. May be empty, but never is <code>null</code>.
     */
-   private ArrayList _listeners;
+   private ArrayList<ExpiryListener> _listeners;
 
    /**
     * Constructs a new <code>ExpiryFolder</code> with the specified name and
@@ -165,15 +165,15 @@ public final class ExpiryFolder {
       _strategy         = strategy;
       _strategyStopped  = false;
       _asString         = CLASSNAME + ' ' + constructorDetail;
-      _recentlyAccessed = new HashMap(INITIAL_QUEUE_SIZE);
+      _recentlyAccessed = new HashMap<Object, Entry>(INITIAL_QUEUE_SIZE);
       _slotCount        = strategy.getSlotCount();
       _slots            = new HashMap[_slotCount];
       _lastSlot         = _slotCount - 1;
-      _listeners        = new ArrayList(5);
+      _listeners        = new ArrayList<ExpiryListener>(5);
 
       // Initialize all slots to a new HashMap
       for (int i = 0; i < _slotCount; i++) {
-         _slots[i] = new HashMap(INITIAL_QUEUE_SIZE);
+         _slots[i] = new HashMap<Object, Entry>(INITIAL_QUEUE_SIZE);
       }
 
       // Notify the strategy that we listen to it. If the strategy has already
@@ -307,8 +307,8 @@ public final class ExpiryFolder {
       // Check state
       assertStrategyNotStopped();
 
-      HashMap toBeExpired;
-      HashMap refMap = null;
+      HashMap<Object, Entry> toBeExpired;
+      HashMap<Object, Object> refMap = null;
       synchronized (_lock) {
 
          // Shift the slots
@@ -332,7 +332,7 @@ public final class ExpiryFolder {
                if (entry.isExpired()) {
                   iterator.remove();
                   if (refMap == null) {
-                     refMap = new HashMap();
+                     refMap = new HashMap<Object, Object>();
                   }
                   refMap.put(key, entry.getReference());
                }
@@ -355,7 +355,7 @@ public final class ExpiryFolder {
 
                   // Create a map for the object references, if necessary
                   if (refMap == null) {
-                     refMap = new HashMap();
+                     refMap = new HashMap<Object, Object>();
                   }
 
                   // Store the entry that needs expiring in the refMap
@@ -394,10 +394,10 @@ public final class ExpiryFolder {
 
          // If appropriate, notify the listeners
          if (refMap != null && refMap.size() > 0) {
-            Map unmodifiableExpired = Collections.unmodifiableMap(refMap);
+            Map<Object, Object> unmodifiableExpired = Collections.unmodifiableMap(refMap);
             int listenerCount = _listeners.size();
             for (int i = 0; i < listenerCount; i++) {
-               ExpiryListener listener = (ExpiryListener) _listeners.get(i);
+               ExpiryListener listener = _listeners.get(i);
                listener.expired(this, unmodifiableExpired);
             }
          }
@@ -471,7 +471,7 @@ public final class ExpiryFolder {
     * @throws IllegalStateException
     *    if the associated {@link ExpiryStrategy} has stopped already.
     */
-   private int sizeOf(final Map map) throws IllegalStateException {
+   private int sizeOf(final Map<Object, Entry> map) throws IllegalStateException {
 
       // Check state
       assertStrategyNotStopped();
@@ -555,7 +555,7 @@ public final class ExpiryFolder {
       // Search in the recently accessed map first
       Entry entry;
       synchronized (_lock) {
-         entry = (Entry) _recentlyAccessed.get(key);
+         entry = _recentlyAccessed.get(key);
 
          // Entry found in recently accessed
          if (entry != null) {
@@ -782,11 +782,11 @@ public final class ExpiryFolder {
          synchronized (secondLock) {
 
             // Copy the recentlyAccessed
-            newFolder._recentlyAccessed = new HashMap(_recentlyAccessed);
+            newFolder._recentlyAccessed = new HashMap<Object, Entry>(_recentlyAccessed);
 
             // Copy the slots
             for (int i = 0; i < _slotCount && i < newFolder._slotCount; i++) {
-               newFolder._slots[i] = new HashMap(_slots[i]);
+               newFolder._slots[i] = new HashMap<Object, Entry>(_slots[i]);
             }
          }
       }

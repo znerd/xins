@@ -27,7 +27,7 @@ public class AsynchronousCall {
    /**
     * List containing the registered {@link CallListener}.
     */
-   private List _listeners = new ArrayList();
+   private List<CallListener> _listeners = new ArrayList<CallListener>();
 
    /**
     * Adds a new listener for the call.
@@ -76,7 +76,7 @@ public class AsynchronousCall {
       /**
        * The listeners to notify.
        */
-      private final List _listeners;
+      private final List<CallListener> _listeners;
 
       /**
        * Calls a CAPI function on a separate thread and notifies the listeners
@@ -91,7 +91,7 @@ public class AsynchronousCall {
        * @param listeners
        *    the listeners to notify of the result of the call.
        */
-      CallNotifyThread(AbstractCAPI capi, AbstractCAPICallRequest request, List listeners) {
+      CallNotifyThread(AbstractCAPI capi, AbstractCAPICallRequest request, List<CallListener> listeners) {
          super(capi, request);
 
          // Notify the listeners registered at the moment of the call and not
@@ -108,17 +108,17 @@ public class AsynchronousCall {
          if (getException() == null) {
             CallSucceededEvent event = new CallSucceededEvent(getCAPI(),
                   getRequest(), getDuration(), getResult());
-            Iterator itListeners = _listeners.iterator();
+            Iterator<CallListener> itListeners = _listeners.iterator();
             while (itListeners.hasNext()) {
-               CallListener listener = (CallListener) itListeners.next();
+               CallListener listener = itListeners.next();
                listener.callSucceeded(event);
             }
          } else {
             CallFailedEvent event = new CallFailedEvent(getCAPI(),
                   getRequest(), getDuration(), getException());
-            Iterator itListeners = _listeners.iterator();
+            Iterator<CallListener> itListeners = _listeners.iterator();
             while (itListeners.hasNext()) {
-               CallListener listener = (CallListener) itListeners.next();
+               CallListener listener = itListeners.next();
                listener.callFailed(event);
             }
          }
