@@ -102,15 +102,14 @@ ${version.file}</fail>
 
 	<target name="java-logdoc" depends="-init" description="Compiles the XINS/Java logdoc code">
 		<mkdir dir="build/classes/logdoc" />
-		<javac
-		srcdir="src/java-common"
-		includes="org/xins/logdoc/*.java"
-		destdir="build/classes/logdoc"
-		debug="${javac.debug}"
-		deprecation="${javac.deprecation}"
-		optimize="${javac.optimize}"
-		source="${javac.sourceversion}"
-		target="${javac.targetvm}">
+		<javac srcdir="src/java"
+		     includes="org/xins/logdoc/*.java"
+		      destdir="build/classes/logdoc"
+		        debug="${javac.debug}"
+		  deprecation="${javac.deprecation}"
+		     optimize="${javac.optimize}"
+		       source="${javac.sourceversion}"
+		       target="${javac.targetvm}">
 			<compilerarg line="${javac.compilerargs}" />
 			<classpath>
 				<fileset dir="lib" includes="*.jar" />
