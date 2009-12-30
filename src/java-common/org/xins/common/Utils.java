@@ -34,7 +34,11 @@ public final class Utils {
     *    the actual Java version.
     *
     * @since XINS 1.2.0
+    *
+    * @deprecated
+    *    Since XINS 3.0; use {@link org.apache.commons.lang.SystemUtils} instead.
     */
+   @Deprecated
    public static double getJavaVersion() {
       String s = System.getProperty("java.version").substring(0, 3);
       return Double.parseDouble(s);
@@ -77,7 +81,7 @@ public final class Utils {
       if (getJavaVersion() >= 1.4) {
 
          // Create an exception in order to have a stack trace
-         Throwable exception = new Throwable();
+         final Throwable exception = new Throwable();
 
          // Analyze the stack trace
          StackTraceElement[] trace = exception.getStackTrace();
@@ -132,7 +136,6 @@ public final class Utils {
     */
    public static String getCallingClass(int level)
    throws IllegalArgumentException {
-
       return getCallingTrace(level, false);
    }
 
@@ -185,7 +188,6 @@ public final class Utils {
     */
    public static String getCallingMethod(int level)
    throws IllegalArgumentException {
-
       return getCallingTrace(level, true);
    }
 
@@ -286,10 +288,10 @@ public final class Utils {
    throws IllegalArgumentException {
 
       // Determine detecting class and method
-      String detectingClass  = getCallingClass();
+      String  detectingClass = getCallingClass();
       String detectingMethod = getCallingMethod();
 
-      String sourceClass = null;
+      String  sourceClass = null;
       String sourceMethod = null;
 
       try {
@@ -655,7 +657,7 @@ public final class Utils {
 
       return getNameOfClass(object.getClass());
    }
-   
+
    /**
     * Logs a DEBUG-level message.
     *
@@ -669,7 +671,7 @@ public final class Utils {
    public static void logDebug(String message) {
       logDebug(message, null);
    }
-   
+
    /**
     * Logs a DEBUG-level message with an optional exception.
     *
@@ -686,7 +688,7 @@ public final class Utils {
    public static void logDebug(String message, Throwable exception) {
       Log.log_1053(exception, message);
    }
-   
+
    /**
     * Logs an INFO-level message.
     *
@@ -700,7 +702,7 @@ public final class Utils {
    public static void logInfo(String message) {
       logInfo(message, null);
    }
-   
+
    /**
     * Logs an INFO-level message.
     *
@@ -717,7 +719,7 @@ public final class Utils {
    public static void logInfo(String message, Throwable exception) {
       Log.log_1054(exception, message);
    }
-   
+
    /**
     * Logs a NOTICE-level message.
     *
@@ -731,7 +733,7 @@ public final class Utils {
    public static void logNotice(String message) {
       logNotice(message, null);
    }
-   
+
    /**
     * Logs a NOTICE-level message.
     *
@@ -748,7 +750,7 @@ public final class Utils {
    public static void logNotice(String message, Throwable exception) {
       Log.log_1055(exception, message);
    }
-   
+
    /**
     * Logs a WARN-level message.
     *
@@ -762,7 +764,7 @@ public final class Utils {
    public static void logWarning(String message) {
       logWarning(message, null);
    }
-   
+
    /**
     * Logs a WARN-level message.
     *
@@ -779,7 +781,7 @@ public final class Utils {
    public static void logWarning(String message, Throwable exception) {
       Log.log_1056(exception, message);
    }
-   
+
    /**
     * Logs an ERROR-level message.
     *
@@ -793,7 +795,7 @@ public final class Utils {
    public static void logError(String message) {
       logError(message, null);
    }
-   
+
    /**
     * Logs an ERROR-level message.
     *
@@ -810,7 +812,7 @@ public final class Utils {
    public static void logError(String message, Throwable exception) {
       Log.log_1057(exception, message);
    }
-   
+
    /**
     * Logs a FATAL-level message.
     *

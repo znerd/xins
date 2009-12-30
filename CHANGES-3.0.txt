@@ -10,6 +10,7 @@ Logdoc:
 
 XINS/Java Common Library:
 * Added various logXXX methods to the Utils class.
+* Deprecated Utils.getJavaVersion, use SystemUtils (in Commons Lang) instead.
 * Added a package 'logging' with a class LoggingThread. This class can be
   derived from by thread implementation classes that perform Log4J logging.
   The Log4J diagnostic context identifier is set and unset on the thread
