@@ -148,7 +148,7 @@
 
 	  @Override
       protected void setLocale(String newLocale) {
-         TRANSLATION_BUNDLE = (TranslationBundle) TRANSLATION_BUNDLES_BY_NAME.get(newLocale);
+         TRANSLATION_BUNDLE = TRANSLATION_BUNDLES_BY_NAME.get(newLocale);
       }
    }
 }
