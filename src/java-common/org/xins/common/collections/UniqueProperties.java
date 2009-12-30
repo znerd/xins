@@ -21,15 +21,20 @@ import org.xins.common.Log;
 public class UniqueProperties extends Properties {
 
    /**
+    * The version UID used for serialization.
+    */
+   private static final long serialVersionUID = -7073948567472966699L;
+
+   /**
     * Flag that indicates that a identical key has been put more than once in
     * this properties object.
     */
    private boolean _unique = true;
 
+   @Override
    public Object put(Object key, Object value) {
        Object oldValue = super.put(key, value);
-       if (oldValue != null &&
-             key instanceof String && value instanceof String && oldValue instanceof String) {
+       if (key instanceof String && value instanceof String && oldValue instanceof String) {
            _unique = false;
            Log.log_1351((String) key, (String) oldValue, (String) value);
        }

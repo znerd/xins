@@ -6,8 +6,6 @@
  */
 package org.xins.common;
 
-import java.util.Iterator;
-
 import org.xins.common.collections.PropertyReader;
 import org.xins.common.text.URLEncoding;
 import org.xins.common.xml.Element;
@@ -111,6 +109,7 @@ public class FormattedParameters {
     * @return
     *    the String representation of the request.
     */
+   @Override
    public String toString() {
 
       // The String representation has already been created.

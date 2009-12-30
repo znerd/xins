@@ -38,12 +38,12 @@ public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
    /**
     * The keys of the Map.
     */
-   private List _keys = new ArrayList();
+   private final List _keys = new ArrayList();
 
    /**
     * The key/pair entries of the Map.
     */
-   private List _entries = new ArrayList();
+   private final List _entries = new ArrayList();
 
    /**
     * Creates a new instance of <code>ChainedMap</code>.
@@ -52,10 +52,12 @@ public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
       // empty
    }
 
+   @Override
    public Set entrySet() {
       return new ChainedSet(_entries);
    }
 
+   @Override
    public Collection values() {
       List values = new ArrayList();
       Iterator itEntries = _entries.iterator();
@@ -66,6 +68,7 @@ public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
       return values;
    }
 
+   @Override
    public Object put(Object key, Object value) {
 
       // Find the index of the current setting
@@ -85,14 +88,9 @@ public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
       }
    }
 
-   public Object clone() {
-      try {
-         return super.clone();
-      } catch (CloneNotSupportedException cnse) {
-         ChainedMap clone = new ChainedMap();
-         clone.putAll(this);
-         return clone;
-      }
+   @Override
+   public Object clone() throws CloneNotSupportedException {
+      return super.clone();
    }
 
    /**
@@ -106,7 +104,7 @@ public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
       /**
        * The key. Can be <code>null</code>.
        */
-      private Object _key;
+      private final Object _key;
 
       /**
        * The value. Can be <code>null</code>.
@@ -141,19 +139,20 @@ public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
           return oldValue;
        }
 
-       public int hashCode() {
-          return (_key == null ? 0 : _key.hashCode()) ^
-                (_value == null ? 0 : _value.hashCode());
-       }
+      @Override
+      public int hashCode() {
+         return (_key == null ? 0 : _key.hashCode()) ^ (_value == null ? 0 : _value.hashCode());
+      }
 
-       public boolean equals(Object o) {
-          if (!(o instanceof Map.Entry)) {
-             return false;
-          }
-          Map.Entry e2 = (Map.Entry)o;
-          return (_key.equals(e2.getKey()))  &&
-                 (_value == null ? e2.getValue() == null : _value.equals(e2.getValue()));
-       }
+      @Override
+      public boolean equals(Object o) {
+         if (!(o instanceof Map.Entry)) {
+            return false;
+         }
+         Map.Entry e2 = (Map.Entry)o;
+         return (_key.equals(e2.getKey()))  &&
+                (_value == null ? e2.getValue() == null : _value.equals(e2.getValue()));
+      }
    }
 
    /**
@@ -168,7 +167,7 @@ public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
       /**
        * The values of the set.
        */
-      private List _values = new ArrayList();
+      private final List _values = new ArrayList();
 
       /**
        * Creates a new instance of <code>ChainedSet</code>.
@@ -191,10 +190,12 @@ public class ChainedMap extends AbstractMap implements Cloneable, Serializable {
          }
       }
 
+      @Override
       public int size() {
          return _values.size();
       }
 
+      @Override
       public Iterator iterator() {
          return _values.iterator();
       }
