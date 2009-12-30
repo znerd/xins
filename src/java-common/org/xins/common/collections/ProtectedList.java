@@ -34,7 +34,7 @@ import org.xins.common.MandatoryArgumentChecker;
  *
  * @since XINS 1.1.0
  */
-public final class ProtectedList extends AbstractList implements Cloneable {
+public final class ProtectedList<T> extends AbstractList<T> implements Cloneable {
 
    /**
     * The secret key.
@@ -44,7 +44,7 @@ public final class ProtectedList extends AbstractList implements Cloneable {
    /**
     * The list containing the objects.
     */
-   private ArrayList _list;
+   private ArrayList<T> _list;
 
    /**
     * Constructs an empty <code>ProtectedList</code> with the specified
@@ -70,7 +70,7 @@ public final class ProtectedList extends AbstractList implements Cloneable {
 
       // Store secret key and construct internal list
       _secretKey = secretKey;
-      _list      = new ArrayList(initialCapacity);
+      _list      = new ArrayList<T>(initialCapacity);
    }
 
    /**
@@ -92,7 +92,7 @@ public final class ProtectedList extends AbstractList implements Cloneable {
 
       // Store secret key and construct internal list
       _secretKey = secretKey;
-      _list      = new ArrayList();
+      _list      = new ArrayList<T>();
    }
 
    /**
@@ -114,7 +114,7 @@ public final class ProtectedList extends AbstractList implements Cloneable {
     *
     * @since XINS 1.2.0
     */
-   public ProtectedList(Object secretKey, Collection c)
+   public ProtectedList(Object secretKey, Collection<T> c)
    throws IllegalArgumentException {
 
       // Check preconditions
@@ -122,7 +122,7 @@ public final class ProtectedList extends AbstractList implements Cloneable {
 
       // Store secret key and construct internal list
       _secretKey = secretKey;
-      _list      = new ArrayList(c);
+      _list      = new ArrayList<T>(c);
    }
 
    /**
@@ -159,7 +159,8 @@ public final class ProtectedList extends AbstractList implements Cloneable {
     *    if <code>index &lt; 0
     *          || index &gt;= {@link #size()}</code>.
     */
-   public Object get(int index)
+   @Override
+   public T get(int index)
    throws IndexOutOfBoundsException {
       return _list.get(index);
    }
@@ -196,7 +197,7 @@ public final class ProtectedList extends AbstractList implements Cloneable {
     *    if <code>secretKey</code> does not match the secret key passed to the
     *    constructor.
     */
-   public void add(Object secretKey, Object element)
+   public void add(Object secretKey, T element)
    throws IncorrectSecretKeyException {
 
       // Check preconditions
@@ -280,18 +281,19 @@ public final class ProtectedList extends AbstractList implements Cloneable {
     * @return
     *    a new clone of this object, never <code>null</code>.
     */
+   @Override
    public Object clone() {
 
       // Use Object.clone() to create a shallow clone
-      ProtectedList clone = null;
+      ProtectedList<T> clone = null;
       try {
-         clone = (ProtectedList) super.clone();
+         clone = (ProtectedList<T>) super.clone();
       } catch (CloneNotSupportedException e) {
          // should never happen
       }
 
       // For a deep clone, duplicate the list as well
-      clone._list = (ArrayList) _list.clone();
+      clone._list = (ArrayList<T>) _list.clone();
 
       return clone;
    }
