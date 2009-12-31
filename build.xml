@@ -71,17 +71,17 @@ ${version.file}</fail>
 		<property name="www.url"               value="http://www.xins.org/" />
 
 		<!-- Java compiler-related settings -->
-		<property name="javac.sourceversion"   value="1.5"    />
-		<property name="javac.targetvm"        value="1.5"    />
-		<property name="javac.debug"           value="true"   />
-		<property name="javac.deprecation"     value="true"   />
-		<property name="javac.optimize"        value="false"  />
+		<property name="javac.sourceversion"   value="1.5"   />
+		<property name="javac.targetvm"        value="1.5"   />
+		<property name="javac.debug"           value="true"  />
+		<property name="javac.deprecation"     value="true"  />
+		<property name="javac.optimize"        value="false" />
 		<property name="javac.compilerargs"    value="-Xlint -Xmaxwarns 9999" />
-		<property name="tests.deprecation"     value="false"  />
+		<property name="tests.deprecation"     value="false" />
 
 		<!-- Javadoc-related settings -->
 		<property name="javadoc.srcdir.javase" value="${java.home}/src" />
-		<property name="javadoc.srcdir.xins"   value="src/java-common:build/src/java-common:src/java-server-framework:build/src/java-server-framework:src/java-client-framework:build/src/java-client-framework" />
+		<property name="javadoc.srcdir.xins"   value="src/java" />
 
 		<!-- Settings related to unit- and performance-testing -->
 		<property name="testclass"     value="org.xins.tests.AllTests"     />
@@ -100,11 +100,11 @@ ${version.file}</fail>
 		<delete dir="docs" />
 	</target>
 
-	<target name="java-logdoc" depends="-init" description="Compiles the XINS/Java logdoc code">
-		<mkdir dir="build/classes/logdoc" />
+	<target name="java" depends="-init" description="Compiles all Java code">
+		<mkdir dir="build/classes" />
 		<javac srcdir="src/java"
-		     includes="org/xins/logdoc/*.java"
-		      destdir="build/classes/logdoc"
+		     includes="org/xins/**/*.java"
+		      destdir="build/classes"
 		        debug="${javac.debug}"
 		  deprecation="${javac.deprecation}"
 		     optimize="${javac.optimize}"
@@ -115,7 +115,14 @@ ${version.file}</fail>
 				<fileset dir="lib" includes="*.jar" />
 			</classpath>
 		</javac>
-		<manifest file="build/MANIFEST.MF">
+	</target>
+
+	<target name="jars" depends="java" description="Generates the JAR files">
+
+		<copy dir="src/java/" excludes="**/*.java **/package.html" todir="build/classes/" />
+
+		<!-- Logdoc -->
+		<manifest file="build/logdoc.manifest">
 			<section name="logdoc">
 				<attribute name="Specification-Title"    value="Logdoc"          />
 				<attribute name="Specification-Version"  value="${xins_version}" />
@@ -125,37 +132,49 @@ ${version.file}</fail>
 				<attribute name="Implementation-Vendor"  value="${xins_vendor}"  />
 			</section>
 		</manifest>
-		<jar
-		destfile="build/logdoc.jar"
-		basedir="build/classes/logdoc"
-		manifest="build/MANIFEST.MF" />
+		<jar destfile="build/logdoc.jar" basedir="build/classes/" includes="org/xins/logdoc/**" manifest="build/logdoc.manifest" />
+
+		<!-- XINS/Java Common Library -->
+		<manifest file="build/xins-common.manifest">
+			<section name="xins-common">
+				<attribute name="Specification-Title"    value="XINS/Java Common Library" />
+				<attribute name="Specification-Version"  value="${xins_version}"          />
+				<attribute name="Specification-Vendor"   value="${xins_vendor}"           />
+				<attribute name="Implementation-Title"   value="XINS/Java Common Library" />
+				<attribute name="Implementation-Version" value="${xins_version}"          />
+				<attribute name="Implementation-Vendor"  value="${xins_vendor}"           />
+			</section>
+		</manifest>
+		<jar destfile="build/xins-common.jar" basedir="build/classes/" includes="org/xins/common/**" manifest="build/xins-common.manifest" />
+
+		<!-- XINS/Java Client Library -->
+		<manifest file="build/client.manifest">
+			<section name="xins-client">
+				<attribute name="Specification-Title"    value="XINS/Java Client Library" />
+				<attribute name="Specification-Version"  value="${xins_version}"          />
+				<attribute name="Specification-Vendor"   value="${xins_vendor}"           />
+				<attribute name="Implementation-Title"   value="XINS/Java Client Library" />
+				<attribute name="Implementation-Version" value="${xins_version}"          />
+				<attribute name="Implementation-Vendor"  value="${xins_vendor}"           />
+			</section>
+		</manifest>
+		<jar destfile="build/xins-client.jar" basedir="build/classes/" includes="org/xins/client/**" manifest="build/xins-client.manifest" />
+
+		<!-- XINS/Java Server Library -->
+		<manifest file="build/server.manifest">
+			<section name="xins-server">
+				<attribute name="Specification-Title"    value="XINS/Java Server Library" />
+				<attribute name="Specification-Version"  value="${xins_version}"          />
+				<attribute name="Specification-Vendor"   value="${xins_vendor}"           />
+				<attribute name="Implementation-Title"   value="XINS/Java Server Library" />
+				<attribute name="Implementation-Version" value="${xins_version}"          />
+				<attribute name="Implementation-Vendor"  value="${xins_vendor}"           />
+			</section>
+		</manifest>
+		<jar destfile="build/xins-server.jar" basedir="build/classes/" includes="org/xins/server/**" manifest="build/xins-server.manifest" />
 	</target>
 
-	<target name="java-common" depends="java-logdoc, logdoc-java-common" description="Compiles the XINS/Java common code">
-		<copy file="src/java-common/org/xins/common/ant/antlib.xml"
-		todir="build/classes/java-common/org/xins/common/ant" />
-		<copy file="src/java-common/org/xins/common/servlet/container/xins.gif"
-		todir="build/classes/java-common/org/xins/common/servlet/container" />
-		<antcall target="-build-framework">
-			<param name="src.side" value="common" />
-			<param name="side"     value="common" />
-			<param name="type"     value="Common" />
-		</antcall>
-	</target>
-
-	<target name="java-client" depends="java-common, logdoc-java-client" description="Compiles the XINS/Java client framework">
-		<path id="path.common">
-			<pathelement path="build/classes/java-common" />
-		</path>
-		<antcall target="-build-framework" inheritRefs="true">
-			<param name="src.side" value="client-framework" />
-			<param name="side"     value="client"           />
-			<param name="type"     value="Client Framework" />
-		</antcall>
-	</target>
-
-	<target name="java-server" depends="java-common, logdoc-java-server" description="Compiles the XINS/Java server framework">
-		<mkdir dir="build/src/java-server-framework" />
+	<target name="TODO-java-server" description="Compiles the XINS/Java server framework">
 		<xslt
 		in="src/xml/default_resultcodes.xml"
 		out="build/src/java-server-framework/org/xins/server/DefaultResultCodes.java"
@@ -169,14 +188,10 @@ ${version.file}</fail>
 			</classpath>
 		</available>
 		<antcall target="download-jmx" />
-		<antcall target="-build-framework" inheritRefs="true">
-			<param name="src.side" value="server-framework" />
-			<param name="side"     value="server"           />
-			<param name="type"     value="Server Framework" />
-		</antcall>
 	</target>
 
-	<target name="java-tools" depends="java-common, java-client, java-server" description="Compiles the XINS/Java tools and put them in xins-common.jar">
+	<!-- TODO: Include this inside "java" target ? -->
+	<target name="java-tools" depends="java" description="Compiles the XINS/Java tools and put them in xins-common.jar">
 		<available property="spring.available" file="lib/spring.jar" />
 		<antcall target="download-spring" />
 		<javac
@@ -215,7 +230,7 @@ ${version.file}</fail>
 		dest="lib/jmxri.jar" usetimestamp="true" ignoreerrors="true" />
 	</target>
 
-	<target name="-build-framework">
+	<target name="TODO-build-framework">
 		<mkdir dir="build/src/java-${src.side}" />
 		<copy file="src/java-${src.side}/org/xins/${side}/Library.java" todir="build/src/java-${src.side}/org/xins/${side}/" />
 		<replace dir="build/src/java-${src.side}" token="%%VERSION%%" value="${xins_version}">
@@ -273,8 +288,6 @@ ${version.file}</fail>
 		basedir="build/classes/java-${side}"
 		manifest="build/MANIFEST.MF" />
 	</target>
-
-	<target name="java" depends="java-logdoc,java-common,java-client,java-server,java-tools" description="Compiles the XINS/Java java code (logdoc, common, server and client)"/>
 
 	<target name="-prepare-logdoc-server">
 		<antcall target="-prepare-logdoc">
@@ -491,7 +504,7 @@ ${version.file}</fail>
 		</antcall>
 	</target>
 
-	<target name="all" depends="java-server,javadoc" description="Generates everything" />
+	<target name="all" depends="java,javadoc" description="Generates everything" />
 
 	<target name="help" description="Print the help of the main targets" depends="-init">
 		<echo message="XINS ${xins_version}"                                                />
