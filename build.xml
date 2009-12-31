@@ -52,38 +52,38 @@ ${version.file}</fail>
 	<target name="-init" depends="-load-version">
 
 		<!-- General project properties -->
-		<property name="title"               value="XINS" />
-		<property name="name"                value="${ant.project.name}" />
-		<property name="xins_version"        value="${version.major}.${version.middle}${dot.version.minor}${version.build}${version.suffix}" />
-		<property name="package-basename"    value="${name}-${xins_version}" />
-		<property name="xins_vendor"         value="Orange Nederland Breedband B.V." />
-		<property name="cvs.module"          value="${name}" />
+		<property name="title"                 value="XINS" />
+		<property name="name"                  value="${ant.project.name}" />
+		<property name="xins_version"          value="${version.major}.${version.middle}${dot.version.minor}${version.build}${version.suffix}" />
+		<property name="package-basename"      value="${name}-${xins_version}" />
+		<property name="xins_vendor"           value="Online Breedband B.V." />
+		<property name="cvs.module"            value="${name}" />
 
-		<!-- SourceForge-related properties -->
-		<property name="sf.group"            value="71598" />
-		<property name="sf.package"          value="71219" />
+		<!-- SourceForge-related settings -->
+		<property name="sf.group"              value="71598" />
+		<property name="sf.package"            value="71219" />
 
-		<!-- Website-related properties -->
-		<property name="www.user"            value="${sf.user}" />
-		<property name="www.host"            value="${name}.sourceforge.net" />
-		<property name="www.dir"             value="/home/groups/x/xi/xins/htdocs" />
-		<property name="www.target"          value="${www.user}@${www.host}:${www.dir}" />
-		<property name="www.url"             value="http://www.xins.org/" />
+		<!-- Website-related settings -->
+		<property name="www.user"              value="${sf.user}" />
+		<property name="www.host"              value="${name}.sourceforge.net" />
+		<property name="www.dir"               value="/home/groups/x/xi/xins/htdocs" />
+		<property name="www.target"            value="${www.user}@${www.host}:${www.dir}" />
+		<property name="www.url"               value="http://www.xins.org/" />
 
-		<!-- Java compiler-related properties -->
-		<property name="javac.sourceversion" value="1.5"    />
-		<property name="javac.targetvm"      value="1.5"    />
-		<property name="javac.debug"         value="true"   />
-		<property name="javac.deprecation"   value="true"   />
-		<property name="javac.optimize"      value="false"  />
-		<property name="javac.compilerargs"  value="-Xlint -Xmaxwarns 9999" />
-		<property name="tests.deprecation"   value="false"  />
+		<!-- Java compiler-related settings -->
+		<property name="javac.sourceversion"   value="1.5"    />
+		<property name="javac.targetvm"        value="1.5"    />
+		<property name="javac.debug"           value="true"   />
+		<property name="javac.deprecation"     value="true"   />
+		<property name="javac.optimize"        value="false"  />
+		<property name="javac.compilerargs"    value="-Xlint -Xmaxwarns 9999" />
+		<property name="tests.deprecation"     value="false"  />
 
-		<!-- Javadoc-related properties -->
+		<!-- Javadoc-related settings -->
 		<property name="javadoc.srcdir.javase" value="${java.home}/src" />
 		<property name="javadoc.srcdir.xins"   value="src/java-common:build/src/java-common:src/java-server-framework:build/src/java-server-framework:src/java-client-framework:build/src/java-client-framework" />
 
-		<!-- Unit- and performance-testing-related properties -->
+		<!-- Settings related to unit- and performance-testing -->
 		<property name="testclass"     value="org.xins.tests.AllTests"     />
 		<property name="perftestclass" value="org.xins.perftests.AllTests" />
 	</target>
