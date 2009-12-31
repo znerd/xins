@@ -25,16 +25,6 @@
 	</target>
 
 	<!--
-	Defines the 'j2h' (Java2HTML) task. This target fails if the required
-	class for this task is not available.
-	-->
-	<target name="-j2h-task">
-		<taskdef name="java2html" classname="com.java2html.Java2HTMLTask">
-			<classpath location="lib/j2h.jar" />
-		</taskdef>
-	</target>
-
-	<!--
 	Determines the SourceForge account with the corresponding password by
 	reading the properties 'sf.user' and 'sf.password' from a file.
 	-->
@@ -114,7 +104,7 @@ ${sf.file}</fail>
 	description="Generates Logdoc HTML and then uploads it for the web site"
 	unless="no-upload" />
 
-	<target name="classes-tests" depends="java" description="Compiles the test cases">
+	<target name="compile-tests" depends="compile" description="Compiles the test cases">
 		<!-- Compiles the example used for the tests -->
 		<!--delete dir="src/tests/build" /-->
 		<!-- property name="build.java.version" value="1.3" /-->
@@ -165,7 +155,7 @@ ${sf.file}</fail>
 		</javac>
 	</target>
 
-	<target name="do-tests" depends="-junit-task,classes-tests" description="Runs the unit tests">
+	<target name="do-tests" depends="-junit-task,compile-tests" description="Runs the unit tests">
 		<mkdir dir="build/testresults" />
 		<mkdir dir="build/testresults/xml" />
 
@@ -192,7 +182,7 @@ ${sf.file}</fail>
 		<fail if="tests.failed" message="All tests should run" />
 	</target>
 
-	<target name="tests-ui" depends="classes-tests" description="Runs the unit tests in a graphical environment">
+	<target name="tests-ui" depends="compile-tests" description="Runs the unit tests in a graphical environment">
 		<mkdir dir="build/testresults" />
 		<java fork="true" classname="junit.swingui.TestRunner">
 			<sysproperty key="user.dir" value="${basedir}"/>
@@ -202,7 +192,7 @@ ${sf.file}</fail>
 		</java>
 	</target>
 
-	<target name="test-netbeans" depends="-junit-task,classes-tests" description="Runs the unit tests in NetBeans">
+	<target name="test-netbeans" depends="-junit-task,compile-tests" description="Runs the unit tests in NetBeans">
 		<mkdir dir="build/testresults" />
 		<mkdir dir="build/testresults/xml" />
 
@@ -215,7 +205,7 @@ ${sf.file}</fail>
 		</junit>
 	</target>
 
-	<target name="do-perftests" depends="-junit-task,classes-tests" description="Runs the performance tests">
+	<target name="do-perftests" depends="-junit-task,compile-tests" description="Runs the performance tests">
 		<mkdir dir="build/perftestresults" />
 		<mkdir dir="build/perftestresults/xml" />
 		<junit printsummary="true" failureproperty="perftests.failed">
@@ -271,7 +261,7 @@ ${sf.file}</fail>
 		</cobertura-instrument>
 	</target>
 
-	<target name="coverage" depends="-junit-task,classes-tests,-prepare-coverage">
+	<target name="coverage" depends="-junit-task,compile-tests,-prepare-coverage">
 		<mkdir dir="build/testresults" />
 		<mkdir dir="build/testresults/xml" />
 		<mkdir dir="build/testresults/coverage" />
@@ -292,31 +282,6 @@ ${sf.file}</fail>
 			<fileset dir="src/java-server-framework" includes="**/*.java" />
 			<fileset dir="src/java-common" includes="**/*.java" />
 		</cobertura-report>
-	</target>
-
-	<target name="j2h" depends="-j2h-task,java" description="Generates pretty-printed Java code as HTML">
-		<mkdir dir="build/j2h" />
-		<java2html
-		title="Source X-ref for ${title} ${version}"
-		destination="build/j2h"
-		footer="no">
-			<fileset dir="src/java-common">
-				<include name="**/*.java" />
-			</fileset>
-			<fileset dir="src/java-server-framework">
-				<include name="**/*.java" />
-			</fileset>
-			<fileset dir="src/java-client-framework">
-				<include name="**/*.java" />
-			</fileset>
-		</java2html>
-		<copy
-		file="src/j2h/front.html"
-		todir="build/j2h"
-		overwrite="true" />
-		<copy file="src/css/j2h/style.css"
-		tofile="build/j2h/stylesheet.css"
-		overwrite="true" />
 	</target>
 
 	<target
@@ -416,38 +381,6 @@ ${sf.file}</fail>
 		         command="ln -s ${www.dir}/checkstyle/${version} ${www.dir}/checkstyle/latest" />
 	</target>
 
-	<target name="upload-j2h"
-	depends="-init-release,j2h"
-	description="Uploads the Java2HTML documentation to the web site"
-	unless="no-upload">
-		<echo message="Uploading ${title} ${version} Java2HTML documentation to ${www.host}" />
-
-		<!-- Create TAR GZ file for Java2HTML -->
-		<echo level="verbose" message="Creating TAR GZ file for Java2HTML" />
-		<tar tarfile="build/j2h.tar" longfile="gnu">
-			<tarfileset dir="build/j2h" mode="664" dirmode="775" prefix="j2h/${version}" />
-		</tar>
-		<gzip src="build/j2h.tar" destfile="build/j2h.tgz" />
-		<delete file="build/j2h.tar" />
-
-		<!-- Copy to remote host -->
-		<echo level="verbose" message="Copying TAR GZ file for Java2HTML" />
-		<scp
-		todir="${www.target}/"
-		password="${sf.password}"
-		trust="true"
-		file="build/j2h.tgz" />
-
-		<!-- Remotely: unpack and create symbolic links -->
-		<echo level="verbose" message="Unpacking TAR GZ file for Java2HTML remotely" />
-		<sshexec
-		host="${www.host}"
-		username="${sf.user}"
-		password="${sf.password}"
-		trust="true"
-		command="cd ${www.dir} &amp;&amp; tar zxf j2h.tgz &amp;&amp; rm j2h.tgz &amp;&amp; cd j2h &amp;&amp; rm -f latest &amp;&amp; ln -s ${version} latest" />
-	</target>
-
 	<target name="copy-demo" depends="-init">
 		<!-- Copy the examples in the release -->
 		<delete dir="demo" />
@@ -518,7 +451,7 @@ ${sf.file}</fail>
 		</copy>
 	</target>
 
-	<target name="package" depends="-init-release-properties,clean-release,java,javadoc,logdoc-html,copy-demo,copy-docs" description="Builds a complete distribution archive">
+	<target name="package" depends="-init-release-properties,clean-release,compile,javadoc,logdoc-html,copy-demo,copy-docs" description="Builds a complete distribution archive">
 		<!-- convert all text files to Unix LF -->
 		<patternset id="release.text.files">
 			<include name="src/ant/**/*"                   />
@@ -851,12 +784,9 @@ http://sourceforge.net/project/showfiles.php?group_id=21935&amp;package_id=16608
 		</cvs>
 	</target>
 
-	<target
-	name="release"
-	depends="-junit-task,-checkstyle-task,-j2h-task,-init-release,-prepare-release,upload-changes,upload-package,upload-javadoc,upload-checkstyle,upload-j2h,upload-logdoc,-post-commit-version, upload-homepage"
-	description="Performs a release" />
+	<target name="release" depends="-junit-task,-checkstyle-task,-init-release,-prepare-release,upload-changes,upload-package,upload-javadoc,upload-checkstyle,upload-logdoc,-post-commit-version, upload-homepage" description="Performs a release" />
 
-	<target name="test-netbeans-debug" depends="-junit-task,classes-tests" if="netbeans.home" description="Debug in NetBeans IDE">
+	<target name="test-netbeans-debug" depends="-junit-task,compile-tests" if="netbeans.home" description="Debug in NetBeans IDE">
 		<nbjpdastart name="XINS tests" addressproperty="jpda.address" transport="dt_socket">
 			<classpath refid="tests.classpath" />
 			<sourcepath>
@@ -899,13 +829,13 @@ http://sourceforge.net/project/showfiles.php?group_id=21935&amp;package_id=16608
 		</xslt>
 	</target>
 
-	<target name="profile" depends="java">
+	<target name="profile" depends="compile">
 		<property name="profile.dir" value="../xins-examples/xins-project"/>
 		<ant antfile="apis/petstore/nbbuild.xml" target="profile" dir="${profile.dir}" />
 	</target>
 
 	<target name="profile-perftests">
-		<antcall target="classes-tests" />
+		<antcall target="compile-tests" />
 		<path id="api.classpath">
 			<fileset includes="logdoc.jar xins-common.jar xins-client.jar xins-server.jar" dir="build"/>
 			<fileset includes="commons-codec.jar commons-httpclient.jar commons-logging.jar commons-net.jar jakarta-oro.jar log4j.jar servlet.jar xmlenc.jar junit.jar" dir="lib"/>
