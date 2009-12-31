@@ -6,7 +6,8 @@ XINS project file:
   APIs, default is "apis" (which is backwards compatible).
 
 Logdoc:
-* Separated out to a separate project, see http://github.com/znerd/logdoc/.
+* Separated out to a separate project, see http://github.com/znerd/logdoc/,
+  library is now in lib/logdoc.jar.
 
 Java2HTML:
 * Removed support for j2h (Java2HTML).
