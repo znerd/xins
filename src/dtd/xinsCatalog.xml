@@ -2,8 +2,7 @@
 <!-- $Id: xinsCatalog.xml,v 1.6 2007/12/17 15:16:06 agoubard Exp $ -->
 
 <!-- see http://www.oasis-open.org/committees/entity/spec.html -->
-<!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN"
-         "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+<!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN" "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
 
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">                
 
@@ -111,6 +110,4 @@
 	<public publicId="-//XINS//DTD Result Code 3.0//EN"             uri="resultcode_3_0.dtd" />
 	<public publicId="-//XINS//DTD Implementation 3.0//EN"          uri="impl_3_0.dtd" />
 	<public publicId="-//XINS//DTD Environments 3.0//EN"            uri="environments_3_0.dtd" />
-	<public publicId="-//XINS//DTD XINS Logdoc 3.0//EN"             uri="log_3_0.dtd" />
-	<public publicId="-//XINS//DTD XINS Translation Bundle 3.0//EN" uri="translation-bundle_3_0.dtd" />
 </catalog>

@@ -207,8 +207,6 @@ ${apis.list}]]></echo>
 			<dtd publicId="-//XINS//DTD Result Code 3.0//EN"             location="resultcode_3_0.dtd" />
 			<dtd publicId="-//XINS//DTD Implementation 3.0//EN"          location="impl_3_0.dtd" />
 			<dtd publicId="-//XINS//DTD Environments 3.0//EN"            location="environments_3_0.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Logdoc 3.0//EN"             location="log_3_0.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Translation Bundle 3.0//EN" location="translation-bundle_3_0.dtd" />
 		</xmlcatalog>
 	</target>
 

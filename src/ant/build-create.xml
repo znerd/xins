@@ -207,7 +207,7 @@ rcsversion="$]]><![CDATA[Revision$" rcsdate="$]]><![CDATA[Date$">
 		<fail message="The file ${log.file} already exists!" if="xml.exists" />
 		<fail message="The file ${log.file2} already exists!" if="xml.exists2" />
 		<echo file="${log.file}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE log PUBLIC "-//XINS//DTD XINS Logdoc 3.0//EN" "http://www.xins.org/dtd/log_3_0.dtd">
+<!DOCTYPE log PUBLIC "-//Logdoc//DTD Logdoc 3.0//EN" "http://www.xins.org/dtd/log_3_0.dtd">
 
 <log>
 
@@ -226,7 +226,7 @@ rcsversion="$]]><![CDATA[Revision$" rcsdate="$]]><![CDATA[Date$">
 </log>
 ]]></echo>
 		<echo file="${log.file2}"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE translation-bundle PUBLIC "-//XINS//DTD XINS Translation Bundle 3.0//EN" "http://www.xins.org/dtd/translation-bundle_3_0.dtd">
+<!DOCTYPE translation-bundle PUBLIC "-//Logdoc//DTD Translation Bundle 3.0//EN" "http://www.xins.org/dtd/translation-bundle_3_0.dtd">
 
 <translation-bundle>
 	<translation entry="10000">Example of logdoc with the parameter <value-of-param name="parameter" format="quoted" /> and <value-of-param name="number" />.</translation>

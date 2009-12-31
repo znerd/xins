@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE log PUBLIC "-//XINS//DTD XINS Logdoc 3.0//EN" "http://www.xins.org/dtd/log_3_0.dtd">
+<!DOCTYPE log PUBLIC "-//Logdoc//DTD Logdoc 3.0//EN" "http://www.xins.org/dtd/log_3_0.dtd">
 <!-- $Id: log.xml,v 1.71 2007/09/13 14:18:01 agoubard Exp $ -->
 
 <log since="XINS 1.0.0">
