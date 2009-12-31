@@ -6,6 +6,9 @@
 	<!-- Extra build file contains XINS dev-specific targets -->
 	<import file="build-dev.xml" optional="true" />
 
+	<!-- Generate everything -->
+	<target name="all" depends="jars,javadoc" description="Generates everything" />
+
 	<!-- Determine current version by reading version file.  -->
 	<target name="-load-version">
 		<property name="version.file" value=".version.properties" />
@@ -32,11 +35,13 @@
 	<target name="-init" depends="-load-version">
 
 		<!-- General project properties -->
-		<property name="project.title"    value="XINS" />
-		<property name="project.name"     value="${ant.project.name}" />
-		<property name="project.version"  value="${version.major}.${version.middle}${dot.version.minor}${version.build}${version.suffix}" />
-		<property name="package-basename" value="${name}-${project.version}" />
-		<property name="project.vendor"   value="Online Breedband B.V." />
+		<property name="project.title"     value="XINS" />
+		<property name="project.name"      value="${ant.project.name}" />
+		<property name="project.version"   value="${version.major}.${version.middle}${dot.version.minor}${version.build}${version.suffix}" />
+		<property name="project.vendor"    value="Online Breedband B.V." />
+		<property name="project.sourcedir" value="src/java" />
+		<property name="project.url"       value="http://github.com/znerd/xins/" />
+		<property name="package-basename"  value="${name}-${project.version}" />
 
 		<!-- Java compiler-related settings -->
 		<property name="javac.sourceversion" value="1.5"   />
@@ -49,7 +54,6 @@
 
 		<!-- Javadoc-related settings -->
 		<property name="javadoc.srcdir.javase" value="${java.home}/src" />
-		<property name="javadoc.srcdir.xins"   value="src/java" />
 
 		<!-- Settings related to unit- and performance-testing -->
 		<property name="testclass"     value="org.xins.tests.AllTests"     />
@@ -73,11 +77,11 @@
 		<delete dir="docs" />
 	</target>
 
-	<!-- Prepare for compilation -->
+	<!-- Prepare for compilation (typically used inside IDEs, too) -->
 	<target name="prepare-compile" depends="-init,-logdoc-task" description="Prepares for the compilation, by generating source files and/or other files to be placed with the compiled files">
 
 		<!-- Generate Java source files -->
-		<xslt in="src/xml/default_resultcodes.xml" style="src/xslt/java-server-framework/default_resultcodes_to_java.xslt" out="src/java/org/xins/server/DefaultResultCodes.java" />
+		<xslt in="src/xml/default_resultcodes.xml" style="src/xslt/java-server-framework/default_resultcodes_to_java.xslt" out="${project.sourcedir}/org/xins/server/DefaultResultCodes.java" />
 		<logdoc-java in="src/logdoc/common" out="docs/logdoc/common" accesslevel="public"  />
 		<logdoc-java in="src/logdoc/client" out="docs/logdoc/client" accesslevel="package" />
 		<logdoc-java in="src/logdoc/server" out="docs/logdoc/server" accesslevel="public"  />
@@ -85,7 +89,7 @@
 		<!-- Stick auxiliary files in location where compiled code will go --> 
 		<mkdir dir="build/classes" />
 		<copy todir="build/classes/">
-			<fileset dir="src/java/">
+			<fileset dir="${project.sourcedir}">
 				<exclude name="**/*.java" />
 				<exclude name="*/package.html" />
 			</fileset>
@@ -94,7 +98,7 @@
 
 	<!-- Compile all source files -->
 	<target name="compile" depends="prepare-compile" description="Compiles the source code">
-		<javac srcdir="src/java"
+		<javac srcdir="${project.sourcedir}"
 		     includes="org/xins/**/*.java"
 		      destdir="build/classes"
 		        debug="${javac.debug}"
@@ -155,14 +159,14 @@
 
 	<!-- Generate Javadoc -->
 	<target name="-jdksrc-avail" depends="-init">
-		<available file="${javadoc.srcdir.javase}" type="dir" property="jdksrc.available" />
+		<available file="${javase.sourcedir}" type="dir" property="jdksrc.available" />
 	</target>
 	<target name="-javadoc-sourcepath-nojdksrc" depends="-jdksrc-avail" unless="jdksrc.available">
-		<property name="javadoc.sourcepath" value="${javadoc.srcdir.xins}" />
+		<property name="javadoc.sourcepath" value="${project.sourcedir}" />
 		<echo level="verbose" message="JDK source code not available." />
 	</target>
 	<target name="-javadoc-sourcepath-jdksrc" depends="-jdksrc-avail" if="jdksrc.available">
-		<property name="javadoc.sourcepath" value="${javadoc.srcdir.xins}:${javadoc.srcdir.javase}" />
+		<property name="javadoc.sourcepath" value="${project.sourcedir}:${javase.sourcedir}" />
 		<echo level="verbose" message="JDK source code available." />
 	</target>
 	<target name="-javadoc-sourcepath" depends="-javadoc-sourcepath-nojdksrc,-javadoc-sourcepath-jdksrc" description="Determines the source path for Javadoc" />
@@ -176,7 +180,7 @@
 			<sequential>
 				<mkdir dir="@{destdir}" />
 				<javadoc doctitle="@{title}" windowtitle="@{title}" destdir="@{destdir}" private="@{private}" bottom="@{footer}" sourcepath="${javadoc.sourcepath}" source="${javac.sourceversion}" version="yes" use="yes" author="yes">
-					<packageset dir="src/java" />
+					<packageset dir="${project.sourcedir}" />
 
 					<group title="XINS/Java Common Library"   packages="org.xins.common*" />
 					<group title="XINS/Java Client Framework" packages="org.xins.client*" />
@@ -203,15 +207,12 @@
 		</macrodef>
 	</target>
 	<target name="javadoc-public" depends="-javadoc-macro" description="Generates public Javadoc API documentation" unless="nodocs">
-		<generate-javadoc private="no" destdir="docs/javadoc" title="${project.title} ${project.version}" footer="See &lt;a target=&quot;_top&quot; href='${www.url}'&gt;${www.url}&lt;/a&gt;." />
+		<generate-javadoc private="no" destdir="docs/javadoc" title="${project.title} ${project.version}" footer="See &lt;a target=&quot;_top&quot; href='${project.url}'&gt;${project.url}&lt;/a&gt;." />
 	</target>
 	<target name="javadoc-private" depends="-javadoc-macro" description="Generates private Javadoc API documentation" unless="nodocs">
-		<generate-javadoc private="yes" destdir="docs/javadoc-private" title="${project.title} ${project.version}" footer="See &lt;a target=&quot;_top&quot; href='${www.url}'&gt;${www.url}&lt;/a&gt;.&lt;br /&gt;This Javadoc API documentation set contains private and package private members as well." />
+		<generate-javadoc private="yes" destdir="docs/javadoc-private" title="${project.title} ${project.version}" footer="See &lt;a target=&quot;_top&quot; href='${project.url}'&gt;${project.url}&lt;/a&gt;.&lt;br /&gt;This Javadoc API documentation set contains private and package private members as well." />
 	</target>
 	<target name="javadoc" depends="javadoc-public,javadoc-private" description="Generates all Javadoc API documentation" unless="nodocs" />
-
-	<!-- Generate everything -->
-	<target name="all" depends="jars,javadoc" description="Generates everything" />
 
 	<!-- Help -->
 	<target name="help" description="Print the help of the main targets" depends="-init">
