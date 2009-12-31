@@ -1,2 +1,3 @@
 build
 docs
+src/java/org/xins/server/DefaultResultCodes.java
