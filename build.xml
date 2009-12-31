@@ -100,7 +100,10 @@ ${version.file}</fail>
 		<delete dir="docs" />
 	</target>
 
-	<target name="java" depends="-init" description="Compiles all Java code">
+	<target name="generate-java" depends="-init" description="Generates the necessary Java files">
+	</target>
+
+	<target name="java" depends="generate-java" description="Compiles all Java code">
 		<mkdir dir="build/classes" />
 		<javac srcdir="src/java"
 		     includes="org/xins/**/*.java"
@@ -147,28 +150,28 @@ ${version.file}</fail>
 		</manifest>
 		<jar destfile="build/xins-common.jar" basedir="build/classes/" includes="org/xins/common/**" manifest="build/xins-common.manifest" />
 
-		<!-- XINS/Java Client Library -->
+		<!-- XINS/Java Client Framework -->
 		<manifest file="build/client.manifest">
 			<section name="xins-client">
-				<attribute name="Specification-Title"    value="XINS/Java Client Library" />
-				<attribute name="Specification-Version"  value="${xins_version}"          />
-				<attribute name="Specification-Vendor"   value="${xins_vendor}"           />
-				<attribute name="Implementation-Title"   value="XINS/Java Client Library" />
-				<attribute name="Implementation-Version" value="${xins_version}"          />
-				<attribute name="Implementation-Vendor"  value="${xins_vendor}"           />
+				<attribute name="Specification-Title"    value="XINS/Java Client Framework" />
+				<attribute name="Specification-Version"  value="${xins_version}"            />
+				<attribute name="Specification-Vendor"   value="${xins_vendor}"             />
+				<attribute name="Implementation-Title"   value="XINS/Java Client Framework" />
+				<attribute name="Implementation-Version" value="${xins_version}"            />
+				<attribute name="Implementation-Vendor"  value="${xins_vendor}"             />
 			</section>
 		</manifest>
 		<jar destfile="build/xins-client.jar" basedir="build/classes/" includes="org/xins/client/**" manifest="build/xins-client.manifest" />
 
-		<!-- XINS/Java Server Library -->
+		<!-- XINS/Java Server Framework -->
 		<manifest file="build/server.manifest">
 			<section name="xins-server">
-				<attribute name="Specification-Title"    value="XINS/Java Server Library" />
-				<attribute name="Specification-Version"  value="${xins_version}"          />
-				<attribute name="Specification-Vendor"   value="${xins_vendor}"           />
-				<attribute name="Implementation-Title"   value="XINS/Java Server Library" />
-				<attribute name="Implementation-Version" value="${xins_version}"          />
-				<attribute name="Implementation-Vendor"  value="${xins_vendor}"           />
+				<attribute name="Specification-Title"    value="XINS/Java Server Framework" />
+				<attribute name="Specification-Version"  value="${xins_version}"            />
+				<attribute name="Specification-Vendor"   value="${xins_vendor}"             />
+				<attribute name="Implementation-Title"   value="XINS/Java Server Framework" />
+				<attribute name="Implementation-Version" value="${xins_version}"            />
+				<attribute name="Implementation-Vendor"  value="${xins_vendor}"             />
 			</section>
 		</manifest>
 		<jar destfile="build/xins-server.jar" basedir="build/classes/" includes="org/xins/server/**" manifest="build/xins-server.manifest" />
@@ -182,52 +185,6 @@ ${version.file}</fail>
 		<path id="path.common">
 			<pathelement path="build/classes/java-common" />
 		</path>
-		<available property="jmx.available" classname="javax.management.openmbean.OpenType">
-			<classpath>
-				<fileset dir="lib" includes="*.jar" />
-			</classpath>
-		</available>
-		<antcall target="download-jmx" />
-	</target>
-
-	<!-- TODO: Include this inside "java" target ? -->
-	<target name="java-tools" depends="java" description="Compiles the XINS/Java tools and put them in xins-common.jar">
-		<available property="spring.available" file="lib/spring.jar" />
-		<antcall target="download-spring" />
-		<javac
-		destdir="build/classes/java-common"
-		debug="${javac.debug}"
-		deprecation="${javac.deprecation}"
-		optimize="${javac.optimize}"
-		source="${javac.sourceversion}"
-		target="${javac.targetvm}">
-			<compilerarg line="${javac.compilerargs}" />
-			<src path="src/java-common" />
-			<classpath>
-				<path refid="path.common" />
-				<pathelement location="build/logdoc.jar" />
-				<pathelement location="build/xins-client.jar" />
-				<pathelement location="build/xins-server.jar" />
-				<fileset dir="lib" includes="*.jar" />
-			</classpath>
-		</javac>
-		<jar
-		destfile="build/xins-common.jar"
-		basedir="build/classes/java-common"
-		update="true"
-		includes="org/xins/common/spring/**" />
-	</target>
-
-	<target name="download-spring" unless="spring.available">
-		<get src="http://repo1.maven.org/maven2/org/springframework/spring/2.0.6/spring-2.0.6.jar" 
-		dest="lib/spring.jar" usetimestamp="true" ignoreerrors="true" />
-	</target>
-
-	<target name="download-jmx" unless="jmx.available">
-		<get src="http://xins.cvs.sourceforge.net/*checkout*/xins/xins/lib/jmxri.LICENSE.html" 
-		dest="lib/jmxri.LICENSE.html" usetimestamp="true" ignoreerrors="true" />
-		<get src="http://xins.cvs.sourceforge.net/*checkout*/xins/xins/lib/jmxri.jar" 
-		dest="lib/jmxri.jar" usetimestamp="true" ignoreerrors="true" />
 	</target>
 
 	<target name="TODO-build-framework">
