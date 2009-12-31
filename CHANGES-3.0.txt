@@ -6,7 +6,10 @@ XINS project file:
   APIs, default is "apis" (which is backwards compatible).
 
 Logdoc:
-* Added support for parameter value filtering.
+* Separated out to a separate project, see http://github.com/znerd/logdoc/.
+
+Java2HTML:
+* Removed support for j2h (Java2HTML).
 
 XINS/Java Common Library:
 * Added various logXXX methods to the Utils class.
