@@ -27,10 +27,10 @@ public final class Library {
     * Returns the version of this library.
     *
     * @return
-    *    the version of this library, for example <code>"1.0.0"</code>,
+    *    the version of this library, for example <code>"3.0"</code>,
     *    never <code>null</code>.
     */
-   public static String getVersion() {
-      return "%%VERSION%%";
+   public static final String getVersion() {
+      return Library.class.getPackage().getImplementationVersion();
    }
 }

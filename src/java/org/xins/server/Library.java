@@ -6,8 +6,6 @@
  */
 package org.xins.server;
 
-import org.apache.oro.text.regex.Pattern;
-import org.apache.oro.text.regex.Perl5Matcher;
 import org.xins.common.text.PatternUtils;
 
 /**
@@ -21,19 +19,6 @@ import org.xins.common.text.PatternUtils;
 public final class Library {
 
    /**
-    * Regular expression that production release versions of XINS match,
-    * and non-production release versions do not.
-    */
-   private static final String PRODUCTION_RELEASE_PATTERN_STRING = "[1-9][0-9]*\\.[0-9]+(\\.[0-9]+)?";
-
-   /**
-    * The <code>Pattern</code> that production release versions of XINS match,
-    * and non-production release versions do not. This is the precompiled
-    * version of {@link #PRODUCTION_RELEASE_PATTERN_STRING}.
-    */
-   private static final Pattern PRODUCTION_RELEASE_PATTERN = PatternUtils.createPattern(PRODUCTION_RELEASE_PATTERN_STRING);
-
-   /**
     * Constructs a new <code>Library</code> object.
     */
    private Library() {
@@ -44,11 +29,11 @@ public final class Library {
     * Returns the version of this library.
     *
     * @return
-    *    the version of this library, for example <code>"1.0.0"</code>,
+    *    the version of this library, for example <code>"3.0"</code>,
     *    never <code>null</code>.
     */
    public static final String getVersion() {
-      return "%%VERSION%%";
+      return Library.class.getPackage().getImplementationVersion();
    }
 
    /**
@@ -64,9 +49,8 @@ public final class Library {
     * @throws NullPointerException
     *    if <code>version == null</code>.
     */
-   static final boolean isProductionRelease(String version)
-   throws NullPointerException {
-      Perl5Matcher patternMatcher = new Perl5Matcher();
-      return patternMatcher.matches(version, PRODUCTION_RELEASE_PATTERN);
+   static final boolean isProductionRelease(String version) throws NullPointerException {
+      return version.matches("[1-9][0-9]*\\.[0-9]+(\\.[0-9]+)?");
+      // TODO: Review (the location of) this method
    }
 }
