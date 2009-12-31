@@ -16,7 +16,8 @@
 
 	<xsl:template match="resultcodes">
 		<xsl:call-template name="java-header" />
-		<xsl:text>package org.xins.server;
+		<xsl:text>// WARNING: This file is generated. Do not edit.
+package org.xins.server;
 
 import java.util.Arrays;
 import java.util.Collections;

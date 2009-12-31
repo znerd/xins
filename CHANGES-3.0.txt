@@ -111,8 +111,12 @@ Generation of specdocs:
 * Showing ellipsis instead of API_PATH in function example requests.
 * Added classes and IDs on elements in index.html, to easen custom styling.
 
+Generation of Java code:
+* Changed default_resultcodes_to_java.xslt to put a warning ("do not edit")
+  in the top of the generated Java source file.
+
 Other:
+* Marked all XSLT stylesheets as XSLT version 2.0 (instead of 1.0).
 * Added DTDs for XINS 3.0.
 * Simplied 'xins' shell script and 'xins.bat' batch file.
-* Marked all XSLT stylesheets as XSLT version 2.0 (instead of 1.0).
 * XINS own build(-dev).xml now passes Xlint compilerarg to javac.
