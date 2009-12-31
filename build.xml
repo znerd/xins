@@ -78,9 +78,9 @@
 
 		<!-- Generate Java source files -->
 		<xslt in="src/xml/default_resultcodes.xml" style="src/xslt/java-server-framework/default_resultcodes_to_java.xslt" out="src/java/org/xins/server/DefaultResultCodes.java" />
-		<logdoc-java in="src/logdoc/common" output="docs/logdoc/common" accesslevel="public"  />
-		<logdoc-java in="src/logdoc/client" output="docs/logdoc/client" accesslevel="package" />
-		<logdoc-java in="src/logdoc/server" output="docs/logdoc/server" accesslevel="public"  />
+		<logdoc-java in="src/logdoc/common" out="docs/logdoc/common" accesslevel="public"  />
+		<logdoc-java in="src/logdoc/client" out="docs/logdoc/client" accesslevel="package" />
+		<logdoc-java in="src/logdoc/server" out="docs/logdoc/server" accesslevel="public"  />
 
 		<!-- Stick auxiliary files in location where compiled code will go --> 
 		<mkdir dir="build/classes" />
@@ -144,9 +144,9 @@
 		<taskdef resource="org/xins/logdoc/ant/antlib.xml" classpath="${logdoc.jar}" />
 	</target>
 	<target name="logdoc-html" depends="-logdoc-task" description="Generates the HTML for the Logdoc documentation">
-		<logdoc-html in="src/logdoc/client" output="docs/logdoc/common" />
-		<logdoc-html in="src/logdoc/client" output="docs/logdoc/client" />
-		<logdoc-html in="src/logdoc/server" output="docs/logdoc/server" />
+		<logdoc-html in="src/logdoc/client" out="docs/logdoc/common" />
+		<logdoc-html in="src/logdoc/client" out="docs/logdoc/client" />
+		<logdoc-html in="src/logdoc/server" out="docs/logdoc/server" />
 
 		<copy file="src/css/logdoc/style.css" todir="docs/logdoc/common/html" />
 		<copy file="src/css/logdoc/style.css" todir="docs/logdoc/client/html" />
