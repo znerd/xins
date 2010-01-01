@@ -145,7 +145,11 @@
 
 	<!-- Logdoc -->
 	<target name="-logdoc-task" depends="-init" description="Initializes the Logdoc task">
-		<taskdef resource="org/xins/logdoc/ant/antlib.xml" classpath="${logdoc.jar}" />
+		<taskdef resource="org/xins/logdoc/ant/antlib.xml">
+			<classpath>
+				<pathelement location="${logdoc.jar}" />
+			</classpath>
+		</taskdef>
 	</target>
 	<target name="logdoc-html" depends="-logdoc-task" description="Generates the HTML for the Logdoc documentation">
 		<logdoc-html in="src/logdoc/client" out="docs/logdoc/common" />
