@@ -2,7 +2,7 @@
 <!DOCTYPE log PUBLIC "-//Logdoc//DTD Logdoc 3.0//EN" "http://www.xins.org/dtd/log_3_0.dtd">
 <!-- $Id: log.xml,v 1.71 2007/09/13 14:18:01 agoubard Exp $ -->
 
-<log since="XINS 1.0.0">
+<log since="XINS 1.0.0" domain="org.xins.common" public="true">
 	<translation-bundle locale="en_US" />
 	<translation-bundle locale="fr_FR" />
 
