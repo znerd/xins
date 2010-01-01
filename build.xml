@@ -91,7 +91,7 @@
 		<copy todir="build/classes/">
 			<fileset dir="${project.sourcedir}">
 				<exclude name="**/*.java" />
-				<exclude name="*/package.html" />
+				<exclude name="**/package.html" />
 			</fileset>
 		</copy>
 	</target>
