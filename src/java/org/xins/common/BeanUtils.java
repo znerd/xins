@@ -170,7 +170,7 @@ public class BeanUtils {
     *
     * @since XINS 2.0
     */
-   public static Object convert(Object origValue, final Class<?> destClass) {
+   public static Object convert(Object origValue, Class<?> destClass) {
 
       // Short-circuit if the target class already matches
       if (origValue.getClass() == destClass) {

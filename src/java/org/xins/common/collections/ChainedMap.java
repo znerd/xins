@@ -43,7 +43,7 @@ public class ChainedMap<K,V> extends AbstractMap<K,V> implements Cloneable, Seri
    /**
     * The key/pair entries of the Map.
     */
-   private final List<MapEntry<K,V>> _entries = new ArrayList<MapEntry<K,V>>();
+   private final List<Map.Entry<K,V>> _entries = new ArrayList<Map.Entry<K,V>>();
 
    /**
     * Creates a new instance of <code>ChainedMap</code>.
@@ -60,7 +60,7 @@ public class ChainedMap<K,V> extends AbstractMap<K,V> implements Cloneable, Seri
    @Override
    public Collection<V> values() {
       List<V> values = new ArrayList<V>();
-      for (MapEntry entry : _entries) {
+      for (Map.Entry<K,V> entry : _entries) {
          values.add(entry.getValue());
       }
       return values;
