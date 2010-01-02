@@ -1,3 +1,5 @@
+.classpath
+.project
 build
 docs
 src/java/org/xins/client/Log.java
