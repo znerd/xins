@@ -4,8 +4,14 @@ build
 docs
 src/java/org/xins/client/Log.java
 src/java/org/xins/client/TranslationBundle.java
+src/java/org/xins/client/TranslationBundle_en_US.java
+src/java/org/xins/client/TranslationBundle_fr_FR.java
 src/java/org/xins/common/Log.java
 src/java/org/xins/common/TranslationBundle.java
+src/java/org/xins/common/TranslationBundle_en_US.java
+src/java/org/xins/common/TranslationBundle_fr_FR.java
 src/java/org/xins/server/DefaultResultCodes.java
 src/java/org/xins/server/Log.java
 src/java/org/xins/server/TranslationBundle.java
+src/java/org/xins/server/TranslationBundle_en_US.java
+src/java/org/xins/server/TranslationBundle_fr_FR.java
