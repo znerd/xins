@@ -82,9 +82,9 @@
 
 		<!-- Generate Java source files -->
 		<xslt in="src/xml/default_resultcodes.xml" style="src/xslt/java-server-framework/default_resultcodes_to_java.xslt" out="${project.sourcedir}/org/xins/server/DefaultResultCodes.java" />
-		<logdoc-java in="src/logdoc/common" out="src/java" />
-		<logdoc-java in="src/logdoc/client" out="src/java" />
-		<logdoc-java in="src/logdoc/server" out="src/java" />
+		<logdoc-code in="src/logdoc/common" out="src/java" />
+		<logdoc-code in="src/logdoc/client" out="src/java" />
+		<logdoc-code in="src/logdoc/server" out="src/java" />
 
 		<!-- Stick auxiliary files in location where compiled code will go --> 
 		<mkdir dir="build/classes" />
@@ -145,7 +145,7 @@
 
 	<!-- Logdoc -->
 	<target name="-logdoc-task" depends="-init" description="Initializes the Logdoc task">
-		<taskdef resource="org/xins/logdoc/ant/antlib.xml">
+		<taskdef resource="org/znerd/logdoc/ant/antlib.xml">
 			<classpath>
 				<pathelement location="${logdoc.jar}" />
 			</classpath>
