@@ -102,6 +102,7 @@ Libraries:
 * Removed Xerces library (xercesImpl.jar, xml-apis.jar), relying on the
   Xerces distribution as part of Java SE platform.
 * Put spring.jar (Spring Framework 2.0.8) in lib directory.
+* Put commons-lang.jar in lib directory.
 
 Serialization:
 * Added a serialVersionUID field to some classes, this may break compatibility
