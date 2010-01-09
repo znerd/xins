@@ -60,7 +60,8 @@
 		<property name="perftestclass" value="org.xins.perftests.AllTests" />
 
 		<!-- Class paths -->
-		<property name="logdoc.jar" value="${basedir}/lib/logdoc.jar" />
+		<property name="logdoc.jar"       value="${basedir}/lib/logdoc.jar" />
+		<property name="commons-lang.jar" value="${basedir}/lib/commons-lang.jar" />
 	</target>
 
 	<!-- Display relevant versions -->
@@ -148,6 +149,7 @@
 		<taskdef resource="org/znerd/logdoc/ant/antlib.xml">
 			<classpath>
 				<pathelement location="${logdoc.jar}" />
+				<pathelement location="${commons-lang.jar}" />
 			</classpath>
 		</taskdef>
 	</target>
