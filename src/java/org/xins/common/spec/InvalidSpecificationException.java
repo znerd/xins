@@ -6,8 +6,6 @@
  */
 package org.xins.common.spec;
 
-import org.xins.logdoc.ExceptionUtils;
-
 /**
  * Thrown when the specification of the API is incorrect or cannot be found.
  *
@@ -18,32 +16,37 @@ import org.xins.logdoc.ExceptionUtils;
  */
 public class InvalidSpecificationException extends Exception {
 
-   /**
-    * Creates a new <code>InvalidSpecificationException</code> with the reason
-    * of the problem.
-    *
-    * @param message
-    *    the reason why this exception has been thrown, can be <code>null</code>.
-    */
-   InvalidSpecificationException(String message) {
-      this(message, null);
-   }
+	/**
+	 * Serialization ID.
+	 */
+	private static final long serialVersionUID = 8346877941172915039L;
 
-   /**
-    * Creates a new <code>InvalidSpecificationException</code> with the reason
-    * of the problem.
-    *
-    * @param message
-    *    the reason why this exception has been thrown, can be <code>null</code>.
-    *
-    * @param cause
-    *    the cause of the exception, can be <code>null</code>.
-    */
-   InvalidSpecificationException(String message, Throwable cause) {
-      super(message);
-      if (cause != null) {
-         initCause(cause);
-      }
-   }
+	/**
+	 * Creates a new <code>InvalidSpecificationException</code> with the reason
+	 * of the problem.
+	 *
+	 * @param message
+	 *    the reason why this exception has been thrown, can be <code>null</code>.
+	 */
+	InvalidSpecificationException(String message) {
+		this(message, null);
+	}
+
+	/**
+	 * Creates a new <code>InvalidSpecificationException</code> with the reason
+	 * of the problem.
+	 *
+	 * @param message
+	 *    the reason why this exception has been thrown, can be <code>null</code>.
+	 *
+	 * @param cause
+	 *    the cause of the exception, can be <code>null</code>.
+	 */
+	InvalidSpecificationException(String message, Throwable cause) {
+		super(message);
+		if (cause != null) {
+			initCause(cause);
+		}
+	}
 
 }
