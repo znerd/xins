@@ -193,8 +193,11 @@ public class XINSServiceCaller extends ServiceCaller {
    }
 
    /**
-    * Constructs a new <code>XINSServiceCaller</code> with the specified
-    * descriptor and the default HTTP method.
+    * Constructs a new <code>XINSServiceCaller</code> with no
+    * descriptor (yet) and the default HTTP method.
+    * 
+    * <p>Before actual calls can be made, {@link #setDescriptor(Descriptor)}
+    * should be used to set the descriptor.
     *
     * @since XINS 1.2.0
     */
