@@ -233,30 +233,41 @@ public class XINSServiceCaller extends ServiceCaller {
           ||  "file".equals(protocol);
    }
 
+   @Override
    public void setDescriptor(Descriptor descriptor) {
       super.setDescriptor(descriptor);
 
       // Create the ServiceCaller for each descriptor
       if (_serviceCallers == null) {
          _serviceCallers = new HashMap<TargetDescriptor, ServiceCaller>();
-      }
-      if (descriptor != null) {
-         for (TargetDescriptor nextTarget : descriptor.targets()) {
-            String protocol = nextTarget.getProtocol();
-
-            // HTTP or HTTPS protocol
-            if ("http".equalsIgnoreCase(protocol) || "https".equalsIgnoreCase(protocol)) {
-               HTTPServiceCaller serviceCaller = new HTTPServiceCaller(nextTarget);
-               _serviceCallers.put(nextTarget, serviceCaller);
-
-            // FILE protocol
-            } else if ("file".equalsIgnoreCase(protocol)) {
-               FileServiceCaller serviceCaller = new FileServiceCaller(nextTarget);
-               _serviceCallers.put(nextTarget, serviceCaller);
-            }
-         }
       } else {
          _serviceCallers.clear();
+      }
+      
+      // Create an HTTP- or File-caller for each descriptor
+      if (descriptor != null) {
+         for (TargetDescriptor target : descriptor.targets()) {
+            
+            String protocol = target.getProtocol().toLowerCase();
+            
+            ServiceCaller caller;
+
+            // HTTP or HTTPS protocol
+            if ("http".equals(protocol) || "https".equals(protocol)) {
+               caller = new HTTPServiceCaller(target);
+
+            // FILE protocol
+            } else if ("file".equals(protocol)) {
+               caller = new FileServiceCaller(target);
+               
+            // Unsupported protocol
+            } else {
+               // TODO: Consider using a specific exception type 
+               throw new RuntimeException("Unsupported protocol \"" + protocol + "\" in descriptor.");
+            }
+            
+            _serviceCallers.put(target, caller);
+         }
       }
    }
 
