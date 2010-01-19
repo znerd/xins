@@ -124,6 +124,15 @@ boolean         failOver = true;
 public class XINSServiceCaller extends ServiceCaller {
 
    /**
+    * Performs (client-side) transaction logging.
+    * 
+    * 
+    */
+   private static final void logTransaction(Throwable exception, long start, String url, String functionName, long duration, String errorCode, PropertyReader inParams, PropertyReader outParams) {
+      
+   }
+   
+   /**
     * The result parser. This field cannot be <code>null</code>.
     */
    private final XINSCallResultParser _parser;
@@ -566,25 +575,34 @@ public class XINSServiceCaller extends ServiceCaller {
       // Call failed due to a generic service calling error
       } catch (GenericCallException exception) {
          duration = exception.getDuration();
+         String errorCode;
          if (exception instanceof UnknownHostCallException) {
             Log.log_2102(url, function, params, duration);
+            errorCode = "=UnknownHost";
          } else if (exception instanceof ConnectionRefusedCallException) {
             Log.log_2103(url, function, params, duration);
+            errorCode = "=ConnectionRefused";
          } else if (exception instanceof ConnectionTimeOutCallException) {
             Log.log_2104(url, function, params, duration, connectionTimeOut);
+            errorCode = "=ConnectionTimeOut";
          } else if (exception instanceof SocketTimeOutCallException) {
             Log.log_2105(url, function, params, duration, socketTimeOut);
+            errorCode = "=SocketTimeOut";
          } else if (exception instanceof TotalTimeOutCallException) {
             Log.log_2106(url, function, params, duration, totalTimeOut);
+            erroCode = "=TotalTimeOut";
          } else if (exception instanceof IOCallException) {
             Log.log_2109(exception, url, function, params, duration);
+            errorCode = "=IOError";
          } else if (exception instanceof UnexpectedExceptionCallException) {
             Log.log_2111(exception.getCause(), url, function, params, duration);
+            errorCode = "=UnexpectedException";
          } else {
-            String detail = "Unrecognized GenericCallException subclass "
-                  + exception.getClass().getName() + '.';
+            String detail = "Unrecognized GenericCallException subclass " + exception.getClass().getName() + '.';
             Utils.logProgrammingError(detail);
+            errorCode = "=UnrecognizedGenericCallException";
          }
+         logTransaction(exception, start, url, function, duration, errorCode, params, null);
          throw exception;
 
       // Call failed due to an HTTP-related error
