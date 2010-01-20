@@ -128,8 +128,8 @@ public class XINSServiceCaller extends ServiceCaller {
     * 
     * 
     */
-   private static final void logTransaction(Throwable exception, long start, String url, String functionName, long duration, String errorCode, PropertyReader inParams, PropertyReader outParams) {
-      
+   private static final void logTransaction(Throwable exception, long start, String url, String functionName, long duration, String errorCode, FormattedParameters inParams, FormattedParameters outParams) {
+      // TODO FIXME
    }
    
    /**
@@ -590,7 +590,7 @@ public class XINSServiceCaller extends ServiceCaller {
             errorCode = "=SocketTimeOut";
          } else if (exception instanceof TotalTimeOutCallException) {
             Log.log_2106(url, function, params, duration, totalTimeOut);
-            erroCode = "=TotalTimeOut";
+            errorCode = "=TotalTimeOut";
          } else if (exception instanceof IOCallException) {
             Log.log_2109(exception, url, function, params, duration);
             errorCode = "=IOError";
