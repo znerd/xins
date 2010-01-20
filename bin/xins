@@ -31,8 +31,14 @@ if [ "$1" = "-version" ] || [ "$1" = "version" ]; then
 	exit 0
 fi
 
+# Explicitly determine the first target, default to "help"
+first_target=$1
+if [ "${first_target}" == "" ]; then
+	first_target=help
+fi
+
 # Create the build file if needed (by invoking Ant)
-ant -Dxins_home=${XINS_HOME} -q -f ${BOOT_XML}
+ant -Dxins_home=${XINS_HOME} -Dfirst_target=${first_target} -q -f ${BOOT_XML}
 
 # If Ant returned successfully, then invoke Ant against the generated build file
 if [ "$?" = "0" ]; then
