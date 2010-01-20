@@ -1,27 +1,198 @@
 This file contains a detailed explanation of the changes between individual
 versions of XINS.
 
-$Id: CHANGES,v 1.2404 2008/03/13 09:24:20 agoubard Exp $
+$Id: CHANGES,v 1.2453 2010/01/18 20:22:56 agoubard Exp $
+______________________________________________________________________________
+CHANGES INTRODUCED IN XINS 2.3 ALPHA 3:
+
+* XINS/Java Server Framework:
+  - Use Log4J NDC instead of ThreadLocal to store session in xins FF.
+  - Reversed use of Log4J NDC in xins FF.
+  - Creation of the API using the constructor of APIImpl.
+
+* Unit tests:
+  - Fixed empty lines in XSLT tests.
+
+* Generation of server-side Java code:
+  - Removed static SINGLETON field in APIImpl.
+  - Functions are now created in the constructor of the API.
+
+* Generated build file:
+  - Added create-project.
+  - Call of xins version is done in the make-build.xml.
+
+* Build- and release-process:
+  - The releases now need to be uploaded via the browser.
+  - Fixed unresolved classes for Netbeans.
+  - Added Netbeans 6.7 project files.
+
+* Librairies:
+  - Removed JSP and DTD files from servlet.jar as not needed.
+
+* Documentation:
+  - Fixed some broken links in the calling convention primer.
+
+______________________________________________________________________________
+CHANGES INTRODUCED IN XINS 2.3 ALPHA 2:
+
+* XINS/Java Common Library:
+  - Fixed bug #2855100: HTTPServiceCaller creates too many open sockets.
+
+* XINS/Java Server Framework:
+  - Improved detection of sub-domain for cookies in the xinsff convention.
+  - Fixed bug #2884559: Adding domain to cookie only when valid in xinsff.
+  - Removed exact number check for Servlet version, 2.2 or higher is supported.
+
+* Librairies:
+  - Upgraded Commons Codec from 1.3 to 1.4.
+  - Upgraded Commons Logging from 1.1 to 1.1.1.
+  - Upgraded Commons Net from 1.4.1 to 2.0.
+
+* Build- and release-process:
+  - Used the unless="no-ftp" instead of no-upload for targets without sshexec.
+
+______________________________________________________________________________
+CHANGES INTRODUCED IN XINS 2.3 ALPHA 1:
+
+* XINS/Java Common Library:
+  - Catch possible missing InetAddress class in IPAddressUtils to make API's
+    compatible with Google App Engine.
+  - Inner classes of ChainedMap should also be Serializable.
+  - If no description is set the spec package will return "" instead of null.
+
+* XINS/Java Server Framework:
+  - Use IPAddressUtils to get the IP address for the APIManager.
+
+* Generation of specdocs:
+  - Fixed bug #1847893: Regex pattern get padded with superflous characters.
+
+* Generation of the WSDL:
+  - Fixed incorrect binding for resultcodes.
+  - Fixed Incorrect indentation for input bindings.
+  - Fixed Bug #2797857: Incorrect location of the SOAP binding operation.
+
+* Tools:
+  - Added appengine target to deploy in Google App Engine.
+
+* Build- and release-process:
+  - Stable version is 2.2 for maven.
+  - Used ${www.url} property for xins URL for Maven mail.
+
+* Documentation:
+  - Changed install primer to with "or later" after version numbers.
+  - Added small precisions to the user guide.
+  - Point Souceforge.net logo to project page as requested by Sourceforge.
+  - Added section about output section possible in error codes.
+
+* Other:
+  - Added XINS indentation preferences for NetBeans in nbproject/project.xml.
+
+______________________________________________________________________________
+CHANGES INTRODUCED IN XINS 2.2:
+
+* Build- and release-process:
+  - Added clean target for the documentation.
+  - Improved release-process.txt document.
+
+______________________________________________________________________________
+CHANGES INTRODUCED IN XINS 2.2 RC 1:
+
+* XINS/Java Common Library:
+  - Declared _xml in the spec package.
+
+* Generation of server-side Java code:
+  - _xml should translate to the XML class and not Xml.
+
+* Unit tests:
+  - Added unit tests for the XML element.
+
+* Build- and release-process:
+  - Clean done once before the tests when creating a release.
+  - Improved documentation on creating a release.
+  - Installer target also uploads the file.
+  - Fixed upload-homepage target.
+
+* Documentation:
+  - Added new features in the XINS user guide.
+
+______________________________________________________________________________
+CHANGES INTRODUCED IN XINS 2.2 BETA 2:
+
+* XINS/Java Common Library:
+  - Fixed bug #1861811: Added possibility to specify an authority in a URL
+    for the TargetDescriptor.
+
+* Generation of client-side Java code:
+  - Fixed bug #2320665: "result" can not be used as input parameter name with
+    capis.
+
+* Documentation:
+  - Fixed incorrect documentation of the callxins task.
+  - Removed invalid links in web site.
+
+______________________________________________________________________________
+CHANGES INTRODUCED IN XINS 2.2 BETA 1:
+
+* XINS/Java Common Library:
+  - Fixed BeanUtils#populate to also populate from the data elements.
+
+* Unit tests:
+  - Disabled test with http://xins.sourceforge.net/patterntest.php as the
+    PHP no longer work.
+  - Changed W3C URLs to Apache URLs as W3C doesn't accept HTTPClient
+    requests anymore.
+
+* Build- and release-process:
+  - Upload of the release is done using sftp instead of the deprecated ftp
+    system.
+  - Upload to the web site is done on a new server.
+  - Added new required property sf.upload.dir for
+    $HOME/.sourceforge.properties.
+
 ______________________________________________________________________________
 CHANGES INTRODUCED IN XINS 2.2 ALPHA 2:
 
 * XINS/Java Common Library:
   - The fromString should throw the same TypeValueException as fromStringImpl.
+  - The check of the value is done in fromStringImpl.
+  - Added possibility for the HTTPServiceCaller to follow redirections.
+  - Improved documentation of HTTPServiceCaller.
+  - Added _xml simple type.
+  - RFE 1863102: Make HTTPServiceCaller use controlTimeOut.
 
 * XINS/Java Server Framework:
   - Changed the way CompositeDataSupport is created for Properties in order
     to still compile with Java 6.
   - Fixed the way the percentage used statistics is computed.
+  - RFE 2009573: Improve log message 3583.
+  - RFE 2013460: Generate diagnostic context identifier if an invalid one is
+    sent.
+
+* XINS/Java Client Framework:
+  - Added possibility for the XINSServiceCaller to follow redirections.
 
 * Generation of server-side Java code:
-  - Forward the details of the TypeValueException in the generated 
+  - Forward the details of the TypeValueException in the generated
     RuntimeProperties.
+
+* Generation of the WSDL:
+  - Added name attribute to input and output elements for better .Net
+    interoperability.
+  - Added <soapbind:operation soapAction="" /> for better .Net
+    interoperability.
 
 * Generated build file:
   - Fixed incorrect comment in help target, tools target -> help-tools target.
 
+* Logdoc:
+  - Added to logs that are at FATAL level the class name and the message of the
+    exception thrown if any.
+
 * DTD:
   - Added missing em in impl.dtd.
+
+* Other:
+  - New copyright owner Online Breedband B.V.
 
 ______________________________________________________________________________
 CHANGES INTRODUCED IN XINS 2.2 ALPHA 1:
@@ -62,7 +233,7 @@ CHANGES INTRODUCED IN XINS 2.2 ALPHA 1:
     declared in impl.xml is the Front-end CC.
   - Changed '/*' instead of '/' for the URL pattern in the generated web.xml
     as Tomcat 5 and 6 will return null for the getPathInfo otherwise.
-  - Added new element web-app in impl.xml which allow to specify extra 
+  - Added new element web-app in impl.xml which allow to specify extra
     XML elements that you want to add in the generated web.xml file.
 
 * Documentation:
@@ -119,7 +290,7 @@ CHANGES INTRODUCED IN XINS 2.1 RC 1:
   - Updated maven tools to point to xins 2.1.
 
 * Installer:
-  - Changed the script installer to make it more independant of the project 
+  - Changed the script installer to make it more independant of the project
     location and the OS.
 
 * Documentation:
@@ -1397,6 +1568,7 @@ CHANGES INTRODUCED IN XINS 1.5.0 BETA 4:
   - Added check that the InputStream in the internal servlet container reads
     the input.
   - Removed post condition check which was using too much CPU time.
+
   - Replaced exception.printStackTrace() with correct logging.
   - Slightly improved the HTTPServletHandler, correctly handling exceptions
     from the httpQuery method, and logging ignored exceptions caused by the
@@ -3603,6 +3775,7 @@ CHANGES INTRODUCED IN XINS 1.2.0 BETA 3:
 * Documentation:
   - Improved README.html file.
 
+
 * Tools:
 
   - Various improvements for the Windows installer.
@@ -4267,7 +4440,7 @@ CHANGES INTRODUCED IN XINS 1.1.0 ALPHA 8:
   - Moved some common functionality from the CallingConvention subclasses up
     to class CallingConvention self. The calling conventions now behave the
     same with regard to the determination of the function name. If the
-    function name is specified both in the parameter "_function" and in the
+    function name is specified both in the paramter "_function" and in the
     parameter "function", then both must be the same. Otherwise the request is
     considered invalid.
     All incoming parameters that do not match the pattern "[a-z][a-z0-9_]*"
