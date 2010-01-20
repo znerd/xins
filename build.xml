@@ -76,6 +76,21 @@
 		<delete dir="build" />
 		<delete dir="src/tests/build" />
 		<delete dir="docs" />
+
+		<!-- Logdoc-generated files -->
+		<delete file="src/java/org/xins/client/Log.java" />
+		<delete file="src/java/org/xins/client/TranslationBundle.java" />
+		<delete file="src/java/org/xins/client/TranslationBundle_en_US.java" />
+		<delete file="src/java/org/xins/client/TranslationBundle_fr_FR.java" />
+		<delete file="src/java/org/xins/common/Log.java" />
+		<delete file="src/java/org/xins/common/TranslationBundle.java" />
+		<delete file="src/java/org/xins/common/TranslationBundle_en_US.java" />
+		<delete file="src/java/org/xins/common/TranslationBundle_fr_FR.java" />
+		<delete file="src/java/org/xins/server/DefaultResultCodes.java" />
+		<delete file="src/java/org/xins/server/Log.java" />
+		<delete file="src/java/org/xins/server/TranslationBundle.java" />
+		<delete file="src/java/org/xins/server/TranslationBundle_en_US.java" />
+		<delete file="src/java/org/xins/server/TranslationBundle_fr_FR.java" />
 	</target>
 
 	<!-- Prepare for compilation (typically used inside IDEs, too) -->

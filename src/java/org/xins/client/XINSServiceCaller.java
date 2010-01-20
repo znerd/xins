@@ -124,6 +124,15 @@ boolean         failOver = true;
 public class XINSServiceCaller extends ServiceCaller {
 
    /**
+    * Performs (client-side) transaction logging.
+    * 
+    * 
+    */
+   private static final void logTransaction(Throwable exception, long start, String url, String functionName, long duration, String errorCode, PropertyReader inParams, PropertyReader outParams) {
+      
+   }
+   
+   /**
     * The result parser. This field cannot be <code>null</code>.
     */
    private final XINSCallResultParser _parser;
@@ -193,8 +202,11 @@ public class XINSServiceCaller extends ServiceCaller {
    }
 
    /**
-    * Constructs a new <code>XINSServiceCaller</code> with the specified
-    * descriptor and the default HTTP method.
+    * Constructs a new <code>XINSServiceCaller</code> with no
+    * descriptor (yet) and the default HTTP method.
+    * 
+    * <p>Before actual calls can be made, {@link #setDescriptor(Descriptor)}
+    * should be used to set the descriptor.
     *
     * @since XINS 1.2.0
     */
@@ -230,30 +242,41 @@ public class XINSServiceCaller extends ServiceCaller {
           ||  "file".equals(protocol);
    }
 
+   @Override
    public void setDescriptor(Descriptor descriptor) {
       super.setDescriptor(descriptor);
 
       // Create the ServiceCaller for each descriptor
       if (_serviceCallers == null) {
          _serviceCallers = new HashMap<TargetDescriptor, ServiceCaller>();
-      }
-      if (descriptor != null) {
-         for (TargetDescriptor nextTarget : descriptor.targets()) {
-            String protocol = nextTarget.getProtocol();
-
-            // HTTP or HTTPS protocol
-            if ("http".equalsIgnoreCase(protocol) || "https".equalsIgnoreCase(protocol)) {
-               HTTPServiceCaller serviceCaller = new HTTPServiceCaller(nextTarget);
-               _serviceCallers.put(nextTarget, serviceCaller);
-
-            // FILE protocol
-            } else if ("file".equalsIgnoreCase(protocol)) {
-               FileServiceCaller serviceCaller = new FileServiceCaller(nextTarget);
-               _serviceCallers.put(nextTarget, serviceCaller);
-            }
-         }
       } else {
          _serviceCallers.clear();
+      }
+      
+      // Create an HTTP- or File-caller for each descriptor
+      if (descriptor != null) {
+         for (TargetDescriptor target : descriptor.targets()) {
+            
+            String protocol = target.getProtocol().toLowerCase();
+            
+            ServiceCaller caller;
+
+            // HTTP or HTTPS protocol
+            if ("http".equals(protocol) || "https".equals(protocol)) {
+               caller = new HTTPServiceCaller(target);
+
+            // FILE protocol
+            } else if ("file".equals(protocol)) {
+               caller = new FileServiceCaller(target);
+               
+            // Unsupported protocol
+            } else {
+               // TODO: Consider using a specific exception type 
+               throw new RuntimeException("Unsupported protocol \"" + protocol + "\" in descriptor.");
+            }
+            
+            _serviceCallers.put(target, caller);
+         }
       }
    }
 
@@ -552,25 +575,34 @@ public class XINSServiceCaller extends ServiceCaller {
       // Call failed due to a generic service calling error
       } catch (GenericCallException exception) {
          duration = exception.getDuration();
+         String errorCode;
          if (exception instanceof UnknownHostCallException) {
             Log.log_2102(url, function, params, duration);
+            errorCode = "=UnknownHost";
          } else if (exception instanceof ConnectionRefusedCallException) {
             Log.log_2103(url, function, params, duration);
+            errorCode = "=ConnectionRefused";
          } else if (exception instanceof ConnectionTimeOutCallException) {
             Log.log_2104(url, function, params, duration, connectionTimeOut);
+            errorCode = "=ConnectionTimeOut";
          } else if (exception instanceof SocketTimeOutCallException) {
             Log.log_2105(url, function, params, duration, socketTimeOut);
+            errorCode = "=SocketTimeOut";
          } else if (exception instanceof TotalTimeOutCallException) {
             Log.log_2106(url, function, params, duration, totalTimeOut);
+            erroCode = "=TotalTimeOut";
          } else if (exception instanceof IOCallException) {
             Log.log_2109(exception, url, function, params, duration);
+            errorCode = "=IOError";
          } else if (exception instanceof UnexpectedExceptionCallException) {
             Log.log_2111(exception.getCause(), url, function, params, duration);
+            errorCode = "=UnexpectedException";
          } else {
-            String detail = "Unrecognized GenericCallException subclass "
-                  + exception.getClass().getName() + '.';
+            String detail = "Unrecognized GenericCallException subclass " + exception.getClass().getName() + '.';
             Utils.logProgrammingError(detail);
+            errorCode = "=UnrecognizedGenericCallException";
          }
+         logTransaction(exception, start, url, function, duration, errorCode, params, null);
          throw exception;
 
       // Call failed due to an HTTP-related error
