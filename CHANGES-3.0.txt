@@ -77,7 +77,8 @@ XINS/Java Common Library:
 * Changed FunctionSpec/APISpec methods to return unmodifiable collections/maps.
 
 XINS/Java Client Framework:
-* Client: Enabled parameter value filtering for messages 2100-2115.
+* Enabled parameter value filtering for messages 2100-2115.
+* Client-side transaction logging in XINSServiceCaller, messages 2300/2301.
 
 XINS/Java Server Framework:
 * Logged the time taken by the initialization.
