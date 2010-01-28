@@ -129,7 +129,8 @@ public class XINSServiceCaller extends ServiceCaller {
     * 
     */
    private static final void logTransaction(Throwable exception, long start, String url, String functionName, long duration, String errorCode, FormattedParameters inParams, FormattedParameters outParams) {
-      // TODO FIXME
+      Log.log_2300(exception, start, url, functionName, duration, errorCode, inParams, outParams);
+      Log.log_2301(exception, start, url, functionName, duration, errorCode);
    }
    
    /**

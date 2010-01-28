@@ -10,7 +10,7 @@
 	<target name="-junit-task">
 		<taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
 			<classpath location="lib/junit.jar" />
-    </taskdef>
+		</taskdef>
 		<property name="junit.showoutput" value="false" />
 	</target>
 
@@ -109,7 +109,7 @@ ${sf.file}</fail>
 		<!--delete dir="src/tests/build" /-->
 		<!-- property name="build.java.version" value="1.3" /-->
 
-		<taskdef resource="org/xins/common/ant/antlib.xml" classpath="build/classes/java-common" />
+		<taskdef resource="org/xins/common/ant/antlib.xml" classpath="build/classes" />
 		<xins api="allinone" target="opendoc" projectdir="src/tests" />
 		<xins api="portal" target="war" projectdir="src/tests" />
 		<xins api="portal" target="jar" projectdir="src/tests" />

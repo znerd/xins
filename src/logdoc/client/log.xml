@@ -162,22 +162,22 @@
 
 	<group id="call.tx" name="Transaction logging">
 		<entry id="2300" level="INFO" exception="true">
-			<description>Function called. This entry differs from 2301 in that it logs all input and output parameters and the exception (if any), while 2301 does not.</description>
-			<param name="start"        type="text"   nullable="false"               />
-			<param name="url"          type="text"   nullable="false"               />
-			<param name="functionName" type="text"   nullable="false"               />
-			<param name="duration"     type="int64"  nullable="false"               />
-			<param name="errorCode"    type="text"   nullable="false"               />
-			<param name="inParams"     type="object" nullable="false" filter="true" />
-			<param name="outParams"    type="object" nullable="true"  filter="true" />
+			<description>Function called. This entry differs from 2301 in that it logs all input and output parameters, while 2301 does not.</description>
+			<param name="start"        type="float64" nullable="false"               />
+			<param name="url"          type="text"    nullable="false"               />
+			<param name="functionName" type="text"    nullable="false"               />
+			<param name="duration"     type="int64"   nullable="false"               />
+			<param name="errorCode"    type="text"    nullable="false"               />
+			<param name="inParams"     type="object"  nullable="false" filter="true" />
+			<param name="outParams"    type="object"  nullable="true"  filter="true" />
 		</entry>
-		<entry id="2301" level="INFO">
-			<description>Function called. This entry differs from 2300 in that it does not log all input and output parameters and the exception (if any), while 2300 does.</description>
-			<param name="start"        type="text"  nullable="false" />
-			<param name="ip"           type="text"  nullable="false" />
-			<param name="functionName" type="text"  nullable="false" />
-			<param name="duration"     type="int64" nullable="false" />
-			<param name="errorCode"    type="text"  nullable="false" />
+		<entry id="2301" level="INFO" exception="true">
+			<description>Function called. This entry differs from 2300 in that it does not log all input and output parameters, while 2300 does.</description>
+			<param name="start"        type="float64" nullable="false" />
+			<param name="ip"           type="text"    nullable="false" />
+			<param name="functionName" type="text"    nullable="false" />
+			<param name="duration"     type="int64"   nullable="false" />
+			<param name="errorCode"    type="text"    nullable="false" />
 		</entry>
 	</group>
 </log>
