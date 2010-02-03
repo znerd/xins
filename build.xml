@@ -114,14 +114,15 @@
 
 	<!-- Compile all source files -->
 	<target name="compile" depends="prepare-compile" description="Compiles the source code">
-		<javac srcdir="${project.sourcedir}"
-		     includes="org/xins/**/*.java"
-		      destdir="build/classes"
-		        debug="${javac.debug}"
-		  deprecation="${javac.deprecation}"
-		     optimize="${javac.optimize}"
-		       source="${javac.sourceversion}"
-		       target="${javac.targetvm}">
+		<javac     srcdir="${project.sourcedir}"
+		         includes="org/xins/**/*.java"
+		          destdir="build/classes"
+		            debug="${javac.debug}"
+		      deprecation="${javac.deprecation}"
+		         optimize="${javac.optimize}"
+		           source="${javac.sourceversion}"
+		           target="${javac.targetvm}"
+		includeAntRuntime="false">
 			<compilerarg line="${javac.compilerargs}" />
 			<classpath>
 				<fileset dir="lib" includes="*.jar" />
