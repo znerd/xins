@@ -35,11 +35,11 @@ public interface XINSCallResultData {
    String getErrorCode();
 
    /**
-    * Gets all parameters.
+    * Retrieves all result parameters.
     *
     * @return
-    *    a {@link PropertyReader} with all parameters, or <code>null</code> if
-    *    there are none.
+    *    a {@link PropertyReader} with all output parameters,
+    *    or <code>null</code> if there are none.
     */
    PropertyReader getParameters();
 
