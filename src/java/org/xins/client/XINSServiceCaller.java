@@ -125,14 +125,40 @@ public class XINSServiceCaller extends ServiceCaller {
 
    /**
     * Performs (client-side) transaction logging.
-    * 
-    * 
+    *
+    * @param exception
+    *    the exception, if any, can be <code>null</code>.
+    *
+    * @param start
+    *    the start as the number of milliseconds since the UNIX Epoch.
+    *
+    * @param url
+    *    the URL that is being called, should not be <code>null</code>.
+    *
+    * @param functionName
+    *    the name of the function that is being invoked, should not be <code>null</code>.
+    *
+    * @param duration
+    *    the duration of the call in milliseconds.
+    *
+    * @param errorCode
+    *    the error code, should not be <code>null</code>.
+    *
+    * @param inParams
+    *    the input parameters, should not be <code>null</code>.
+    *
+    * @param outParams
+    *    the output parameters, should not be <code>null</code>.
     */
    private static final void logTransaction(Throwable exception, long start, String url, String functionName, long duration, String errorCode, FormattedParameters inParams, FormattedParameters outParams) {
-      Log.log_2300(exception, start, url, functionName, duration, errorCode, inParams, outParams);
+	  errorCode              = (errorCode == null) ? "0" : errorCode;
+	  Object inParamsObject  = (inParams  == null) ? "-" : inParams;
+	  Object outParamsObject = (outParams == null) ? "-" : outParams;
+
+      Log.log_2300(exception, start, url, functionName, duration, errorCode, inParamsObject, outParamsObject);
       Log.log_2301(exception, start, url, functionName, duration, errorCode);
    }
-   
+
    /**
     * The result parser. This field cannot be <code>null</code>.
     */
@@ -205,7 +231,7 @@ public class XINSServiceCaller extends ServiceCaller {
    /**
     * Constructs a new <code>XINSServiceCaller</code> with no
     * descriptor (yet) and the default HTTP method.
-    * 
+    *
     * <p>Before actual calls can be made, {@link #setDescriptor(Descriptor)}
     * should be used to set the descriptor.
     *
@@ -237,6 +263,7 @@ public class XINSServiceCaller extends ServiceCaller {
     *
     * @since XINS 1.2.0
     */
+   @Override
    protected boolean isProtocolSupportedImpl(String protocol) {
       return  "http".equals(protocol)
           || "https".equals(protocol)
@@ -253,13 +280,13 @@ public class XINSServiceCaller extends ServiceCaller {
       } else {
          _serviceCallers.clear();
       }
-      
+
       // Create an HTTP- or File-caller for each descriptor
       if (descriptor != null) {
          for (TargetDescriptor target : descriptor.targets()) {
-            
+
             String protocol = target.getProtocol().toLowerCase();
-            
+
             ServiceCaller caller;
 
             // HTTP or HTTPS protocol
@@ -269,13 +296,13 @@ public class XINSServiceCaller extends ServiceCaller {
             // FILE protocol
             } else if ("file".equals(protocol)) {
                caller = new FileServiceCaller(target);
-               
+
             // Unsupported protocol
             } else {
-               // TODO: Consider using a specific exception type 
+               // TODO: Consider using a specific exception type
                throw new RuntimeException("Unsupported protocol \"" + protocol + "\" in descriptor.");
             }
-            
+
             _serviceCallers.put(target, caller);
          }
       }
@@ -309,6 +336,7 @@ public class XINSServiceCaller extends ServiceCaller {
     *    a new {@link XINSCallConfig} instance with default settings, never
     *    <code>null</code>.
     */
+   @Override
    protected CallConfig getDefaultCallConfig() {
       return new XINSCallConfig();
    }
@@ -408,8 +436,7 @@ public class XINSServiceCaller extends ServiceCaller {
          // a functional error code. We assume that a functional error code
          // can never fail-over, so this issue will have been logged at the
          // correct (non-error) level already.
-         if (!(exception instanceof UnsuccessfulXINSCallException) ||
-               ((UnsuccessfulXINSCallException) exception).getType() != ErrorCodeSpec.FUNCTIONAL) {
+         if (!(exception instanceof UnsuccessfulXINSCallException) || ((UnsuccessfulXINSCallException) exception).getType() != ErrorCodeSpec.FUNCTIONAL) {
 
             // Determine how long the call took
             long duration = System.currentTimeMillis() - start;
@@ -522,6 +549,7 @@ public class XINSServiceCaller extends ServiceCaller {
     * @throws XINSCallException
     *    if the call attempt failed due to a XINS-related reason.
     */
+   @Override
    public Object doCallImpl(CallRequest      request,
                             CallConfig       callConfig,
                             TargetDescriptor target)
@@ -609,14 +637,17 @@ public class XINSServiceCaller extends ServiceCaller {
       // Call failed due to an HTTP-related error
       } catch (HTTPCallException exception) {
          duration = exception.getDuration();
+         String errorCode;
          if (exception instanceof StatusCodeHTTPCallException) {
             int code = ((StatusCodeHTTPCallException) exception).getStatusCode();
             Log.log_2108(url, function, params, duration, code);
+            errorCode = "=HTTPStatusCode" + code;
          } else {
-            String detail = "Unrecognized HTTPCallException subclass "
-                  + exception.getClass().getName() + '.';
+            String detail = "Unrecognized HTTPCallException subclass " + exception.getClass().getName() + '.';
             Utils.logProgrammingError(detail);
+            errorCode = "=UnrecognizedHTTPCallException";
          }
+         logTransaction(exception, start, url, function, duration, errorCode, params, null);
          throw exception;
 
       // Unknown kind of exception. This should never happen. Log and re-throw
@@ -625,10 +656,13 @@ public class XINSServiceCaller extends ServiceCaller {
          duration = System.currentTimeMillis() - start;
          Utils.logProgrammingError(exception);
 
-         String message = "Unexpected exception: " + exception.getClass().getName()
-               + ". Message: " + TextUtils.quote(exception.getMessage()) + '.';
-
+         // Log: Unexpected exception
+         String message = "Unexpected exception: " + exception.getClass().getName() + ". Message: " + TextUtils.quote(exception.getMessage()) + '.';
          Log.log_2111(exception, url, function, params, duration);
+         String errorCode = "=UnexpectedException-" + exception.getClass().getName();
+         logTransaction(exception, start, url, function, duration, errorCode, params, null);
+
+         // Wrap inside a CallException and throw that
          throw new UnexpectedExceptionCallException(request, target, duration, message, exception);
       }
 
@@ -641,10 +675,10 @@ public class XINSServiceCaller extends ServiceCaller {
 
          // Log: No data was received
          Log.log_2110(url, function, params, duration, "No data received.");
+         logTransaction(null, start, url, function, duration, "=NoHTTPData", params, null);
 
          // Throw an appropriate exception
-         throw InvalidResultXINSCallException.noDataReceived(
-            xinsRequest, target, duration);
+         throw InvalidResultXINSCallException.noDataReceived(xinsRequest, target, duration);
       }
 
       // Parse the result
@@ -653,21 +687,24 @@ public class XINSServiceCaller extends ServiceCaller {
          resultData = _parser.parse(httpData);
 
       // If parsing failed, then abort
-      } catch (ParseException e) {
+      } catch (ParseException exception) {
 
          // Create a message for the new exception
-         String detail = e.getDetail();
+         String detail = exception.getDetail();
          String message = detail != null && detail.trim().length() > 0
                         ? "Failed to parse result: " + detail.trim()
                         : "Failed to parse result.";
 
          // Log: Parsing failed
          Log.log_2110(url, function, params, duration, message);
+         logTransaction(exception, start, url, function, duration, "=ParseError", params, null);
 
          // Throw an appropriate exception
-         throw InvalidResultXINSCallException.parseError(
-            httpData, xinsRequest, target, duration, e);
+         throw InvalidResultXINSCallException.parseError(httpData, xinsRequest, target, duration, exception);
       }
+
+      // Convert the output parameters to a FormattedParameters object
+      FormattedParameters outParams = new FormattedParameters(resultData.getParameters(), resultData.getDataElement(), "(null)", "&", 160);
 
       // If the result is unsuccessful, then throw an exception
       String errorCode = resultData.getErrorCode();
@@ -685,64 +722,40 @@ public class XINSServiceCaller extends ServiceCaller {
          } else {
             Log.log_2112(url, function, params, duration, errorCode);
          }
+         logTransaction(null, start, url, function, duration, errorCode, params, outParams);
 
          // Standard error codes (start with an underscore)
          if (errorCode.charAt(0) == '_') {
             if (errorCode.equals("_DisabledFunction")) {
-               throw new DisabledFunctionException(xinsRequest,
-                                                   target,
-                                                   duration,
-                                                   resultData);
-            } else if (errorCode.equals("_InternalError")
-                    || errorCode.equals("_InvalidResponse")) {
-               throw new InternalErrorException(
-                  xinsRequest, target, duration, resultData);
+               throw new DisabledFunctionException(xinsRequest, target, duration, resultData);
+            } else if (errorCode.equals("_InternalError")|| errorCode.equals("_InvalidResponse")) {
+               throw new InternalErrorException(xinsRequest, target, duration, resultData);
             } else if (errorCode.equals("_InvalidRequest")) {
-               throw new InvalidRequestException(
-                  xinsRequest, target, duration, resultData);
+               throw new InvalidRequestException(xinsRequest, target, duration, resultData);
             } else {
-               throw new UnacceptableErrorCodeXINSCallException(
-                  xinsRequest, target, duration, resultData);
+               throw new UnacceptableErrorCodeXINSCallException(xinsRequest, target, duration, resultData);
             }
 
          // Non-standard error codes, CAPI not used
          } else if (_capi == null) {
-            throw new UnsuccessfulXINSCallException(
-               xinsRequest, target, duration, resultData, null);
+            throw new UnsuccessfulXINSCallException(xinsRequest, target, duration, resultData, null);
 
          // Non-standard error codes, CAPI used
          } else {
-            AbstractCAPIErrorCodeException ex =
-               _capi.createErrorCodeException(
-                  xinsRequest, target, duration, resultData);
+            AbstractCAPIErrorCodeException ex = _capi.createErrorCodeException(xinsRequest, target, duration, resultData);
 
             if (ex != null) {
                ex.setType(type);
                throw ex;
             } else {
-
-               // If the CAPI class was generated using a XINS release older
-               // than 1.2.0, then it will not override the
-               // 'createErrorCodeException' method and consequently the
-               // method will return null. It cannot be determined here
-               // whether the error code is acceptable or not
-               String ver = _capi.getXINSVersion();
-               if (ver.startsWith("0.")
-                || ver.startsWith("1.0.")
-                || ver.startsWith("1.1.")) {
-                  throw new UnsuccessfulXINSCallException(
-                     xinsRequest, target, duration, resultData, null);
-
-               } else {
-                  throw new UnacceptableErrorCodeXINSCallException(
-                     xinsRequest, target, duration, resultData);
-               }
+               throw new UnacceptableErrorCodeXINSCallException(xinsRequest, target, duration, resultData);
             }
          }
       }
 
-      // Call completely succeeded
+      // Log: Call completely succeeded
       Log.log_2101(url, function, params, duration);
+      logTransaction(null, start, url, function, duration, errorCode, params, outParams);
 
       return resultData;
    }
@@ -785,6 +798,7 @@ public class XINSServiceCaller extends ServiceCaller {
     *    if either <code>request</code> or <code>result</code> is not of the
     *    correct class.
     */
+   @Override
    protected CallResult createCallResult(CallRequest       request,
                                          TargetDescriptor  succeededTarget,
                                          long              duration,
@@ -819,6 +833,7 @@ public class XINSServiceCaller extends ServiceCaller {
     *    <code>true</code> if the call should fail-over to the next target, or
     *    <code>false</code> if it should not.
     */
+   @Override
    protected boolean shouldFailOver(CallRequest       request,
                                     CallConfig        callConfig,
                                     CallExceptionList exceptions) {
