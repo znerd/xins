@@ -52,7 +52,8 @@ public class FormattedParameters {
    private String _asString;
 
    /**
-    * Constructs a new <code>FormattedParameters</code> object.
+    * Constructs a new <code>FormattedParameters</code> object, using the
+    * specified parameters.
     *
     * @param parameters
     *    the parameters, can be <code>null</code>.
@@ -62,7 +63,8 @@ public class FormattedParameters {
    }
 
    /**
-    * Constructs a new <code>FormattedParameters</code> object.
+    * Constructs a new <code>FormattedParameters</code> object, using the
+    * specified parameters and data section.
     *
     * @param parameters
     *    the parameters, can be <code>null</code>.
@@ -75,7 +77,10 @@ public class FormattedParameters {
    }
 
    /**
-    * Constructs a new <code>FormattedParameters</code> object.
+    * Constructs a new <code>FormattedParameters</code> object using the
+    * specified parameters, data section, the empty value (to be returned if
+    * there is no parameter and no data section), the prefix if the value is
+    * not empty and the maximum string length
     *
     * @param parameters
     *    the parameters, can be <code>null</code>.
@@ -94,8 +99,7 @@ public class FormattedParameters {
     *    than this limit '...' will be added after the limit.
     *    If the value is -1, no limit will be set.
     */
-   public FormattedParameters(PropertyReader parameters, Element dataSection, String valueIfEmpty,
-         String prefixIfNotEmpty, int maxValueLength) {
+   public FormattedParameters(PropertyReader parameters, Element dataSection, String valueIfEmpty, String prefixIfNotEmpty, int maxValueLength) {
       _parameters = parameters;
       _dataSection = dataSection;
       _valueIfEmpty = valueIfEmpty;
