@@ -646,10 +646,10 @@
 
 		<target name="jar-{$api}" description="Generates and compiles the Java classes for the client-side '{$api}' API stubs">
 			<xsl:attribute name="depends">
-				<xsl:text>-load-properties-</xsl:text>
+				<xsl:text>-prepare-classes, -load-properties-</xsl:text>
 				<xsl:value-of select="$api" />
 				<xsl:if test="$apiHasTypes">
-					<xsl:text>,</xsl:text>
+					<xsl:text>, </xsl:text>
 					<xsl:text>-classes-types-</xsl:text>
 					<xsl:value-of select="$api" />
 				</xsl:if>
