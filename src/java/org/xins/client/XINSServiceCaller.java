@@ -7,7 +7,6 @@
 package org.xins.client;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import org.xins.common.FormattedParameters;
 
 import org.xins.common.MandatoryArgumentChecker;
@@ -151,9 +150,9 @@ public class XINSServiceCaller extends ServiceCaller {
     *    the output parameters, should not be <code>null</code>.
     */
    private static final void logTransaction(Throwable exception, long start, String url, String functionName, long duration, String errorCode, FormattedParameters inParams, FormattedParameters outParams) {
-	  errorCode              = (errorCode == null) ? "0" : errorCode;
-	  Object inParamsObject  = (inParams  == null) ? "-" : inParams;
-	  Object outParamsObject = (outParams == null) ? "-" : outParams;
+	   errorCode              = (errorCode == null) ? "0" : errorCode;
+	   Object inParamsObject  = (inParams  == null) ? "-" : inParams;
+	   Object outParamsObject = (outParams == null) ? "-" : outParams;
 
       Log.log_2300(exception, start, url, functionName, duration, errorCode, inParamsObject, outParamsObject);
       Log.log_2301(exception, start, url, functionName, duration, errorCode);
