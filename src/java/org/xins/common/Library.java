@@ -34,17 +34,7 @@ public final class Library {
     * Initializes this class, loading the version number once.
     */
    static {
-      String filePath = "version.txt";
-      try {
-         InputStream stream = MetaResourceLoader.getMetaResource(Library.class, filePath).openStream();
-         VERSION = IOUtils.toString(stream, "UTF-8").trim();
-      } catch (IOException cause) {
-         System.err.println("I/O error while reading meta resource: " + filePath);
-         cause.printStackTrace();
-      } catch (NoSuchResourceException cause) {
-         System.err.println("Failed to load version meta data for " + getName() + '.');
-         cause.printStackTrace();
-      }
+      VERSION = MetaResourceLoader.findVersion(Library.class);
    }
 
    /**

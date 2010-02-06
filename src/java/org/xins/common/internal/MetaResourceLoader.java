@@ -73,4 +73,43 @@ public final class MetaResourceLoader {
       
       return url;
    }
+
+   /**
+    * Finds the version for the specified class, by reading a meta resource.
+    *
+    * @param clazz
+    *    the class to load the version for, cannot be <code>null</code>.
+    *
+    * @return
+    *    the version, or <code>null</code> if it could not be found.
+    *
+    * @throws IllegalArgumentException
+    *    if <code>clazz == null</code>.
+    */
+   public static final <T> String findVersion(Class clazz)
+   throws IllegalArgumentException {
+
+      // TODO: Review the exceptions/return
+
+      // Check preconditions
+      MandatoryArgumentChecker.check("clazz", clazz);
+
+      // Determine the exact location for the file
+      String packageName = clazz.getPackage().getName();
+      String    filePath = packageName.replace('.', '/') + "/version.txt";
+
+      String version = null;
+      try {
+         InputStream stream = getMetaResource(clazz, filePath).openStream();
+         version = IOUtils.toString(stream, "UTF-8").trim();
+      } catch (IOException cause) {
+         System.err.println("I/O error while reading meta resource: " + filePath);
+         cause.printStackTrace();
+      } catch (NoSuchResourceException cause) {
+         System.err.println("Failed to load version meta data for package " + packageName + '.');
+         cause.printStackTrace();
+      }
+
+      return version;
+   }
 }
