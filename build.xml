@@ -217,6 +217,7 @@
 					<link offline="true" packagelistloc="src/package-lists/servlet/"            href="http://tomcat.apache.org/tomcat-6.0-doc/api/"          />
 					<link offline="true" packagelistloc="src/package-lists/javase/"             href="http://java.sun.com/javase/6/docs/api"                 />
 					<link offline="true" packagelistloc="src/package-lists/log4j/"              href="http://jakarta.apache.org/log4j/docs/api/"             />
+					<link offline="true" packagelistloc="src/package-lists/commons-lang/"       href="http://commons.apache.org/lang/api-release/"           />
 					<link offline="true" packagelistloc="src/package-lists/commons-logging/"    href="http://jakarta.apache.org/commons/logging/api/"        />
 					<link offline="true" packagelistloc="src/package-lists/commons-httpclient/" href="http://jakarta.apache.org/commons/httpclient/apidocs/" />
 					<link offline="true" packagelistloc="src/package-lists/oro/"                href="http://jakarta.apache.org/oro/api/"                    />
