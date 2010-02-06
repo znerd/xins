@@ -49,7 +49,9 @@
 		<property name="javac.debug"         value="true"  />
 		<property name="javac.deprecation"   value="true"  />
 		<property name="javac.optimize"      value="false" />
-		<property name="javac.compilerargs"  value="-Xlint -Xmaxwarns 9999 -Xmaxerrs 9999" />
+		<property name="javac.maxerrs"       value="9999"  />
+		<property name="javac.maxwarns"      value="9999"  />
+		<property name="javac.compilerargs"  value="-Xlint -Xmaxwarns ${javac.maxwarns} -Xmaxerrs ${javac.maxerrs}" />
 		<property name="tests.deprecation"   value="false" />
 
 		<!-- Javadoc-related settings -->
