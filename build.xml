@@ -122,7 +122,7 @@
 		         optimize="${javac.optimize}"
 		           source="${javac.sourceversion}"
 		           target="${javac.targetvm}"
-		includeAntRuntime="false">
+		includeAntRuntime="true">
 			<compilerarg line="${javac.compilerargs}" />
 			<classpath>
 				<fileset dir="lib" includes="*.jar" />
