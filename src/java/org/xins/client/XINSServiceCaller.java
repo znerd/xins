@@ -206,7 +206,7 @@ public class XINSServiceCaller extends ServiceCaller {
       super(descriptor, callConfig);
 
       // Initialize the fields
-      _parser      = new XINSCallResultParser();
+      _parser = new XINSCallResultParser();
    }
 
    /**
@@ -299,7 +299,7 @@ public class XINSServiceCaller extends ServiceCaller {
 
             // Unsupported protocol
             } else {
-               // TODO: Consider using a specific exception type
+               // TODO: Consider using a specific exception type (XINS 3.0 ?)
                throw new RuntimeException("Unsupported protocol \"" + protocol + "\" in descriptor.");
             }
 
@@ -319,6 +319,7 @@ public class XINSServiceCaller extends ServiceCaller {
     *    <code>null</code>.
     */
    void setCAPI(AbstractCAPI capi) {
+	  // TODO: Make CAPI implement a certain interface and use that interface here instead
       _capi = capi;
    }
 
