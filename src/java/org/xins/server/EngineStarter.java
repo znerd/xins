@@ -142,7 +142,7 @@ final class EngineStarter {
 
 		// Warn if Server version differs from Common version
 		String commonVersion = org.xins.common.Library.getVersion();
-		if (! serverVersion.equals(commonVersion)) {
+		if (serverVersion != null && ! serverVersion.equals(commonVersion)) {
 			Log.log_3226(serverVersion, commonVersion);
 		}
 

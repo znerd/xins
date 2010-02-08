@@ -49,7 +49,9 @@
 		<property name="javac.debug"         value="true"  />
 		<property name="javac.deprecation"   value="true"  />
 		<property name="javac.optimize"      value="false" />
-		<property name="javac.compilerargs"  value="-Xlint -Xmaxwarns 9999 -Xmaxerrs 9999" />
+		<property name="javac.maxerrs"       value="9999"  />
+		<property name="javac.maxwarns"      value="9999"  />
+		<property name="javac.compilerargs"  value="-Xlint -Xmaxwarns ${javac.maxwarns} -Xmaxerrs ${javac.maxerrs}" />
 		<property name="tests.deprecation"   value="false" />
 
 		<!-- Javadoc-related settings -->
@@ -122,7 +124,7 @@
 		         optimize="${javac.optimize}"
 		           source="${javac.sourceversion}"
 		           target="${javac.targetvm}"
-		includeAntRuntime="false">
+		includeAntRuntime="true">
 			<compilerarg line="${javac.compilerargs}" />
 			<classpath>
 				<fileset dir="lib" includes="*.jar" />
@@ -180,19 +182,7 @@
 	</target>
 
 	<!-- Generate Javadoc -->
-	<target name="-jdksrc-avail" depends="-init">
-		<available file="${javase.sourcedir}" type="dir" property="jdksrc.available" />
-	</target>
-	<target name="-javadoc-sourcepath-nojdksrc" depends="-jdksrc-avail" unless="jdksrc.available">
-		<property name="javadoc.sourcepath" value="${project.sourcedir}" />
-		<echo level="verbose" message="JDK source code not available." />
-	</target>
-	<target name="-javadoc-sourcepath-jdksrc" depends="-jdksrc-avail" if="jdksrc.available">
-		<property name="javadoc.sourcepath" value="${project.sourcedir}:${javase.sourcedir}" />
-		<echo level="verbose" message="JDK source code available." />
-	</target>
-	<target name="-javadoc-sourcepath" depends="-javadoc-sourcepath-nojdksrc,-javadoc-sourcepath-jdksrc" description="Determines the source path for Javadoc" />
-	<target name="-javadoc-macro" depends="-javadoc-sourcepath" description="Defines the macro for generating Javadoc">
+	<target name="-javadoc-macro" depends="-init" description="Defines the macro for generating Javadoc">
 		<macrodef name="generate-javadoc">
 			<attribute name="title"   />
 			<attribute name="destdir" />
@@ -201,8 +191,11 @@
 
 			<sequential>
 				<mkdir dir="@{destdir}" />
-				<javadoc doctitle="@{title}" windowtitle="@{title}" destdir="@{destdir}" private="@{private}" bottom="@{footer}" sourcepath="${javadoc.sourcepath}" source="${javac.sourceversion}" version="yes" use="yes" author="yes">
-					<packageset dir="${project.sourcedir}" />
+				<javadoc doctitle="@{title}" windowtitle="@{title}" destdir="@{destdir}" private="@{private}" bottom="@{footer}" source="${javac.sourceversion}" version="yes" use="yes" author="yes">
+					<packageset dir="${project.sourcedir}">
+						<exclude name="org/xins/common/internal" />
+						<exclude name="org/xins/common/internal/**" />
+					</packageset>
 
 					<group title="XINS/Java Common Library"   packages="org.xins.common*" />
 					<group title="XINS/Java Client Framework" packages="org.xins.client*" />
@@ -217,6 +210,7 @@
 					<link offline="true" packagelistloc="src/package-lists/servlet/"            href="http://tomcat.apache.org/tomcat-6.0-doc/api/"          />
 					<link offline="true" packagelistloc="src/package-lists/javase/"             href="http://java.sun.com/javase/6/docs/api"                 />
 					<link offline="true" packagelistloc="src/package-lists/log4j/"              href="http://jakarta.apache.org/log4j/docs/api/"             />
+					<link offline="true" packagelistloc="src/package-lists/commons-lang/"       href="http://commons.apache.org/lang/api-release/"           />
 					<link offline="true" packagelistloc="src/package-lists/commons-logging/"    href="http://jakarta.apache.org/commons/logging/api/"        />
 					<link offline="true" packagelistloc="src/package-lists/commons-httpclient/" href="http://jakarta.apache.org/commons/httpclient/apidocs/" />
 					<link offline="true" packagelistloc="src/package-lists/oro/"                href="http://jakarta.apache.org/oro/api/"                    />

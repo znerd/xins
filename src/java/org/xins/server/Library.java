@@ -50,7 +50,7 @@ public final class Library {
     *    if <code>version == null</code>.
     */
    static final boolean isProductionRelease(String version) throws NullPointerException {
-      return version.matches("[1-9][0-9]*\\.[0-9]+(\\.[0-9]+)?");
+      return version != null && version.matches("[1-9][0-9]*\\.[0-9]+(\\.[0-9]+)?");
       // TODO: Review (the location of) this method
    }
 }

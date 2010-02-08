@@ -110,8 +110,6 @@ ${apis.list}]]></echo>
 			<dtd publicId="-//XINS//DTD Result Code 1.0//EN"             location="resultcode_1_0.dtd" />
 			<dtd publicId="-//XINS//DTD Implementation 1.0//EN"          location="impl_1_0.dtd" />
 			<dtd publicId="-//XINS//DTD Environments 1.0//EN"            location="environments_1_0.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Logdoc 1.0//EN"             location="log_1_0.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.0//EN" location="translation-bundle_1_0.dtd" />
 
 			<dtd publicId="-//XINS//DTD XINS Project 1.1//EN"            location="xins-project_1_1.dtd" />
 			<dtd publicId="-//XINS//DTD XINS API 1.1//EN"                location="api_1_1.dtd" />
@@ -120,8 +118,6 @@ ${apis.list}]]></echo>
 			<dtd publicId="-//XINS//DTD Result Code 1.1//EN"             location="resultcode_1_1.dtd" />
 			<dtd publicId="-//XINS//DTD Implementation 1.1//EN"          location="impl_1_1.dtd" />
 			<dtd publicId="-//XINS//DTD Environments 1.1//EN"            location="environments_1_1.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Logdoc 1.1//EN"             location="log_1_1.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.1//EN" location="translation-bundle_1_1.dtd" />
 
 			<dtd publicId="-//XINS//DTD XINS Project 1.2//EN"            location="xins-project_1_2.dtd" />
 			<dtd publicId="-//XINS//DTD XINS API 1.2//EN"                location="api_1_2.dtd" />
@@ -130,8 +126,6 @@ ${apis.list}]]></echo>
 			<dtd publicId="-//XINS//DTD Result Code 1.2//EN"             location="resultcode_1_2.dtd" />
 			<dtd publicId="-//XINS//DTD Implementation 1.2//EN"          location="impl_1_2.dtd" />
 			<dtd publicId="-//XINS//DTD Environments 1.2//EN"            location="environments_1_2.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Logdoc 1.2//EN"             location="log_1_2.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.2//EN" location="translation-bundle_1_2.dtd" />
 
 			<dtd publicId="-//XINS//DTD XINS Project 1.3//EN"            location="xins-project_1_3.dtd" />
 			<dtd publicId="-//XINS//DTD XINS API 1.3//EN"                location="api_1_3.dtd" />
@@ -141,8 +135,6 @@ ${apis.list}]]></echo>
 			<dtd publicId="-//XINS//DTD Result Code 1.3//EN"             location="resultcode_1_3.dtd" />
 			<dtd publicId="-//XINS//DTD Implementation 1.3//EN"          location="impl_1_3.dtd" />
 			<dtd publicId="-//XINS//DTD Environments 1.3//EN"            location="environments_1_3.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Logdoc 1.3//EN"             location="log_1_3.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.3//EN" location="translation-bundle_1_3.dtd" />
 
 			<dtd publicId="-//XINS//DTD XINS Project 1.4//EN"            location="xins-project_1_4.dtd" />
 			<dtd publicId="-//XINS//DTD XINS API 1.4//EN"                location="api_1_4.dtd" />
@@ -152,8 +144,6 @@ ${apis.list}]]></echo>
 			<dtd publicId="-//XINS//DTD Result Code 1.4//EN"             location="resultcode_1_4.dtd" />
 			<dtd publicId="-//XINS//DTD Implementation 1.4//EN"          location="impl_1_4.dtd" />
 			<dtd publicId="-//XINS//DTD Environments 1.4//EN"            location="environments_1_4.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Logdoc 1.4//EN"             location="log_1_4.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.4//EN" location="translation-bundle_1_4.dtd" />
 
 			<dtd publicId="-//XINS//DTD XINS Project 1.5//EN"            location="xins-project_1_5.dtd" />
 			<dtd publicId="-//XINS//DTD XINS API 1.5//EN"                location="api_1_5.dtd" />
@@ -163,8 +153,6 @@ ${apis.list}]]></echo>
 			<dtd publicId="-//XINS//DTD Result Code 1.5//EN"             location="resultcode_1_5.dtd" />
 			<dtd publicId="-//XINS//DTD Implementation 1.5//EN"          location="impl_1_5.dtd" />
 			<dtd publicId="-//XINS//DTD Environments 1.5//EN"            location="environments_1_5.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Logdoc 1.5//EN"             location="log_1_5.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Translation Bundle 1.5//EN" location="translation-bundle_1_5.dtd" />
 
 			<dtd publicId="-//XINS//DTD XINS Project 2.0//EN"            location="xins-project_2_0.dtd" />
 			<dtd publicId="-//XINS//DTD XINS API 2.0//EN"                location="api_2_0.dtd" />
@@ -174,8 +162,6 @@ ${apis.list}]]></echo>
 			<dtd publicId="-//XINS//DTD Result Code 2.0//EN"             location="resultcode_2_0.dtd" />
 			<dtd publicId="-//XINS//DTD Implementation 2.0//EN"          location="impl_2_0.dtd" />
 			<dtd publicId="-//XINS//DTD Environments 2.0//EN"            location="environments_2_0.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Logdoc 2.0//EN"             location="log_2_0.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Translation Bundle 2.0//EN" location="translation-bundle_2_0.dtd" />
 
 			<dtd publicId="-//XINS//DTD XINS Project 2.1//EN"            location="xins-project_2_1.dtd" />
 			<dtd publicId="-//XINS//DTD XINS API 2.1//EN"                location="api_2_1.dtd" />
@@ -185,8 +171,6 @@ ${apis.list}]]></echo>
 			<dtd publicId="-//XINS//DTD Result Code 2.1//EN"             location="resultcode_2_1.dtd" />
 			<dtd publicId="-//XINS//DTD Implementation 2.1//EN"          location="impl_2_1.dtd" />
 			<dtd publicId="-//XINS//DTD Environments 2.1//EN"            location="environments_2_1.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Logdoc 2.1//EN"             location="log_2_1.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Translation Bundle 2.1//EN" location="translation-bundle_2_1.dtd" />
 
 			<dtd publicId="-//XINS//DTD XINS Project 2.2//EN"            location="xins-project_2_2.dtd" />
 			<dtd publicId="-//XINS//DTD XINS API 2.2//EN"                location="api_2_2.dtd" />
@@ -196,8 +180,6 @@ ${apis.list}]]></echo>
 			<dtd publicId="-//XINS//DTD Result Code 2.2//EN"             location="resultcode_2_2.dtd" />
 			<dtd publicId="-//XINS//DTD Implementation 2.2//EN"          location="impl_2_2.dtd" />
 			<dtd publicId="-//XINS//DTD Environments 2.2//EN"            location="environments_2_2.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Logdoc 2.2//EN"             location="log_2_2.dtd" />
-			<dtd publicId="-//XINS//DTD XINS Translation Bundle 2.2//EN" location="translation-bundle_2_2.dtd" />
 
 			<dtd publicId="-//XINS//DTD XINS Project 3.0//EN"            location="xins-project_3_0.dtd" />
 			<dtd publicId="-//XINS//DTD XINS API 3.0//EN"                location="api_3_0.dtd" />
@@ -253,18 +235,9 @@ ${apis.list}]]></echo>
 
 	<target name="-prepare-classes" depends="-load-properties,-load-dtds">
 		<!-- If not set by the user set the default properties. -->
-		<property name="build.deprecation" value="true" />
+		<property name="build.deprecation"  value="true" />
 		<property name="build.java.version" value="${ant.java.version}" />
-		<condition property="build.generics">
-			<and>
-				<not>
-					<equals arg1="${build.java.version}" arg2="1.3" />
-				</not>
-				<not>
-					<equals arg1="${build.java.version}" arg2="1.4" />
-				</not>
-			</and>
-		</condition>
+		<property name="build.generics"     value="true" />
 		<path id="xins.classpath">
 			<pathelement path="${xins_home}/build/logdoc.jar" />
 			<pathelement path="${xins_home}/build/xins-common.jar" />
@@ -581,6 +554,7 @@ ${apis.list}]]></echo>
 		<property name="classes.api.dir" value="${builddir}/classes-api/${api}" />
 		<mkdir dir="${builddir}/classes-tests/${api}" />
 		<javac
+		includeAntRuntime="false"
 		destdir="${builddir}/classes-tests/${api}"
 		debug="true"
 		deprecation="${build.deprecation}"
@@ -663,6 +637,7 @@ ${apis.list}]]></echo>
 	<target name="-jar" depends="-load-version, -prepare-classes, -stubs-capi">
 		<mkdir dir="${builddir}/classes-capi/${api}" />
 		<javac
+		includeAntRuntime="false"
 		srcdir="${builddir}/java-capi/${api}/"
 		destdir="${builddir}/classes-capi/${api}"
 		debug="true"
@@ -674,7 +649,7 @@ ${apis.list}]]></echo>
 		<mkdir dir="${builddir}/capis/" />
 		<manifest file="${builddir}/capis/${api}-MANIFEST.MF">
 			<attribute name="XINS-Version" value="${xins_version}" />
-			<attribute name="API-Version" value="${api.version}" />
+			<attribute name="API-Version"  value="${api.version}"  />
 		</manifest>
 	</target>
 
@@ -934,6 +909,7 @@ ${apis.list}]]></echo>
 		</xslt>
 	</target>
 
+<!-- TODO FIXME: Either fix or remove
 	<target name="-specdocs-impl-logdoc">
 		<property name="impl_dir" value="${apis_dir}/${api}/impl${implName2}" />
 		<property name="javaDestFileDir" value="${builddir}/java-fundament/${api}${implName2}/${packageAsDir}" />
@@ -957,6 +933,7 @@ ${apis.list}]]></echo>
 		<copy file="${xins_home}/src/css/logdoc/style.css" todir="${builddir}/specdocs/${api}/logdoc${implName2}" />
 		<ant dir="${builddir}/logdoc/${api}${implName2}" target="html" inheritall="false" />
 	</target>
+-->
 
 	<target name="-classes-types" depends="-prepare-classes" if="typeIncludesAll">
 		<property name="javaDestDir" value="${builddir}/java-types/${api}" />
@@ -1003,6 +980,7 @@ ${apis.list}]]></echo>
 
 		<mkdir dir="${typeClassesDir}" />
 		<javac
+		includeAntRuntime="false"
 		srcdir="${javaDestDir}"
 		destdir="${typeClassesDir}"
 		debug="true"
@@ -1117,6 +1095,7 @@ ${apis.list}]]></echo>
 		<!-- Compile all classes -->
 		<mkdir dir="${classesDestDir}" />
 		<javac
+		includeAntRuntime="false"
 		destdir="${classesDestDir}"
 		debug="true"
 		deprecation="${build.deprecation}"
@@ -1166,27 +1145,19 @@ ${apis.list}]]></echo>
 			<param name="api_file"     expression="${api_file}"     />
 		</xslt>
 	</target>
+	
+	<target name="-logdoc-task">
+	       <property name="logdoc.jar" value="${xins_home}/lib/logdoc.jar" />
+	       <taskdef resource="org/znerd/logdoc/ant/antlib.xml">
+                        <classpath>
+                                <pathelement location="${logdoc.jar}" />
+                                <pathelement location="${commons-lang.jar}" />
+                        </classpath>
+                </taskdef>
+	</target>
 
-	<target name="-classes-api-logdoc" if="logdoc_file">
+	<target name="-classes-api-logdoc" depends="-logdoc-task" if="logdoc_file">
 		<echo message="Generating the logdoc for ${api}${implName2}" />
-		<mkdir dir="${builddir}/logdoc/${api}${implName2}" />
-		<xmlvalidate file="${impl_dir}/log.xml" warn="false">
-			<xmlcatalog refid="all-dtds" />
-		</xmlvalidate>
-		<xslt
-		in="${impl_dir}/log.xml"
-		out="${builddir}/logdoc/${api}${implName2}/build.xml"
-		style="${xins_home}/src/xslt/logdoc/log_to_build.xslt">
-			<xmlcatalog refid="all-dtds" />
-			<param name="xins_home"       expression="${xins_home}" />
-			<param name="logdoc_xslt_dir" expression="${xins_home}/src/xslt/logdoc" />
-			<param name="sourcedir"       expression="${impl_dir}" />
-			<param name="html_destdir"    expression="${builddir}/specdocs/${api}/logdoc${implName2}" />
-			<param name="java_destdir"    expression="${javaDestFileDir}" />
-			<param name="package_name"    expression="${package}" />
-		</xslt>
-		<ant antfile="${builddir}/logdoc/${api}${implName2}/build.xml" target="java">
-			<property name="accesslevel" value="${accesslevel}" />
-		</ant>
+		<logdoc-code in="${impl_dir}" out="${javaDestDir}" />
 	</target>
 </project>
