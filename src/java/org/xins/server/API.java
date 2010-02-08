@@ -1434,6 +1434,7 @@ public abstract class API extends Manageable {
       builder.param("java.version",   System.getProperty("java.version"));
       builder.param("xmlenc.version", org.znerd.xmlenc.Library.getVersion());
       builder.param("xins.version",   Library.getVersion());
+      builder.param("logdoc.version", org.znerd.logdoc.Library.getVersion());
       builder.param("api.version",    _apiVersion);
 
       return builder;
