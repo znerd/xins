@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE translation-bundle PUBLIC "-//znerd//DTD Logdoc Translation Bundle 0.1//EN" "http://www.znerd.org/logdoc/dtd/translation-bundle_0_1.dtd">
-<!-- $Id: translation-bundle-en_US.xml,v 1.36 2007/03/07 11:06:37 agoubard Exp $ -->
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <translation-bundle>
 	<translation entry="2100">Calling <value-of-param name="url" />?_function=<value-of-param name="function" /><value-of-param name="parameters" />.</translation>

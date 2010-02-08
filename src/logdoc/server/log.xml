@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE log PUBLIC "-//znerd//DTD Logdoc Log 0.1//EN" "http://www.znerd.org/logdoc/dtd/log_0_1.dtd">
-<!-- $Id: log.xml,v 1.129 2007/09/03 12:11:57 agoubard Exp $ -->
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <log since="XINS 1.0.0" domain="org.xins.server" public="true">
 	<translation-bundle locale="en_US" />
