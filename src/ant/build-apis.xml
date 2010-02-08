@@ -1148,13 +1148,16 @@ ${apis.list}]]></echo>
 	</target>
 	
 	<target name="-logdoc-task">
-	       <property name="logdoc.jar" value="${xins_home}/lib/logdoc.jar" />
-	       <taskdef resource="org/znerd/logdoc/ant/antlib.xml">
-                        <classpath>
-                                <pathelement location="${logdoc.jar}" />
-                                <pathelement location="${commons-lang.jar}" />
-                        </classpath>
-                </taskdef>
+		<property name="logdoc.jar"       value="${xins_home}/lib/logdoc.jar"       />
+		<property name="commons-io.jar"   value="${xins_home}/lib/commons-io.jar"   />
+		<property name="commons-lang.jar" value="${xins_home}/lib/commons-lang.jar" />
+		<taskdef resource="org/znerd/logdoc/ant/antlib.xml">
+			<classpath>
+				<pathelement location="${logdoc.jar}"       />
+				<pathelement location="${commons-io.jar}"   />
+				<pathelement location="${commons-lang.jar}" />
+			</classpath>
+		</taskdef>
 	</target>
 
 	<target name="-classes-api-logdoc" depends="-logdoc-task" if="logdoc_file">
