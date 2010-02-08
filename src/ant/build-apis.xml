@@ -317,12 +317,13 @@ ${apis.list}]]></echo>
 
 	<target name="-run">
 		<property name="org.xins.server.config" value="" />
+		<property name="jmx.port" value="1090" />
 		<property name="servlet.port" value="8080" />
 		<java classname="org.xins.common.servlet.container.HTTPServletStarter"
 					fork="true">
 			<jvmarg value="-Dorg.xins.server.config=${org.xins.server.config}" />
 			<jvmarg value="-Dcom.sun.management.jmxremote" />
-			<jvmarg value="-Dcom.sun.management.jmxremote.port=1090"/>
+			<jvmarg value="-Dcom.sun.management.jmxremote.port=${jmx.port}"/>
 			<jvmarg value="-Dcom.sun.management.jmxremote.authenticate=false"/>
 			<jvmarg value="-Dcom.sun.management.jmxremote.ssl=false"/>
 			<arg path="${builddir}/webapps/${api}${implName2}/${api}${implName2}.war" />
