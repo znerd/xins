@@ -52,7 +52,7 @@ public final class MetaResourceLoader {
     * @throws NoSuchResourceException
     *    if the resource could not be found.
     */
-   public static final <T> URL getMetaResource(Class<T> clazz, String path)
+   public static final URL getMetaResource(Class clazz, String path)
    throws IllegalArgumentException, NoSuchResourceException {
       
       // Check preconditions
@@ -86,7 +86,7 @@ public final class MetaResourceLoader {
     * @throws IllegalArgumentException
     *    if <code>clazz == null</code>.
     */
-   public static final <T> String findVersion(Class clazz)
+   public static final String findVersion(Class clazz)
    throws IllegalArgumentException {
 
       // TODO: Review the exceptions/return
@@ -95,8 +95,7 @@ public final class MetaResourceLoader {
       MandatoryArgumentChecker.check("clazz", clazz);
 
       // Determine the exact location for the file
-      String packageName = clazz.getPackage().getName();
-      String    filePath = packageName.replace('.', '/') + "/version.txt";
+      String filePath = "version.txt";
 
       String version = null;
       try {
@@ -106,7 +105,7 @@ public final class MetaResourceLoader {
          System.err.println("I/O error while reading meta resource: " + filePath);
          cause.printStackTrace();
       } catch (NoSuchResourceException cause) {
-         System.err.println("Failed to load version meta data for package " + packageName + '.');
+         System.err.println("Failed to load version meta data for class " + clazz.getName() + '.');
          cause.printStackTrace();
       }
 

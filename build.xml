@@ -37,11 +37,15 @@
 		<!-- General project properties -->
 		<property name="project.title"     value="XINS" />
 		<property name="project.name"      value="${ant.project.name}" />
+		<property name="name"              value="${ant.project.name}" />
 		<property name="project.version"   value="${version.major}.${version.middle}${dot.version.minor}${version.build}${version.suffix}" />
 		<property name="project.vendor"    value="Online Breedband B.V." />
 		<property name="project.sourcedir" value="src/java" />
 		<property name="project.url"       value="http://github.com/znerd/xins/" />
-		<property name="package-basename"  value="${name}-${project.version}" />
+		<property name="project.outputdir" value="${basedir}/build" />
+		<property name="classes.outputdir" value="${project.outputdir}/classes" />
+		<property name="metainf.outputdir" value="${classes.outputdir}/META-INF" />
+		<property name="package-basename"  value="${project.name}-${project.version}" />
 
 		<!-- Java compiler-related settings -->
 		<property name="javac.sourceversion" value="1.5"   />
@@ -75,7 +79,7 @@
 
 	<!-- Clean generated files -->
 	<target name="clean" description="Removes all generated files">
-		<delete dir="build" />
+		<delete dir="${project.outputdir}" />
 		<delete dir="src/tests/build" />
 		<delete dir="docs" />
 
@@ -105,20 +109,24 @@
 		<logdoc-code in="src/logdoc/server" out="src/java" />
 
 		<!-- Stick auxiliary files in location where compiled code will go --> 
-		<mkdir dir="build/classes" />
-		<copy todir="build/classes/">
+		<mkdir dir="${classes.outputdir}" />
+		<copy todir="${classes.outputdir}">
 			<fileset dir="${project.sourcedir}">
 				<exclude name="**/*.java" />
 				<exclude name="**/package.html" />
 			</fileset>
 		</copy>
+
+		<!-- Meta files -->
+		<mkdir dir="${metainf.outputdir}" />
+		<concat destfile="${metainf.outputdir}/version.txt" eol="unix" outputencoding="UTF-8">${project.version}</concat>
 	</target>
 
 	<!-- Compile all source files -->
 	<target name="compile" depends="prepare-compile" description="Compiles the source code">
 		<javac     srcdir="${project.sourcedir}"
 		         includes="org/xins/**/*.java"
-		          destdir="build/classes"
+		          destdir="${classes.outputdir}"
 		            debug="${javac.debug}"
 		      deprecation="${javac.deprecation}"
 		         optimize="${javac.optimize}"
@@ -141,7 +149,7 @@
 			<attribute name="title" />
 
 			<sequential>
-				<jar destfile="build/xins-@{name}.jar" basedir="build/classes/" includes="org/xins/@{name}/**">
+				<jar destfile="build/xins-@{name}.jar" basedir="build/classes/" includes="org/xins/@{name}/** META-INF/**">
 					<manifest>
 						<section name="org/xins/@{name}">
 							<attribute name="Specification-Title"    value="@{title}"           />

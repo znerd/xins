@@ -6,7 +6,7 @@
  */
 package org.xins.server;
 
-import org.xins.common.text.PatternUtils;
+import org.xins.common.internal.MetaResourceLoader;
 
 /**
  * Class that represents the XINS/Java Server Framework library.
@@ -19,10 +19,28 @@ import org.xins.common.text.PatternUtils;
 public final class Library {
 
    /**
+    * The version of this library.
+    */
+   private static final String VERSION = MetaResourceLoader.findVersion(Library.class);
+
+   /**
     * Constructs a new <code>Library</code> object.
     */
    private Library() {
       // empty
+   }
+   
+   /**
+    * Returns the name of this library.
+    * 
+    * @return
+    *    the name of this library, never <code>null</code>;
+    *    for example <code>"XINS/Java Client Framework"</code>.
+    *    
+    * @since XINS 3.0
+    */
+   public static final String getName() {
+      return "XINS/Java Client Framework";
    }
 
    /**
@@ -33,7 +51,19 @@ public final class Library {
     *    never <code>null</code>.
     */
    public static final String getVersion() {
-      return Library.class.getPackage().getImplementationVersion();
+      return VERSION;
+   }
+   
+   /**
+    * Prints the name and version of this library.
+    * 
+    * @param args
+    *    the command line arguments; will be ignored.
+    *
+    * @since XINS 3.0
+    */
+   public static final void main(String[] args) {
+      System.out.println(getName() + " " + getVersion());
    }
 
    /**

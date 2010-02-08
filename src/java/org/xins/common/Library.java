@@ -13,7 +13,6 @@ import java.net.URL;
 import org.apache.commons.io.IOUtils;
 
 import org.xins.common.internal.MetaResourceLoader;
-import org.xins.common.internal.NoSuchResourceException;
 
 /**
  * Class that represents the XINS/Java Common Library.
@@ -26,16 +25,9 @@ import org.xins.common.internal.NoSuchResourceException;
 public final class Library {
 
    /**
-    * The version of this library, lazily initialized.
+    * The version of this library.
     */
-   private static String VERSION;
-
-   /**
-    * Initializes this class, loading the version number once.
-    */
-   static {
-      VERSION = MetaResourceLoader.findVersion(Library.class);
-   }
+   private static final String VERSION = MetaResourceLoader.findVersion(Library.class);
 
    /**
     * Constructs a new <code>Library</code> object.
