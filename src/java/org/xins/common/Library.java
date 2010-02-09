@@ -12,8 +12,6 @@ import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
 
-import org.xins.common.internal.MetaResourceLoader;
-
 /**
  * Class that represents the XINS/Java Common Library.
  *
@@ -27,7 +25,7 @@ public final class Library {
    /**
     * The version of this library.
     */
-   private static final String VERSION = MetaResourceLoader.findVersion(Library.class);
+   private static final String VERSION = Library.class.getPackage().getImplementationVersion();
 
    /**
     * Constructs a new <code>Library</code> object.

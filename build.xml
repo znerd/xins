@@ -37,7 +37,7 @@
 		<!-- General project properties -->
 		<property name="project.title"     value="XINS" />
 		<property name="project.name"      value="${ant.project.name}" />
-		<property name="name"              value="${ant.project.name}" />
+		<property name="name"              value="${project.name}" />
 		<property name="project.version"   value="${version.major}.${version.middle}${dot.version.minor}${version.build}${version.suffix}" />
 		<property name="project.vendor"    value="Online Breedband B.V." />
 		<property name="project.sourcedir" value="src/java" />
@@ -55,11 +55,9 @@
 		<property name="javac.optimize"      value="false" />
 		<property name="javac.maxerrs"       value="9999"  />
 		<property name="javac.maxwarns"      value="9999"  />
+		<property name="javac.includes"      value="org/xins/**/*.java" />
 		<property name="javac.compilerargs"  value="-Xlint -Xmaxwarns ${javac.maxwarns} -Xmaxerrs ${javac.maxerrs}" />
 		<property name="tests.deprecation"   value="false" />
-
-		<!-- Javadoc-related settings -->
-		<property name="javadoc.srcdir.javase" value="${java.home}/src" />
 
 		<!-- Settings related to unit- and performance-testing -->
 		<property name="testclass"     value="org.xins.tests.AllTests"     />
@@ -117,16 +115,12 @@
 				<exclude name="**/package.html" />
 			</fileset>
 		</copy>
-
-		<!-- Meta files -->
-		<mkdir dir="${metainf.outputdir}" />
-		<concat destfile="${metainf.outputdir}/version.txt" eol="unix" outputencoding="UTF-8">${project.version}</concat>
 	</target>
 
 	<!-- Compile all source files -->
 	<target name="compile" depends="prepare-compile" description="Compiles the source code">
 		<javac     srcdir="${project.sourcedir}"
-		         includes="org/xins/**/*.java"
+		         includes="${javac.includes}"
 		          destdir="${classes.outputdir}"
 		            debug="${javac.debug}"
 		      deprecation="${javac.deprecation}"
@@ -152,7 +146,8 @@
 			<sequential>
 				<jar destfile="build/xins-@{name}.jar" basedir="build/classes/" includes="org/xins/@{name}/** META-INF/**">
 					<manifest>
-						<section name="org/xins/@{name}">
+						<attribute name="Main-Class" value="org.xins.@{name}.Library" />
+						<section name="org/xins/@{name}/">
 							<attribute name="Specification-Title"    value="@{title}"           />
 							<attribute name="Specification-Version"  value="${project.version}" />
 							<attribute name="Specification-Vendor"   value="${project.vendor}"  />

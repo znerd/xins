@@ -6,8 +6,6 @@
  */
 package org.xins.client;
 
-import org.xins.common.internal.MetaResourceLoader;
-
 /**
  * Class that represents the XINS/Java Client Framework library.
  *
@@ -21,7 +19,7 @@ public final class Library {
    /**
     * The version of this library.
     */
-   private static final String VERSION = MetaResourceLoader.findVersion(Library.class);
+   private static final String VERSION = Library.class.getPackage().getImplementationVersion();
 
    /**
     * Constructs a new <code>Library</code> object.
