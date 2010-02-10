@@ -29,5 +29,4 @@
 
 	<translation entry="2300"><value-of-param name="start" /> <value-of-param name="url" /> <value-of-param name="functionName" /> <value-of-param name="duration" /> <value-of-param name="errorCode" /> <value-of-param name="inParams" /> <value-of-param name="outParams" /></translation>
 	<translation entry="2301"><value-of-param name="start" /> <value-of-param name="url" /> <value-of-param name="functionName" /> <value-of-param name="duration" /> <value-of-param name="errorCode" /></translation>
-
 </translation-bundle>

@@ -150,9 +150,9 @@ public class XINSServiceCaller extends ServiceCaller {
     *    the output parameters, should not be <code>null</code>.
     */
    private static final void logTransaction(Throwable exception, long start, String url, String functionName, long duration, String errorCode, FormattedParameters inParams, FormattedParameters outParams) {
-	   errorCode              = (errorCode == null) ? "0" : errorCode;
-	   Object inParamsObject  = (inParams  == null) ? "-" : inParams;
-	   Object outParamsObject = (outParams == null) ? "-" : outParams;
+      errorCode              = (errorCode == null) ? "0" : errorCode;
+      Object inParamsObject  = (inParams  == null) ? "-" : inParams;
+      Object outParamsObject = (outParams == null) ? "-" : outParams;
 
       Log.log_2300(exception, start, url, functionName, duration, errorCode, inParamsObject, outParamsObject);
       Log.log_2301(exception, start, url, functionName, duration, errorCode);
@@ -318,7 +318,7 @@ public class XINSServiceCaller extends ServiceCaller {
     *    <code>null</code>.
     */
    void setCAPI(AbstractCAPI capi) {
-	  // TODO: Make CAPI implement a certain interface and use that interface here instead
+      // TODO: Make CAPI implement a certain interface and use that interface here instead
       _capi = capi;
    }
 
@@ -728,7 +728,7 @@ public class XINSServiceCaller extends ServiceCaller {
          if (errorCode.charAt(0) == '_') {
             if (errorCode.equals("_DisabledFunction")) {
                throw new DisabledFunctionException(xinsRequest, target, duration, resultData);
-            } else if (errorCode.equals("_InternalError")|| errorCode.equals("_InvalidResponse")) {
+            } else if (errorCode.equals("_InternalError") || errorCode.equals("_InvalidResponse")) {
                throw new InternalErrorException(xinsRequest, target, duration, resultData);
             } else if (errorCode.equals("_InvalidRequest")) {
                throw new InvalidRequestException(xinsRequest, target, duration, resultData);
