@@ -1185,8 +1185,11 @@ public abstract class API extends Manageable {
          String detailedArg = functionRequest.getParameters().get("detailed");
          boolean detailed = !"false".equals(detailedArg);
 
+         // Determine the name of the specific function, if any
+         String targetFunction = functionRequest.getParameters().get("targetFunction");
+
          // Get the statistics
-         result = doGetStatistics(detailed);
+         result = doGetStatistics(detailed, targetFunction);
 
          // Determine value of 'reset' argument
          String resetArg = functionRequest.getParameters().get("reset");
@@ -1354,14 +1357,18 @@ public abstract class API extends Manageable {
     * Returns the call statistics for all functions in this API.
     *
     * @param detailed
-    *    If <code>true</code>, the unsuccessful result will be returned sorted
+    *    if <code>true</code>, the unsuccessful result will be returned sorted
     *    per error code. Otherwise the unsuccessful result won't be displayed
     *    by error code.
+    *
+    * @param functionName
+    *    the name of the specific function to return the statistics for,
+    *    if <code>null</code>, then the stats for all functions are returned.
     *
     * @return
     *    the call result, never <code>null</code>.
     */
-   private final FunctionResult doGetStatistics(boolean detailed) {
+   private final FunctionResult doGetStatistics(boolean detailed, String functionName) {
 
       // Initialize a builder
       FunctionResult builder = new FunctionResult();
@@ -1372,12 +1379,7 @@ public abstract class API extends Manageable {
 
       // Currently available processors
       Runtime rt = Runtime.getRuntime();
-      try {
-         builder.param("availableProcessors",
-                       String.valueOf(rt.availableProcessors()));
-      } catch (NoSuchMethodError error) {
-         // NOTE: Runtime.availableProcessors() is not available in Java 1.3
-      }
+      builder.param("availableProcessors", String.valueOf(rt.availableProcessors()));
 
       // Heap memory statistics
       Element heap = new Element("heap");
@@ -1386,20 +1388,23 @@ public abstract class API extends Manageable {
       heap.setAttribute("used",  String.valueOf(total - free));
       heap.setAttribute("free",  String.valueOf(free));
       heap.setAttribute("total", String.valueOf(total));
-      try {
-         long max = rt.maxMemory();
-         heap.setAttribute("max", String.valueOf(max));
-         double percentageUsed = (total - free) / (double) max;
-         heap.setAttribute("percentageUsed", String.valueOf((int) (percentageUsed * 100)));
-      } catch (NoSuchMethodError error) {
-         // NOTE: Runtime.maxMemory() is not available in Java 1.3
-      }
+
+      long max = rt.maxMemory();
+      heap.setAttribute("max", String.valueOf(max));
+      double percentageUsed = (total - free) / (double) max;
+      heap.setAttribute("percentageUsed", String.valueOf((int) (percentageUsed * 100)));
       builder.add(heap);
 
       // Function-specific statistics
       int count = _functionList.size();
       for (int i = 0; i < count; i++) {
          Function function = _functionList.get(i);
+
+         // Possibly only results for a specific function are to be returned
+         if (functionName != null && ! functionName.equals(function.getName())) {
+            continue;
+         }
+
          FunctionStatistics stats = function.getStatistics();
 
          Element functionElem = new Element("function");
