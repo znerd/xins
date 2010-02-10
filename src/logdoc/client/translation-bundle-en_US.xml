@@ -26,4 +26,8 @@
 	<translation entry="2204">Found output parameter <value-of-param name="name" format="quoted" /> with value <value-of-param name="value" format="quoted" />.</translation>
 	<translation entry="2205">Unable to convert the specified character string to XML: <value-of-param name="detail" /></translation>
 	<translation entry="2206">Ignoring unrecognized element of type <value-of-param name="localName" format="quoted" /> with namespace <value-of-param name="namespaceURI" format="quoted" /> at root level.</translation>
+	
+	<translation entry="2300"><value-of-param name="start" /> <value-of-param name="url" /> <value-of-param name="functionName" /> <value-of-param name="duration" /> <value-of-param name="errorCode" /> <value-of-param name="inParams" /> <value-of-param name="outParams" /></translation>
+	<translation entry="2301"><value-of-param name="start" /> <value-of-param name="url" /> <value-of-param name="functionName" /> <value-of-param name="duration" /> <value-of-param name="errorCode" /></translation>
+
 </translation-bundle>

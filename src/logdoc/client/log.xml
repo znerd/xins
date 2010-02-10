@@ -172,7 +172,7 @@
 		<entry id="2301" level="INFO" exception="true">
 			<description>Function called. This entry differs from 2300 in that it does not log all input and output parameters, while 2300 does.</description>
 			<param name="start"        type="float64" nullable="false" />
-			<param name="ip"           type="text"    nullable="false" />
+			<param name="url"          type="text"    nullable="false" />
 			<param name="functionName" type="text"    nullable="false" />
 			<param name="duration"     type="int64"   nullable="false" />
 			<param name="errorCode"    type="text"    nullable="false" />
