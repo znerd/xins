@@ -121,6 +121,7 @@ public class AllTests extends TestSuite {
       suite.addTestSuite(org.xins.tests.common.BeanUtilsTests.class);
       suite.addTestSuite(org.xins.tests.common.MandatoryArgumentCheckerTests.class);
       suite.addTestSuite(org.xins.tests.common.UtilsTests.class);
+      suite.addTestSuite(org.xins.tests.common.VarianceComputerTests.class);
 
       suite.addTestSuite(org.xins.tests.common.ant.CallXINSTaskTests.class);
       suite.addTestSuite(org.xins.tests.common.ant.HostnameTaskTests.class);
