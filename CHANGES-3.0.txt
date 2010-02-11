@@ -91,6 +91,7 @@ XINS/Java Server Framework:
 * Enabled parameter value filtering for messages 3520-3523, 3540.
 * Changed some code to use Java SE regex framework instead of Jakarta ORO
   (TODO, work in progress).
+* Supporting "targetFunction" parameter on _GetStatistics function.
 
 Libraries:
 * Upgraded to Juxy 0.8.
