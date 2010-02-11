@@ -10,7 +10,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.xins.logdoc.ExceptionUtils;
 import org.xins.common.text.FormatException;
 
 /**

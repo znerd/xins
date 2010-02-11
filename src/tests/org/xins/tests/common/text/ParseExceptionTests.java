@@ -10,7 +10,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.xins.logdoc.ExceptionUtils;
 import org.xins.common.text.ParseException;
 
 /**
@@ -46,12 +45,12 @@ public class ParseExceptionTests extends TestCase {
       ParseException p = new ParseException();
       assertEquals(null, p.getMessage());
       assertEquals(null, p.getDetail());
-      assertEquals(null, ExceptionUtils.getCause(p));
+      assertEquals(null, p.getCause());
 
       p = new ParseException(null, null, null);
       assertEquals(null, p.getMessage());
       assertEquals(null, p.getDetail());
-      assertEquals(null, ExceptionUtils.getCause(p));
+      assertEquals(null, p.getCause());
 
       Exception cause = new Exception();
       String message = "'nough said.";
@@ -59,6 +58,6 @@ public class ParseExceptionTests extends TestCase {
       p = new ParseException(message, cause, detail);
       assertEquals(message, p.getMessage());
       assertEquals(detail,  p.getDetail());
-      assertEquals(cause,   ExceptionUtils.getCause(p));
+      assertEquals(cause,   p.getCause());
    }
 }

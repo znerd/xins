@@ -12,7 +12,6 @@ import junit.framework.TestSuite;
 
 import org.xins.common.ProgrammingException;
 import org.xins.common.Utils;
-import org.xins.logdoc.ExceptionUtils;
 
 /**
  * Tests for class <code>Utils</code>
@@ -156,7 +155,7 @@ public class UtilsTests extends TestCase {
       assertEquals(m2,     pe.getSubjectMethod());
       assertEquals(detail, pe.getDetail());
 
-      assertTrue("Incorrect cause for ProgrammingException.", ExceptionUtils.getCause(pe) == e);
+      assertTrue("Incorrect cause for ProgrammingException.", pe.getCause() == e);
 
       String[] s = new String[] { c1, m1, c2, m2, detail };
       String peMessage = pe.getMessage();

@@ -21,7 +21,6 @@ import org.xins.common.collections.InvalidPropertyValueException;
 import org.xins.common.collections.MissingRequiredPropertyException;
 import org.xins.common.collections.PropertyReader;
 import org.xins.common.service.*;
-import org.xins.logdoc.ExceptionUtils;
 
 import org.xins.tests.AllTests;
 
