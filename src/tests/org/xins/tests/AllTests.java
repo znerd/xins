@@ -119,7 +119,6 @@ public class AllTests extends TestSuite {
       // Sorted in alphabetic order
 
       suite.addTestSuite(org.xins.tests.common.BeanUtilsTests.class);
-      suite.addTestSuite(org.xins.tests.common.ExceptionUtilsTests.class);
       suite.addTestSuite(org.xins.tests.common.MandatoryArgumentCheckerTests.class);
       suite.addTestSuite(org.xins.tests.common.UtilsTests.class);
 
