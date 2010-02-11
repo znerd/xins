@@ -910,12 +910,12 @@ ${apis.list}]]></echo>
 		</xslt>
 	</target>
 
-<!-- TODO FIXME: Either fix or remove
 	<target name="-specdocs-impl-logdoc">
 		<property name="impl_dir" value="${apis_dir}/${api}/impl${implName2}" />
 		<property name="javaDestFileDir" value="${builddir}/java-fundament/${api}${implName2}/${packageAsDir}" />
 		<echo message="Generating the logdoc for ${api}${implName2}" />
 		<mkdir dir="${builddir}/logdoc/${api}${implName2}" />
+		<!-- TODO FIXME
 		<xmlvalidate file="${impl_dir}/log.xml" warn="false">
 			<xmlcatalog refid="all-dtds" />
 		</xmlvalidate>
@@ -933,8 +933,8 @@ ${apis.list}]]></echo>
 		</xslt>
 		<copy file="${xins_home}/src/css/logdoc/style.css" todir="${builddir}/specdocs/${api}/logdoc${implName2}" />
 		<ant dir="${builddir}/logdoc/${api}${implName2}" target="html" inheritall="false" />
+		-->
 	</target>
--->
 
 	<target name="-classes-types" depends="-prepare-classes" if="typeIncludesAll">
 		<property name="javaDestDir" value="${builddir}/java-types/${api}" />
