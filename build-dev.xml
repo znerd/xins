@@ -104,7 +104,7 @@ ${sf.file}</fail>
 	description="Generates Logdoc HTML and then uploads it for the web site"
 	unless="no-upload" />
 
-	<target name="compile-tests" depends="compile" description="Compiles the test cases">
+	<target name="compile-tests" depends="jars" description="Compiles the test cases">
 		<!-- Compiles the example used for the tests -->
 		<!--delete dir="src/tests/build" /-->
 		<!-- property name="build.java.version" value="1.3" /-->
