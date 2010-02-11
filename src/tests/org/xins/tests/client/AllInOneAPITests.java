@@ -31,9 +31,10 @@ import org.xins.common.types.standard.Date;
 import org.xins.common.types.standard.Timestamp;
 import org.xins.common.xml.Element;
 import org.xins.common.xml.ElementBuilder;
-import org.xins.logdoc.LogCentral;
 
 import org.xins.tests.AllTests;
+
+import org.znerd.logdoc.LogCentral;
 
 /**
  * Tests the functions in the <em>allinone</em> API using the generated CAPI
