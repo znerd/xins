@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
+import org.apache.log4j.NDC;
+
 import org.xins.common.text.DateConverter;
 import org.xins.common.xml.Element;
 
@@ -167,8 +169,7 @@ class FunctionStatistics {
     * <p>The implementation of this class is thread-safe.
     *
     * @author <a href="mailto:anthony.goubard@japplis.com">Anthony Goubard</a>
-    *
-    * @since XINS 1.1.0
+    * @author <a href="mailto:ernst@ernstdehaan.com">Ernst de Haan</a>
     */
    private static final class Statistic {
 
@@ -182,6 +183,12 @@ class FunctionStatistics {
        * The start time of the most recent call. Initially <code>0L</code>.
        */
       private long _lastStart;
+
+      /**
+       * The transaction ID of the most recent call.
+       * Initially null.
+       */
+      private String _lastTx;
 
       /**
        * The duration of the most recent call. Initially <code>0L</code>.
@@ -207,6 +214,12 @@ class FunctionStatistics {
       private long _minStart;
 
       /**
+       * The transaction ID of the call that took the shortest.
+       * Initially null.
+       */
+      private String _minTx;
+
+      /**
        * The duration of the call that took the longest. Initially
        * <code>0L</code>.
        */
@@ -217,6 +230,12 @@ class FunctionStatistics {
        * <code>0L</code>.
        */
       private long _maxStart;
+
+      /**
+       * The transaction ID of the call that took the longest.
+       * Initially null.
+       */
+      private String _maxTx;
 
       /**
        * Constructs a new <code>Statistic</code> object.
@@ -239,12 +258,20 @@ class FunctionStatistics {
       public synchronized void recordCall(long start, long duration) {
          _lastStart    = start;
          _lastDuration = duration;
+         _lastTx       = getTx();
+
          _calls++;
          _duration += duration;
          _min      = _min > duration ? duration : _min;
          _max      = _max < duration ? duration : _max;
          _minStart = (_min == duration) ? start : _minStart;
          _maxStart = (_max == duration) ? start : _maxStart;
+         _minTx    = (_min == duration) ? _lastTx : _minTx;
+         _maxTx    = (_max == duration) ? _lastTx : _maxTx;
+      }
+
+      private final String getTx() {
+         return NDC.peek();
       }
 
       /**
@@ -302,14 +329,19 @@ class FunctionStatistics {
          Element minElem = new Element("min");
          minElem.setAttribute("start",    minStart);
          minElem.setAttribute("duration", min);
+         minElem.setAttribute("tx",       _minTx);
          element.addChild(minElem);
+
          Element maxElem = new Element("max");
          maxElem.setAttribute("start",    maxStart);
          maxElem.setAttribute("duration", max);
+         maxElem.setAttribute("tx",       _maxTx);
          element.addChild(maxElem);
+
          Element lastElem = new Element("last");
          lastElem.setAttribute("start",    lastStart);
          lastElem.setAttribute("duration", lastDuration);
+         lastElem.setAttribute("tx",       _lastTx);
          element.addChild(lastElem);
          return element;
       }
