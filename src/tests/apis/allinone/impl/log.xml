@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE log PUBLIC "-//XINS//DTD XINS Logdoc 1.0//EN" "http://xins.sourceforge.net/dtd/log_1_0.dtd">
 
-<log>
+<log domain="com.mycompany.allinone.api" public="false">
 
 	<translation-bundle locale="en_US" />
 	<translation-bundle locale="fr_FR" />
