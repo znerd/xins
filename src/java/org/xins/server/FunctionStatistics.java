@@ -12,6 +12,7 @@ import java.util.TreeMap;
 
 import org.apache.log4j.NDC;
 
+import org.xins.common.VarianceComputer;
 import org.xins.common.text.DateConverter;
 import org.xins.common.xml.Element;
 
@@ -83,8 +84,8 @@ class FunctionStatistics {
     *    is <code>true</code>.
     *
     * @return
-    *    returns the duration in milliseconds of the call of the function.
-    *    The duration is computed as the difference in between
+    *    returns the duration in milliseconds of the call of the function;
+    *    the duration is computed as the difference in between
     *    the start time and the time that this method has been invoked.
     */
    final synchronized long recordCall(long    start,
@@ -106,9 +107,9 @@ class FunctionStatistics {
          Statistic errorCodeStat = (Statistic)_errorCodeStatistics.get(errorCode);
          if (errorCodeStat == null) {
             errorCodeStat = new Statistic();
+            _errorCodeStatistics.put(errorCode, errorCodeStat);
          }
          errorCodeStat.recordCall(start, duration);
-         _errorCodeStatistics.put(errorCode, errorCodeStat);
       }
       return duration;
    }
@@ -123,7 +124,7 @@ class FunctionStatistics {
    }
 
    /**
-    * Get the successful statistic as an {@link org.xins.common.xml.Element}.
+    * Get the successful statistic as an {@link Element}.
     *
     * @return
     *    the successful element, cannot be <code>null</code>
@@ -173,11 +174,10 @@ class FunctionStatistics {
     */
    private static final class Statistic {
 
-      /**
-       * The number of successful calls executed up until now. Initially
-       * <code>0L</code>.
-       */
-      private int _calls;
+	  /**
+	   * The variance computer.
+	   */
+	  private VarianceComputer _varianceComputer = new VarianceComputer();
 
       /**
        * The start time of the most recent call. Initially <code>0L</code>.
@@ -260,7 +260,7 @@ class FunctionStatistics {
          _lastDuration = duration;
          _lastTx       = getTx();
 
-         _calls++;
+         _varianceComputer.add(duration);
          _duration += duration;
          _min      = _min > duration ? duration : _min;
          _max      = _max < duration ? duration : _max;
@@ -284,7 +284,7 @@ class FunctionStatistics {
        *    specified in the returned element.
        *
        * @return
-       *    the statistic, cannot be <code>null</code>
+       *    the statistics as an XML {@link Element}, cannot be <code>null</code>.
        */
       public synchronized Element getElement(boolean successful, String errorCode) {
 
@@ -295,7 +295,10 @@ class FunctionStatistics {
          String maxStart;
          String lastStart;
          String lastDuration;
-         if (_calls == 0) {
+         int       calls = _varianceComputer.getCount();
+         double     mean = _varianceComputer.getMean();
+         String variance = String.valueOf(_varianceComputer.getVariance());
+         if (calls == 0) {
             average      = NOT_AVAILABLE;
             min          = NOT_AVAILABLE;
             minStart     = NOT_AVAILABLE;
@@ -303,16 +306,8 @@ class FunctionStatistics {
             maxStart     = NOT_AVAILABLE;
             lastStart    = NOT_AVAILABLE;
             lastDuration = NOT_AVAILABLE;
-         } else if (_duration == 0) {
-            average      = "0";
-            min          = String.valueOf(_min);
-            minStart     = DateConverter.toDateString(TIME_ZONE, _minStart);
-            max          = String.valueOf(_max);
-            maxStart     = DateConverter.toDateString(TIME_ZONE, _maxStart);
-            lastStart    = DateConverter.toDateString(TIME_ZONE, _lastStart);
-            lastDuration = String.valueOf(_lastDuration);
          } else {
-            average      = String.valueOf(_duration / _calls);
+            average      = String.valueOf(mean);
             min          = String.valueOf(_min);
             minStart     = DateConverter.toDateString(TIME_ZONE, _minStart);
             max          = String.valueOf(_max);
@@ -321,8 +316,9 @@ class FunctionStatistics {
             lastDuration = String.valueOf(_lastDuration);
          }
          Element element = new Element(successful ? "successful" : "unsuccessful");
-         element.setAttribute("count",    String.valueOf(_calls));
+         element.setAttribute("count",    String.valueOf(calls));
          element.setAttribute("average",  average);
+         element.setAttribute("variance", variance);
          if (errorCode != null) {
             element.setAttribute("errorcode", errorCode);
          }
@@ -350,7 +346,7 @@ class FunctionStatistics {
        * Resets this statistic.
        */
       public synchronized void reset() {
-         _calls        = 0;
+         _varianceComputer = new VarianceComputer();
          _lastStart    = 0L;
          _lastDuration = 0L;
          _duration     = 0L;
