@@ -1,7 +1,7 @@
 /*
- * $Id: FunctionStatistics.java,v 1.22 2007/09/18 08:45:05 agoubard Exp $
+ * $Id: FunctionStatistics.java,v 1.23 2008/07/04 10:22:51 agoubard Exp $
  *
- * Copyright 2003-2007 Orange Nederland Breedband B.V.
+ * Copyright 2003-2008 Online Breedband B.V.
  * See the COPYRIGHT file for redistribution and use restrictions.
  */
 package org.xins.server;
@@ -21,7 +21,7 @@ import org.xins.common.xml.Element;
  *
  * <p>The implementation of this class is thread-safe.
  *
- * @version $Revision: 1.22 $ $Date: 2007/09/18 08:45:05 $
+ * @version $Revision: 1.23 $ $Date: 2008/07/04 10:22:51 $
  * @author <a href="mailto:ernst@ernstdehaan.com">Ernst de Haan</a>
  * @author <a href="mailto:anthony.goubard@japplis.com">Anthony Goubard</a>
  *
@@ -45,7 +45,7 @@ class FunctionStatistics {
    FunctionStatistics() {
       _successful          = new Statistic();
       _unsuccessful        = new Statistic();
-      _errorCodeStatistics = new TreeMap();
+      _errorCodeStatistics = new TreeMap<String,Statistic>();
    }
 
    /**
@@ -63,7 +63,7 @@ class FunctionStatistics {
     * The key of the map is the error code and the Statistic object
     * corresponding to the error code. Never <code>null</code>.
     */
-   private final TreeMap _errorCodeStatistics;
+   private final TreeMap<String,Statistic> _errorCodeStatistics;
 
    /**
     * Callback method that may be called after a call to this function. This
@@ -104,7 +104,7 @@ class FunctionStatistics {
 
          _unsuccessful.recordCall(start, duration);
 
-         Statistic errorCodeStat = (Statistic)_errorCodeStatistics.get(errorCode);
+         Statistic errorCodeStat = _errorCodeStatistics.get(errorCode);
          if (errorCodeStat == null) {
             errorCodeStat = new Statistic();
             _errorCodeStatistics.put(errorCode, errorCodeStat);
@@ -326,19 +326,19 @@ class FunctionStatistics {
          minElem.setAttribute("start",    minStart);
          minElem.setAttribute("duration", min);
          minElem.setAttribute("tx",       _minTx);
-         element.addChild(minElem);
+         element.add(minElem);
 
          Element maxElem = new Element("max");
          maxElem.setAttribute("start",    maxStart);
          maxElem.setAttribute("duration", max);
          maxElem.setAttribute("tx",       _maxTx);
-         element.addChild(maxElem);
+         element.add(maxElem);
 
          Element lastElem = new Element("last");
          lastElem.setAttribute("start",    lastStart);
          lastElem.setAttribute("duration", lastDuration);
          lastElem.setAttribute("tx",       _lastTx);
-         element.addChild(lastElem);
+         element.add(lastElem);
          return element;
       }
 
