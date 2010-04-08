@@ -8,7 +8,7 @@ package org.xins.server;
 
 /**
  * Exception that indicates that a calling convention failed to convert a XINS
- * <code>FunctionResult</code> to an appropriate http response.
+ * <code>FunctionResult</code> to an appropriate HTTP response.
  *
  * @version $Revision: 1.9 $ $Date: 2007/03/12 10:40:30 $
  * @author <a href="mailto:ernst@ernstdehaan.com">Ernst de Haan</a>
