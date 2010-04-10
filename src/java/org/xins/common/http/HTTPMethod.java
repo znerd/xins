@@ -14,7 +14,7 @@ import java.io.Serializable;
  * <ul>
  *    <li>{@link #GET}
  *    <li>{@link #POST}
- *    <li>{@link #HEAD}
+ *    <li>{@link #HEAD} (added in XINS 3.0)
  * </ul>
  *
  * @version $Revision: 1.13 $ $Date: 2007/03/15 17:08:27 $
@@ -37,7 +37,7 @@ public final class HTTPMethod implements Serializable {
    /**
     * The HEAD method.
     *
-    * @since XINS 2.2
+    * @since XINS 3.0
     */
    public static final HTTPMethod HEAD = new HTTPMethod("HEAD");
 
@@ -64,8 +64,8 @@ public final class HTTPMethod implements Serializable {
     * <code>"GET"</code> or <code>"POST"</code>.
     *
     * @return
-    *    the name of this method, e.g. <code>"GET"</code> or
-    *    <code>"POST"</code>; never <code>null</code>.
+    *    the method name, e.g. <code>"GET"</code>, <code>"POST"</code>
+    *    or <code>"HEAD"</code>; never <code>null</code>.
     */
    public String toString() {
       return _name;
