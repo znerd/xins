@@ -14,6 +14,7 @@ Java2HTML:
 
 XINS/Java Common Library:
 * Library class now loads version from JAR manifest, once, at class init.
+* HTTPMethod now supports HEAD method.
 * Added various logXXX methods to the Utils class.
 * Deprecated Utils.getJavaVersion, use SystemUtils (in Commons Lang) instead.
 * Added a package 'logging' with a class LoggingThread. This class can be
@@ -131,7 +132,7 @@ Generation of Java code:
 Other:
 * Marked all XSLT stylesheets as XSLT version 2.0 (instead of 1.0).
 * Added DTDs for XINS 3.0.
-* Simplied 'xins' shell script and 'xins.bat' batch file.
+* Simplified 'xins' shell script and 'xins.bat' batch file.
 * XINS own build(-dev).xml now passes Xlint compilerarg to javac.
 * Allowing JMX port to be specified, e.g. "xins run-XXX -Djmx.port=2090"
 * Added supported for XINS_ANT_VERBOSE to xins shell script.
