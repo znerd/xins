@@ -55,6 +55,11 @@ final class ConfigManager {
    static final String INIT_LOGGING_SYSTEM_PROPERTY = "org.xins.server.logging.init";
 
    /**
+    * Flag that determines if the Log4J logging subsystem should be initialized.
+    */
+   private static boolean INIT_LOGGING;
+
+   /**
     * The name of the system property that specifies the location of the
     * configuration file.
     */
@@ -174,7 +179,9 @@ final class ConfigManager {
       }
 
       // TODO: Log if value is neither "true" nor "false"
-      if (setting == null || ! "false".equalsIgnoreCase(setting.trim())) {
+      INIT_LOGGING = (setting == null || ! "false".equalsIgnoreCase(setting.trim()));
+
+      if (INIT_LOGGING) {
          configureLoggerFallbackImpl();
          Utils.logInfo("Initialized Log4J configuration."); // TODO: Separate Logdoc log entry
       } else {
@@ -206,7 +213,7 @@ final class ConfigManager {
 
       // Perform Log4J configuration
       PropertyConfigurator.configure(settings);
-      }
+   }
 
    /**
     * Determines the name of the runtime configuration file. The system
@@ -571,6 +578,11 @@ final class ConfigManager {
       // Check preconditions
       MandatoryArgumentChecker.check("properties", properties);
 
+      // Short-circuit if logging configuration is done outside XINS
+      if (! INIT_LOGGING) {
+         return;
+      }
+
       // Reset Log4J configuration
       LogManager.getLoggerRepository().resetConfiguration();
 
@@ -584,8 +596,7 @@ final class ConfigManager {
       PropertyConfigurator.configure(properties);
 
       // Determine if Log4J is properly initialized
-      Enumeration appenders =
-         LogManager.getLoggerRepository().getRootLogger().getAllAppenders();
+      Enumeration appenders = LogManager.getLoggerRepository().getRootLogger().getAllAppenders();
 
       // If the properties did not include Log4J configuration settings, then
       // fallback to default settings
