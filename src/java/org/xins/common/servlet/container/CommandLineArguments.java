@@ -11,6 +11,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.xins.common.Utils;
+
 /**
  * Class used to parse and get the command line arguments when the internal
  * Servlet container is started.
@@ -62,8 +64,7 @@ class CommandLineArguments {
             try {
                port = Integer.parseInt(arg.substring(6));
             } catch (NumberFormatException nfe) {
-               System.err.println("Warning: Incorrect port number \"" + args[1] +
-                     "\", using " + HTTPServletStarter.DEFAULT_PORT_NUMBER + " as port number.");
+               System.err.println("Warning: Incorrect port number \"" + args[1] + "\", using " + HTTPServletStarter.DEFAULT_PORT_NUMBER + " as port number.");
             }
          } else if (arg.startsWith("-war:") || arg.startsWith("-war=")) {
             warFile = new File(arg.substring(5));
@@ -71,8 +72,7 @@ class CommandLineArguments {
             try {
                loaderMode = Integer.parseInt(args[2]);
             } catch (NumberFormatException nfe) {
-               System.err.println("Warning: Incorrect ClassLoader \"" + args[2] +
-                     "\", using " + ServletClassLoader.USE_WAR_LIB + " as default.");
+               System.err.println("Warning: Incorrect ClassLoader \"" + args[2] + "\", using " + ServletClassLoader.USE_WAR_LIB + " as default.");
             }
          } else if (arg.equalsIgnoreCase("-gui")) {
             showGUI = true;
@@ -84,6 +84,7 @@ class CommandLineArguments {
             try {
                port = Integer.parseInt(arg);
             } catch (NumberFormatException nfe) {
+               Utils.logIgnoredException(nfe);
             }
          }
       }
@@ -107,8 +108,7 @@ class CommandLineArguments {
       // Detect the ClassLoader mode
       if (loaderMode == -1) {
          String classPath = System.getProperty("java.class.path");
-         if (classPath.indexOf("xins-common.jar") != -1 && classPath.indexOf("servlet.jar") != -1 &&
-               classPath.indexOf("xins-server.jar") != -1 && classPath.indexOf("xmlenc.jar") != -1) {
+         if (classPath.indexOf("xins-common.jar") != -1 && classPath.indexOf("servlet.jar") != -1 && classPath.indexOf("xins-server.jar") != -1 && classPath.indexOf("xmlenc.jar") != -1) {
             loaderMode = ServletClassLoader.USE_WAR_EXTERNAL_LIB;
          } else {
             loaderMode = ServletClassLoader.USE_WAR_LIB;
