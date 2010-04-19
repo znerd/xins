@@ -93,6 +93,8 @@ XINS/Java Server Framework:
   (TODO, work in progress).
 * Supporting "targetFunction" parameter on _GetStatistics function.
 * _GetStatistics now returns transaction IDs for calls.
+* Not initializing logging subsystem if system property
+  "org.xins.server.logging.init" is set to "false".
 
 Libraries:
 * Upgraded to Juxy 0.8.
@@ -132,3 +134,4 @@ Other:
 * Simplied 'xins' shell script and 'xins.bat' batch file.
 * XINS own build(-dev).xml now passes Xlint compilerarg to javac.
 * Allowing JMX port to be specified, e.g. "xins run-XXX -Djmx.port=2090"
+* Added supported for XINS_ANT_VERBOSE to xins shell script.

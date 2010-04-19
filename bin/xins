@@ -42,5 +42,10 @@ ant -Dxins_home=${XINS_HOME} -Dfirst_target=${first_target} -q -f ${BOOT_XML}
 
 # If Ant returned successfully, then invoke Ant against the generated build file
 if [ "$?" = "0" ]; then
-	ant -Dxins_home=${XINS_HOME} -logger org.apache.tools.ant.NoBannerLogger -f build/build.xml $*
+	if [ "${XINS_ANT_VERBOSE}" = "true" ]; then
+		echo Executing: ant -Dxins_home=${XINS_HOME} --execdebug -logger org.apache.tools.ant.NoBannerLogger -f build/build.xml $*
+		ant -Dxins_home=${XINS_HOME} --execdebug -logger org.apache.tools.ant.NoBannerLogger -f build/build.xml $*
+	else
+		ant -Dxins_home=${XINS_HOME} -logger org.apache.tools.ant.NoBannerLogger -f build/build.xml $*
+	fi
 fi
