@@ -317,11 +317,12 @@ ${apis.list}]]></echo>
 
 	<target name="-run">
 		<property name="org.xins.server.config" value="" />
+		<property name="org.xins.server.logging" value="" />
 		<property name="jmx.port" value="1090" />
 		<property name="servlet.port" value="8080" />
-		<java classname="org.xins.common.servlet.container.HTTPServletStarter"
-					fork="true">
+		<java classname="org.xins.common.servlet.container.HTTPServletStarter" fork="true">
 			<jvmarg value="-Dorg.xins.server.config=${org.xins.server.config}" />
+			<jvmarg value="-Dorg.xins.server.logging.init=${org.xins.server.logging.init}" />
 			<jvmarg value="-Dcom.sun.management.jmxremote" />
 			<jvmarg value="-Dcom.sun.management.jmxremote.port=${jmx.port}"/>
 			<jvmarg value="-Dcom.sun.management.jmxremote.authenticate=false"/>
@@ -551,6 +552,7 @@ ${apis.list}]]></echo>
 		<property name="test.environment" value="" />
 		<property name="test.start.server" value="false" />
 		<property name="org.xins.server.config" value="" />
+		<property name="org.xins.server.logging.init" value="" />
 		<property name="servlet.port" value="8080" />
 		<property name="classes.api.dir" value="${builddir}/classes-api/${api}" />
 		<mkdir dir="${builddir}/classes-tests/${api}" />
@@ -581,6 +583,7 @@ ${apis.list}]]></echo>
 			<sysproperty key="test.environment" value="${test.environment}" />
 			<sysproperty key="test.start.server" value="${test.start.server}" />
 			<sysproperty key="org.xins.server.config" value="${org.xins.server.config}" />
+			<sysproperty key="org.xins.server.logging.init" value="${org.xins.server.logging.init}" />
 			<sysproperty key="servlet.port" value="${servlet.port}" />
 			<!--sysproperty key="net.sourceforge.cobertura.datafile"	file="${builddir}/coverage/${api}/cobertura.ser" /-->
 			<sysproperty key="emma.coverage.out.file"	file="${builddir}/emma/${api}/coverage.emma" />
