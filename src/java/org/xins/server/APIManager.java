@@ -69,8 +69,8 @@ public final class APIManager implements APIManagerMBean {
       _api = api;
       try {
          _ip = InetAddress.getLocalHost().getHostAddress();
-      } catch (UnknownHostException uhex) {
-         Log.log_3250(uhex);
+      } catch (UnknownHostException exception) {
+         Log.log_3250(exception);
          _ip = "127.0.0.1";
       }
    }
@@ -341,7 +341,7 @@ public final class APIManager implements APIManagerMBean {
     */
    private CompositeDataSupport propertiesToCompositeData(Properties properties) {
        try {
-          String[] keys = (String[]) properties.keySet().toArray(new String[properties.size()]);
+          String[] keys = properties.keySet().toArray(new String[properties.size()]);
           OpenType[] itemTypes = new OpenType[keys.length];
           Object[] values = new Object[keys.length];
           for (int i = 0; i < itemTypes.length; i++) {
