@@ -17,6 +17,11 @@ public final class ConvertRequestException
 extends Exception {
 
    /**
+    * Serial version UID. Used for serialization.
+    */
+   private static final long serialVersionUID = -9033187236433455358L;
+
+   /**
     * Constructs a new <code>ConvertRequestException</code>
     * with no detail message.
     */

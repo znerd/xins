@@ -25,6 +25,11 @@ import java.io.Serializable;
 public final class HTTPMethod implements Serializable {
 
    /**
+    * Serial version UID. Used for serialization.
+    */
+   private static final long serialVersionUID = -1800287612341346377L;
+
+   /**
     * The GET method.
     */
    public static final HTTPMethod GET = new HTTPMethod("GET");
