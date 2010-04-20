@@ -127,7 +127,8 @@ public class FormattedParameters {
          return _asString;
       }
 
-      StringBuffer buffer = new StringBuffer(80 + _parameters.size() * 40);
+      int parametersSize = _parameters == null ? 0 : _parameters.size();
+      StringBuffer buffer = new StringBuffer(80 + parametersSize * 40);
       if (_prefixIfNotEmpty != null) {
          buffer.append(_prefixIfNotEmpty);
       }
