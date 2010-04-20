@@ -82,18 +82,21 @@ public abstract class PatternType extends Type {
    protected final void checkValueImpl(String value) throws TypeValueException {
 
       // Determine if the value matches the pattern
+      boolean found;
       try {
          Matcher patternMatcher = _pattern.matcher(value);
-         if (! patternMatcher.find()) {
-            throw new TypeValueException(this, value, "String does not match pattern.");
-         }
+         found = patternMatcher.find();
 
       // If the call causes an exception, then log that exception and assume
       // the value does not match the pattern
       } catch (Throwable cause) {
          String detail = "Assuming the value \"" + value + "\" is invalid for the pattern \"" + _patternString + "\".";
-         Utils.logProgrammingError(detail, cause);
+         Utils.logProgrammingError(PatternType.class.getName(), "checkValueImpl()", null, null, detail, cause);
          throw new TypeValueException(this, value, "Pattern matching caused an exception.", cause);
+      }
+
+      if (! found) {
+         throw new TypeValueException(this, value, "String does not match pattern.");
       }
    }
 

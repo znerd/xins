@@ -77,7 +77,8 @@ XINS/Java Common Library:
   (TODO, work in progress).
 * FunctionSpec/APISpec classes simplified, using generics.
 * Changed FunctionSpec/APISpec methods to return unmodifiable collections/maps.
-* Fixed NPE in FormatterParameters.
+* Fixed NPE in FormattedParameters.
+* Fixed issue in PatternType.
 
 XINS/Java Client Framework:
 * Library class now loads version from JAR manifest, once, at class init.
