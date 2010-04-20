@@ -178,9 +178,9 @@
 		</blockquote>
 		<p />
 		<form onsubmit="return testPattern(elements['pattern'].value, elements['input'].value)">
-		  <input name="pattern" type="text" size="50" value="^{$pattern}$" />
+		  <input name="pattern" type="text" size="50" value="{$pattern}" />
 				<xsl:text> </xsl:text>
-		  <input type="button" value="&lt;- Original pattern" onclick="javascript:elements['pattern'].value='^' + document.getElementById('pattern').innerHTML + '$'"/>
+		  <input type="button" value="&lt;- Original pattern" onclick="javascript:elements['pattern'].value='' + document.getElementById('pattern').innerHTML"/>
 			<br />
 		  <input name="input" type="text" size="50" />
 				<xsl:text> </xsl:text>

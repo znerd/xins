@@ -126,6 +126,8 @@ Generation of specdocs:
 * Minor changes to text in generated index.html file.
 * Showing ellipsis instead of API_PATH in function example requests.
 * Added classes and IDs on elements in index.html, to easen custom styling.
+* Type no longer assumes a pattern applies to the whole line (hence no longer
+  adding line start and end markers to the regular expression).
 
 Generation of Java code:
 * Changed default_resultcodes_to_java.xslt to put a warning ("do not edit")
@@ -135,6 +137,6 @@ Other:
 * Marked all XSLT stylesheets as XSLT version 2.0 (instead of 1.0).
 * Added DTDs for XINS 3.0.
 * Simplified 'xins' shell script and 'xins.bat' batch file.
+* Added supported for XINS_ANT_VERBOSE to xins shell script.
 * XINS own build(-dev).xml now passes Xlint compilerarg to javac.
 * Allowing JMX port to be specified, e.g. "xins run-XXX -Djmx.port=2090"
-* Added supported for XINS_ANT_VERBOSE to xins shell script.
