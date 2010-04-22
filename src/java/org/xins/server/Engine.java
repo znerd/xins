@@ -443,8 +443,7 @@ final class Engine {
     * @throws IOException
     *    in case of an I/O error.
     */
-   void service(HttpServletRequest  request,
-         HttpServletResponse response)
+   void service(HttpServletRequest request, HttpServletResponse response)
    throws IOException {
 
       // Set the correct character encoding for the request
