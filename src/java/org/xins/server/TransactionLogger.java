@@ -84,7 +84,37 @@ public class TransactionLogger {
                      duration);
    }
 
-   // TODO: Document
+   /**
+    * Log a single transaction after a function was invoked.
+    *
+    * @param functionName
+    *    the name of the function that was invoked,
+    *    cannot be <code>null</code>.
+    *
+    * @param requestParams
+    *    the incoming request parameters, or <code>null</code> if none.
+    *
+    * @param requestDataElement
+    *    the input data section, or <code>null</code> if none.
+    *
+    * @param resultCode
+    *    the result error code, or <code>null</code> on success.
+    *
+    * @param resultParams
+    *    the outgoing result parameters, or <code>null</code> if none.
+    *
+    * @param requestDataElement
+    *    the output data section, or <code>null</code> if none.
+    *
+    * @param ip
+    *    the IP address of the caller, cannot be <code>null</code>.
+    *
+    * @param start
+    *    the time of the incoming call, in milliseconds since January 1, 1970.
+    *
+    * @param duration
+    *    the duration of the call in milliseconds.
+    */
    protected void logTransaction(String         functionName,
                                  PropertyReader requestParams,
                                  Element        requestDataElement,
