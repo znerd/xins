@@ -3,28 +3,48 @@ This is XINS: "XML Interface for Network Services".
 This software is available under the terms of a BSD-style license, see
 the accompanied COPYRIGHT file.
 
-This is a fork of the regular XINS distribution, see:
+
+BUILDING XINS
+
+To build XINS self, use Ant (1.7.1 or 1.8.0) and execute:
+
+   ant
+
+Under the build/ directory files will be generated, including a JAR file and
+Javadoc API documentation.
+
+
+HISTORY
+
+This is a fork of the regular XINS distribution:
 
    http://xins.sourceforge.net/
 
 The most important changes compared to the mainstream XINS branch are:
 - Java 5 required (support for earlier versions dropped)
 - Java 5-features supported/used (generics, foreach-loop, etc.)
-- various classes and methods are deprecated
-- removal of classes and methods previously marked deprecated
-- various library upgrades
+- XSLT 2.0 is now used by all stylesheets
+- various classes and methods have been marked deprecated
+- several previously deprecated classes/methods have been removed
+- libraries have been updated
 - various utility methods added to allow less code for users
-- improved logging
-- API documentation improvements
-- upgraded to XSLT 2.0
+- logging has been improved
+- API documentation has been extended and improved
+- the XML Element class now supports mixed content
+- the FileWatcher has seen a lot of improvements 
+- CallingConventions are now easier to develop
 
 For details, see the file: CHANGES-3.0.txt
+
+
+BUG REPORTS AND FEATURE REQUESTS
 
 If you want to file a bug report or a feature request, please do so here:
 
    http://github.com/znerd/xins/issues
 
 
+--
 --
 Ernst de Haan
 ernst@ernstdehaan.com
