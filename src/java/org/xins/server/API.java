@@ -730,7 +730,27 @@ public abstract class API extends Manageable {
       Log.log_3406(_name);
    }
 
-   // TODO: Document
+   /**
+    * Creates an appropriate <code>TransactionLogger</code> instance from the 
+    * specified settings.
+    *
+    * @param settings
+    *    the settings to create a transaction logger from,
+    *    cannot be <code>null</code>.
+    *
+    * @return
+    *    an appropriate {@link TransactionLogger}, never <code>null</code>.
+    *
+    * @throws IllegalArgumentException
+    *    if <code>settings == null</code>.
+    *
+    * @throws InvalidPropertyValueException
+    *    if one of the settings has an invalid value.
+    *
+    * @throws InitializationException
+    *    if the settings appear usable, but still an appropriate
+    *    {@link TransactionLogger} could not be created.
+    */
    private TransactionLogger createTransactionLogger(PropertyReader settings)
    throws IllegalArgumentException,
           InvalidPropertyValueException,
