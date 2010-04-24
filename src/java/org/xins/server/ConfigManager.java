@@ -91,7 +91,7 @@ final class ConfigManager {
    /**
     * The default configuration file modification check interval, in seconds.
     */
-   static final int DEFAULT_CONFIG_RELOAD_INTERVAL = 60;
+   static final int DEFAULT_CONFIG_RELOAD_INTERVAL = 5;
 
    // XXX: Consider adding state checking
    /**

@@ -44,7 +44,7 @@ XINS/Java Common Library:
 * MissingRequiredPropertyException now extends from PropertyException.
 * Added copyUnmodifiable(PropertyReader) to PropertyReaderUtils class.
 * Implemented toString() method in AbstractPropertyReader class.
-* Added methods to TextUtils: hash, hashToString and nullIfEmpty.
+* Added methods to TextUtils: hash, hashToString, nullIfEmpty, fuzzyEquals.
 * PropertyReaderUtils.parsePropertyReader supports XML.
 * Added names() method to PropertyReader interface that allows the use of
   the Java 5 foreach-operator. It returns a Collection<String>.
@@ -98,6 +98,7 @@ XINS/Java Server Framework:
 * _GetStatistics now returns transaction IDs for calls.
 * Not initializing logging subsystem if system property
   "org.xins.server.logging.init" is set to "false".
+* Default runtime config file reload interval is now 5 instead of 60 seconds.
 
 Libraries:
 * Upgraded to Juxy 0.8.
