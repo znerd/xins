@@ -7,6 +7,7 @@
 package org.xins.server;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
@@ -16,6 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 import javax.management.openmbean.CompositeDataSupport;
 import javax.management.openmbean.CompositeType;
 import javax.management.openmbean.OpenDataException;
@@ -60,10 +63,10 @@ public final class APIManager implements APIManagerMBean {
    private String _ip;
 
    /**
-    * Ctreates a new API manager MBean.
+    * Creates a new API manager MBean.
     *
     * @param api
-    *    the APi that is managed by this MBean.
+    *    the API that is managed by this MBean.
     */
    APIManager(API api) {
       _api = api;
@@ -367,16 +370,9 @@ public final class APIManager implements APIManagerMBean {
     *    if the MBeanServer cannot be found or created or one of the registered MBean fails.
     */
    static void registerMBean(API api) throws Throwable {
-      javax.management.MBeanServer mBeanServer;
-      try {
-         mBeanServer = (javax.management.MBeanServer) Class.forName("java.lang.management.ManagementFactory").getMethod("getPlatformMBeanServer").invoke(null);
-      } catch (ClassNotFoundException cnfe) {
-
-         // Try with the JDK 1.4 and 1.3 compatible JMX reference implementation
-         mBeanServer = javax.management.MBeanServerFactory.createMBeanServer();
-      }
+      MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
       APIManager mBean = new APIManager(api);
-      javax.management.ObjectName objectName = new javax.management.ObjectName("org.xins.server.api." + api.getName() + ":type=APIManager");
+      ObjectName objectName = new ObjectName("org.xins.server.api." + api.getName() + ":type=APIManager");
 
       mBeanServer.registerMBean(mBean, objectName);
 
@@ -384,7 +380,7 @@ public final class APIManager implements APIManagerMBean {
 
       // Create and Register the top level Log4J MBean
       HierarchyDynamicMBean hdm = new HierarchyDynamicMBean();
-      javax.management.ObjectName mbo = new javax.management.ObjectName("org.xins.server.api." + api.getName() + ":hiearchy=log4j");
+      ObjectName mbo = new ObjectName("org.xins.server.api." + api.getName() + ":hiearchy=log4j");
       mBeanServer.registerMBean(hdm, mbo);
 
       // Add the root logger to the Hierarchy MBean
