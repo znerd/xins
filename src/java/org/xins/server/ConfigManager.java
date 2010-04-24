@@ -56,11 +56,13 @@ import org.znerd.logdoc.UnsupportedLocaleException;
 final class ConfigManager {
 
    /**
-    * The name of the system property that can be used to enable or disable
-    * initialization of the logging subsystem. Default is that initialization
-    * is done.
+    * The name of the system property that determines if the Log4J logging
+    * subsystem is initialized by the XINS/Java Server Framework. Default is
+    * that initialization is indeed done by XINS. Should be either 
+    * <code>"true"</code> or <code>"false"</code>, default is 
+    * <code>"true"</code>.
     */
-   static final String INIT_LOGGING_SYSTEM_PROPERTY = "org.xins.server.logging.init";
+   public static final String INIT_LOGGING_SYSTEM_PROPERTY = "org.xins.server.logging.init";
 
    /**
     * Flag that determines if the Log4J logging subsystem should be initialized.
