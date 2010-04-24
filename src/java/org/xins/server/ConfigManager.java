@@ -31,7 +31,10 @@ import org.xins.common.collections.StatsPropertyReader;
 import org.xins.common.collections.UniqueProperties;
 import org.xins.common.io.FileWatcher;
 import org.xins.common.io.HTTPFileWatcher;
-import org.xins.common.text.TextUtils;
+import static org.xins.common.text.TextUtils.fuzzyEquals;
+import static org.xins.common.text.TextUtils.isEmpty;
+import static org.xins.common.text.TextUtils.quote;
+import static org.xins.common.text.TextUtils.trim;
 import org.znerd.logdoc.LogCentral;
 import org.znerd.logdoc.UnsupportedLocaleException;
 
@@ -174,13 +177,22 @@ final class ConfigManager {
       try {
          setting = System.getProperty(INIT_LOGGING_SYSTEM_PROPERTY);
       } catch (SecurityException exception) {
-         Utils.logError("Failed to retrieve system property " + TextUtils.quote(INIT_LOGGING_SYSTEM_PROPERTY) + " due to SecurityException.", exception);
+         Utils.logError("Failed to retrieve system property " + quote(INIT_LOGGING_SYSTEM_PROPERTY) + " due to SecurityException.", exception);
          setting = null;
       }
 
-      // TODO: Log if value is neither "true" nor "false"
-      INIT_LOGGING = (setting == null || ! "false".equalsIgnoreCase(setting.trim()));
+      // Analyze the string value to produce a boolean
+      boolean value;
+      if (isEmpty(setting) || fuzzyEquals("true", setting)) {
+         INIT_LOGGING = true;
+      } else if (fuzzyEquals("false", setting)) {
+         INIT_LOGGING = true;
+      } else {
+         INIT_LOGGING = true;
+         Utils.logWarning("System property \"" + INIT_LOGGING_SYSTEM_PROPERTY + "\" has invalid value " + quote(setting) + ". Expected either \"true\" or \"false\". Assuming default, which is \"true\".");
+      }
 
+      // Do initialize the logging subsystem
       if (INIT_LOGGING) {
          configureLoggerFallbackImpl();
          Utils.logInfo("Initialized Log4J configuration."); // TODO: Separate Logdoc log entry
@@ -301,7 +313,7 @@ final class ConfigManager {
 
             // No such file
          } catch (FileNotFoundException exception) {
-            String detail = TextUtils.trim(exception.getMessage(), null);
+            String detail = trim(exception.getMessage(), null);
             Log.log_3301(_configFilesPath, detail);
 
             // Other I/O error
@@ -501,7 +513,7 @@ final class ConfigManager {
    private void logUnusedRuntimeProperties() {
       if (_runtimeProperties != null) {
          for (String name : _runtimeProperties.getUnused().names()) {
-            if (! (TextUtils.isEmpty(name) || name.startsWith("log4j."))) {
+            if (! (isEmpty(name) || name.startsWith("log4j."))) {
                Log.log_3434(name);
             }
          }
@@ -720,7 +732,7 @@ final class ConfigManager {
       String s = _runtimeProperties.get(LogCentral.LOG_FILTER_PROPERTY);
 
       // Runtime property is not set, also skip
-      if (TextUtils.isEmpty(s)) {
+      if (isEmpty(s)) {
          return true;
       }
 

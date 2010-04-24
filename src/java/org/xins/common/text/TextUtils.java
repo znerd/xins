@@ -145,6 +145,39 @@ public final class TextUtils {
    }
 
    /**
+    * Compares the specified strings for equality, after normalizing 
+    * whitespace and ignoring case.
+    *
+    * @param s1
+    *    the first string, or <code>null</code>.
+    *
+    * @param s2
+    *    the second string, or <code>null</code>.
+    *
+    * @return
+    *    if <code>s1</code> and <code>s2</code> are considered equal,
+    *    normalizing whitespace and ignoring case.
+    *
+    * @since XINS 3.0
+    */
+   public static boolean fuzzyEquals(String s1, String s2) {
+
+      // First check nulls
+      if (s1 == null) {
+         return s2 == null;
+      } else if (s2 == null) {
+         return false;
+      }
+
+      // Normalize whitespace
+      String n1 = normalizeWhitespace(s1);
+      String n2 = normalizeWhitespace(s2);
+
+      // Compare normalized versions, ignoring case
+      return n1.equalsIgnoreCase(n2);
+   }
+
+   /**
     * Removes all leading and trailing whitespace from a string, and replaces
     * all internal whitespace with a single space character.
     * If <code>null</code> is passed, then <code>""</code> is returned.
