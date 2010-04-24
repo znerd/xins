@@ -233,7 +233,7 @@ ${apis.list}]]></echo>
 		<property name="api.version" value="Not specified" />
 	</target>
 
-	<target name="-prepare-classes" depends="-load-properties,-load-dtds">
+	<target name="-prepare-classes" depends="-load-properties">
 		<!-- If not set by the user set the default properties. -->
 		<property name="build.deprecation"  value="true" />
 		<property name="build.java.version" value="${ant.java.version}" />
@@ -423,7 +423,10 @@ ${apis.list}]]></echo>
 			<link href="http://java.sun.com/javase/6/docs/api"                                                               offline="true" packagelistloc="${xins_home}/src/package-lists/javase/" />
 			<link href="http://jakarta.apache.org/log4j/docs/api/"                                                           offline="true" packagelistloc="${xins_home}/src/package-lists/log4j/"  />
 			<link href="http://xmlenc.sourceforge.net/javadoc/${xmlenc_version}/"                                            offline="true" packagelistloc="${xins_home}/src/package-lists/xmlenc/" />
-			<classpath refid="classes.api.classpath" />
+			<classpath>
+				<path refid="classes.api.classpath" />
+				<path refid="xins.classpath" />
+			</classpath>
 		</javadoc>
 		<copy
 		file="${xins_home}/src/css/javadoc/style.css"
@@ -648,7 +651,10 @@ ${apis.list}]]></echo>
 		deprecation="${build.deprecation}"
 		source="${build.java.version}"
 		target="${build.java.version}">
-			<classpath refid="jar.classpath" />
+			<classpath>
+				<path refid="jar.classpath" />
+				<path refid="xins.classpath" />
+			</classpath>
 		</javac>
 		<mkdir dir="${builddir}/capis/" />
 		<manifest file="${builddir}/capis/${api}-MANIFEST.MF">
@@ -1107,7 +1113,10 @@ ${apis.list}]]></echo>
 		target="${build.java.version}">
 			<src path="${javaDestDir}" />
 			<src path="${javaImplDir}" />
-			<classpath refid="classes.api.classpath" />
+			<classpath>
+				<path refid="classes.api.classpath" />
+				<path refid="xins.classpath" />
+			</classpath>
 		</javac>
 	</target>
 
