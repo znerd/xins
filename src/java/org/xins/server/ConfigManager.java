@@ -43,6 +43,11 @@ import org.znerd.logdoc.UnsupportedLocaleException;
  * file and is responsible for triggering actions when the file has actually
  * changed.
  *
+ * <p>At startup, the <code>org.xins.server.logging.init</code> system 
+ * property is analyzed. Unless it is set to <code>false</code> the Log4J 
+ * logging subsystem is initialized. Note that this setting is persistent 
+ * during the lifetime of the server framework, it will not be reread. 
+ *
  * @version $Revision: 1.60 $ $Date: 2007/09/18 08:45:05 $
  * @author <a href="mailto:mees.witteman@orange-ftgroup.com">Mees Witteman</a>
  * @author <a href="mailto:anthony.goubard@japplis.com">Anthony Goubard</a>
@@ -177,7 +182,7 @@ final class ConfigManager {
       try {
          setting = System.getProperty(INIT_LOGGING_SYSTEM_PROPERTY);
       } catch (SecurityException exception) {
-         Utils.logError("Failed to retrieve system property " + quote(INIT_LOGGING_SYSTEM_PROPERTY) + " due to SecurityException.", exception);
+         Utils.logError("Failed to retrieve system property " + quote(INIT_LOGGING_SYSTEM_PROPERTY) + " due to SecurityException.", exception); // TODO: Separate Logdoc log entry
          setting = null;
       }
 
@@ -189,7 +194,7 @@ final class ConfigManager {
          INIT_LOGGING = true;
       } else {
          INIT_LOGGING = true;
-         Utils.logWarning("System property \"" + INIT_LOGGING_SYSTEM_PROPERTY + "\" has invalid value " + quote(setting) + ". Expected either \"true\" or \"false\". Assuming default, which is \"true\".");
+         Utils.logWarning("System property \"" + INIT_LOGGING_SYSTEM_PROPERTY + "\" has invalid value " + quote(setting) + ". Expected either \"true\" or \"false\". Assuming default, which is \"true\"."); // TODO: Separate Logdoc log entry
       }
 
       // Do initialize the logging subsystem
