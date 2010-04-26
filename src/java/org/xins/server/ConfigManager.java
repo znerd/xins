@@ -258,6 +258,12 @@ final class ConfigManager {
     */
    static synchronized void setPushContextID(boolean flag) {
       PUSH_CONTEXT_ID = flag;
+
+      if (flag) {
+         Utils.logInfo("Context ID pushing enabled.");
+      } else {
+         Utils.logInfo("Context ID pushing disabled.");
+      }
    }
 
    /**
