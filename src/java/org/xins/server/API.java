@@ -731,7 +731,7 @@ public abstract class API extends Manageable {
    }
 
    /**
-    * Creates an appropriate <code>TransactionLogger</code> instance from the 
+    * Creates an appropriate <code>TransactionLogger</code> instance from the
     * specified settings.
     *
     * @param settings
