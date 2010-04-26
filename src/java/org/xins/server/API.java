@@ -33,7 +33,9 @@ import org.xins.common.spec.APISpec;
 import org.xins.common.spec.InvalidSpecificationException;
 import org.xins.common.text.DateConverter;
 import org.xins.common.text.ParseException;
-import org.xins.common.text.TextUtils;
+import static org.xins.common.text.TextUtils.fuzzyEquals;
+import static org.xins.common.text.TextUtils.isEmpty;
+import static org.xins.common.text.TextUtils.quote;
 import org.xins.common.xml.Element;
 
 /**
@@ -393,11 +395,7 @@ public abstract class API extends Manageable {
       // Check state
       Manageable.State state = getState();
       if (state != BOOTSTRAPPING) {
-         String message = "State is "
-                        + state
-                        + " instead of "
-                        + BOOTSTRAPPING
-                        + '.';
+         String message = "State is " + state.getName() + " instead of BOOTSTRAPPING.";
          Utils.logProgrammingError(message);
          throw new IllegalStateException(message);
       }
@@ -411,12 +409,26 @@ public abstract class API extends Manageable {
       _buildSettings = buildSettings;
 
       // Get build-time properties
-      _apiVersion   = _buildSettings.get(API_VERSION_PROPERTY       );
-      _buildHost    = _buildSettings.get(BUILD_HOST_PROPERTY        );
-      _buildTime    = _buildSettings.get(BUILD_TIME_PROPERTY        );
-      _buildVersion = _buildSettings.get(BUILD_XINS_VERSION_PROPERTY);
-
+      _apiVersion   = buildSettings.get(API_VERSION_PROPERTY       );
+      _buildHost    = buildSettings.get(BUILD_HOST_PROPERTY        );
+      _buildTime    = buildSettings.get(BUILD_TIME_PROPERTY        );
+      _buildVersion = buildSettings.get(BUILD_XINS_VERSION_PROPERTY);
       Log.log_3212(_buildHost, _buildTime, _buildVersion, _name, _apiVersion);
+
+      // Additional settings that affect server behaviour
+      String propName = ConfigManager.CONTEXT_ID_PUSH_PROPERTY;
+      String  setting = buildSettings.get(propName);
+      if (! isEmpty(setting)) {
+         if (fuzzyEquals("true", setting)) {
+            _engine.getConfigManager().setPushContextID(true);
+         } else if (fuzzyEquals("false", setting)) {
+            _engine.getConfigManager().setPushContextID(false);
+         } else {
+            Utils.logWarning("Build property \"" + propName + "\" has invalid value " + quote(setting) + ". Ignoring.");
+         }
+      } else {
+         Utils.logDebug("Build property \"" + propName + "\" is unset or empty.");
+      }
 
       // Skip check if build version is not set
       if (_buildVersion == null) {
@@ -438,7 +450,7 @@ public abstract class API extends Manageable {
          String className = m.getClass().getName();
          Log.log_3213(_name, className);
          try {
-            m.bootstrap(_buildSettings);
+            m.bootstrap(buildSettings);
 
          // Missing property
          } catch (MissingRequiredPropertyException exception) {
@@ -479,7 +491,7 @@ public abstract class API extends Manageable {
          String functionName = f.getName();
          Log.log_3220(_name, functionName);
          try {
-            f.bootstrap(_buildSettings);
+            f.bootstrap(buildSettings);
 
          // Missing required property
          } catch (MissingRequiredPropertyException exception) {
@@ -628,6 +640,22 @@ public abstract class API extends Manageable {
          }
       }
 
+      // Setting that controls context ID pushing
+      propName       = ConfigManager.CONTEXT_ID_PUSH_PROPERTY;
+      String setting = runtimeSettings.get(propName);
+      if (! isEmpty(setting)) {
+         if (fuzzyEquals("true", setting)) {
+            _engine.getConfigManager().setPushContextID(true);
+         } else if (fuzzyEquals("false", setting)) {
+            _engine.getConfigManager().setPushContextID(false);
+         } else {
+            Utils.logWarning("Runtime property \"" + propName + "\" has invalid value " + quote(setting) + ". Ignoring.");
+         }
+      } else {
+         Utils.logDebug("Runtime property \"" + propName + "\" is unset or empty.");
+      }
+
+      //--------------------------
       // Initialize ACL subsystem
 
       // First with the API specific access rule list
@@ -762,7 +790,7 @@ public abstract class API extends Manageable {
       String className = settings.get(TRANSACTION_LOGGER_PROPERTY);
 
       TransactionLogger txLogger;
-      if (TextUtils.isEmpty(className, true)) {
+      if (isEmpty(className, true)) {
          txLogger = new TransactionLogger();
       } else {
 
@@ -1493,7 +1521,7 @@ public abstract class API extends Manageable {
       for (String key : _buildSettings.names()) {
          String value = _buildSettings.get(key);
 
-         if (! TextUtils.isEmpty(value)) {
+         if (! isEmpty(value)) {
             Element property = new Element("property");
             property.setAttribute("name", key);
             property.setText(value);
