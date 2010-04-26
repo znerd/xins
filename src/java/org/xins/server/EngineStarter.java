@@ -19,6 +19,9 @@ import org.xins.common.collections.MissingRequiredPropertyException;
 import org.xins.common.collections.PropertyReader;
 import org.xins.common.servlet.ServletConfigPropertyReader;
 import org.xins.common.text.TextUtils;
+
+import static org.xins.server.ConfigManager.LOG_STACK_TRACE_AT_MESSAGE_LEVEL;
+
 import org.znerd.logdoc.LogCentral;
 import org.znerd.logdoc.UnsupportedLocaleException;
 import org.znerd.logdoc.internal.log4j.AbstractLog;
@@ -345,14 +348,13 @@ final class EngineStarter {
 		PropertyReader properties = new ServletConfigPropertyReader(_config);
 
 		// Determine at what level should the stack traces be displayed
-		String stackTraceAtMessageLevel = properties.get(LogCentral.LOG_STACK_TRACE_AT_MESSAGE_LEVEL);
+		String stackTraceAtMessageLevel = properties.get(LOG_STACK_TRACE_AT_MESSAGE_LEVEL);
 		if ("true".equals(stackTraceAtMessageLevel)) {
 			LogCentral.setStackTraceAtMessageLevel(true);
 		} else if ("false".equals(stackTraceAtMessageLevel)) {
 			LogCentral.setStackTraceAtMessageLevel(false);
 		} else if (stackTraceAtMessageLevel != null) {
-			throw new ServletException("Incorrect value for the " +
-					LogCentral.LOG_STACK_TRACE_AT_MESSAGE_LEVEL + " bootstrap property.");
+			throw new ServletException("Incorrect value for the " + LOG_STACK_TRACE_AT_MESSAGE_LEVEL + " bootstrap property.");
 		}
 
 		// Bootstrap the API self

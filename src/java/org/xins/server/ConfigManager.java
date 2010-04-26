@@ -35,6 +35,10 @@ import static org.xins.common.text.TextUtils.fuzzyEquals;
 import static org.xins.common.text.TextUtils.isEmpty;
 import static org.xins.common.text.TextUtils.quote;
 import static org.xins.common.text.TextUtils.trim;
+
+import static org.xins.server.ConfigManager.LOG_FILTER_PROPERTY;
+import static org.xins.server.ConfigManager.LOG_LOCALE_PROPERTY;
+
 import org.znerd.logdoc.LogCentral;
 import org.znerd.logdoc.UnsupportedLocaleException;
 
@@ -54,6 +58,25 @@ import org.znerd.logdoc.UnsupportedLocaleException;
  * @author <a href="mailto:ernst@ernstdehaan.com">Ernst de Haan</a>
  */
 final class ConfigManager {
+
+   /**
+    * The name of the property that specifies which locale should be used by 
+    * Logdoc.
+    */
+   public static final String LOG_LOCALE_PROPERTY = "org.xins.logdoc.locale";
+
+   /**
+    * The name of the property that specifies if all stack traces should be
+    * displayed at the message level. By default, stack traces are displayed
+    * at the <em>DEBUG</em> level.
+    */
+   public static final String LOG_STACK_TRACE_AT_MESSAGE_LEVEL = "org.xins.logdoc.stackTraceAtMessageLevel";
+
+   /**
+    * The name of the property that specifies the name of the Logdoc
+    * <code>LogFilter</code> class to use.
+    */
+   public static final String LOG_FILTER_PROPERTY = "org.xins.logdoc.filterClass";
 
    /**
     * The name of the system property that determines if the Log4J logging
@@ -782,7 +805,7 @@ final class ConfigManager {
 
       // If we have runtime properties, then get the log locale
       if (_runtimeProperties != null) {
-         newLocale = _runtimeProperties.get(LogCentral.LOG_LOCALE_PROPERTY);
+         newLocale = _runtimeProperties.get(LOG_LOCALE_PROPERTY);
       }
 
       // If the log locale is set, apply it
@@ -822,7 +845,7 @@ final class ConfigManager {
       }
 
       // Get the name of the filter class to use
-      String s = _runtimeProperties.get(LogCentral.LOG_FILTER_PROPERTY);
+      String s = _runtimeProperties.get(LOG_FILTER_PROPERTY);
 
       // Runtime property is not set, also skip
       if (isEmpty(s)) {

@@ -43,6 +43,9 @@ import org.xins.common.spec.APISpec;
 import org.xins.common.spec.EntityNotFoundException;
 import org.xins.common.spec.InvalidSpecificationException;
 import org.xins.common.text.TextUtils;
+
+import static org.xins.server.ConfigManager.LOG_STACK_TRACE_AT_MESSAGE_LEVEL;
+
 import org.znerd.logdoc.LogCentral;
 
 /**
@@ -323,7 +326,7 @@ final class Engine {
       PropertyReader properties = _configManager.getRuntimeProperties();
 
       // Determine at what level should the stack traces be displayed
-      String stackTraceAtMessageLevel = properties.get(LogCentral.LOG_STACK_TRACE_AT_MESSAGE_LEVEL);
+      String stackTraceAtMessageLevel = properties.get(LOG_STACK_TRACE_AT_MESSAGE_LEVEL);
       if ("true".equals(stackTraceAtMessageLevel)) {
          LogCentral.setStackTraceAtMessageLevel(true);
       } else if ("false".equals(stackTraceAtMessageLevel)) {
