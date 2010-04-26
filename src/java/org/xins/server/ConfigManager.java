@@ -43,10 +43,10 @@ import org.znerd.logdoc.UnsupportedLocaleException;
  * file and is responsible for triggering actions when the file has actually
  * changed.
  *
- * <p>At startup, the <code>org.xins.server.logging.init</code> system 
- * property is analyzed. Unless it is set to <code>false</code> the Log4J 
- * logging subsystem is initialized. Note that this setting is persistent 
- * during the lifetime of the server framework, it will not be reread. 
+ * <p>At startup, the <code>org.xins.server.logging.init</code> system
+ * property is analyzed. Unless it is set to <code>false</code> the Log4J
+ * logging subsystem is initialized. Note that this setting is persistent
+ * during the lifetime of the server framework, it will not be reread.
  *
  * @version $Revision: 1.60 $ $Date: 2007/09/18 08:45:05 $
  * @author <a href="mailto:mees.witteman@orange-ftgroup.com">Mees Witteman</a>
@@ -58,8 +58,8 @@ final class ConfigManager {
    /**
     * The name of the system property that determines if the Log4J logging
     * subsystem is initialized by the XINS/Java Server Framework. Default is
-    * that initialization is indeed done by XINS. Should be either 
-    * <code>"true"</code> or <code>"false"</code>, default is 
+    * that initialization is indeed done by XINS. Should be either
+    * <code>"true"</code> or <code>"false"</code>, default is
     * <code>"true"</code>.
     */
    public static final String INIT_LOGGING_SYSTEM_PROPERTY = "org.xins.server.logging.init";
@@ -314,16 +314,16 @@ final class ConfigManager {
             }
             propertiesRead = true;
 
-            // Security issue
+         // Security issue
          } catch (SecurityException exception) {
             Log.log_3302(exception, _configFilesPath);
 
-            // No such file
+         // No such file
          } catch (FileNotFoundException exception) {
             String detail = trim(exception.getMessage(), null);
             Log.log_3301(_configFilesPath, detail);
 
-            // Other I/O error
+         // Other I/O error
          } catch (IOException exception) {
             Log.log_3303(exception, _configFilesPath);
          }
@@ -392,7 +392,7 @@ final class ConfigManager {
             _configFiles[0] = _configFile;
          }
 
-         // Always close the input stream
+      // Always close the input stream
       } finally {
          if (in != null) {
             try {
@@ -448,7 +448,7 @@ final class ConfigManager {
             _configFiles[0] = _configFile;
          }
 
-         // Always close the input stream
+      // Always close the input stream
       } finally {
          if (in != null) {
             try {
@@ -668,13 +668,13 @@ final class ConfigManager {
                Log.log_3410(_configFilesPath, s);
             }
 
-            // Not a valid number string
+         // Not a valid number string
          } catch (NumberFormatException nfe) {
             Log.log_3409(_configFilesPath, prop, s);
             throw new InvalidPropertyValueException(prop, s, "Not a 32-bit integer number.");
          }
 
-         // Property not set, use the default
+      // Property not set, use the default
       } else {
          Log.log_3408(_configFilesPath, prop, DEFAULT_CONFIG_RELOAD_INTERVAL);
          interval = DEFAULT_CONFIG_RELOAD_INTERVAL;
@@ -713,7 +713,7 @@ final class ConfigManager {
             }
          }
 
-         // No property defines the locale, use the default
+      // No property defines the locale, use the default
       } else {
          LogCentral.useDefaultLocale();
       }
