@@ -189,6 +189,16 @@ final class Engine {
    }
 
    /**
+    * Retrieves the container <code>ConfigManager</code>.
+    *
+    * @return
+    *    the {@link ConfigManager}, never <code>null</code>.
+    */
+   ConfigManager getConfigManager() {
+      return _configManager;
+   }
+
+   /**
     * Bootstraps the API. The following steps will be performed:
     *
     * <ul>
