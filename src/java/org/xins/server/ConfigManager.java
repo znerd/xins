@@ -65,6 +65,13 @@ final class ConfigManager {
    public static final String INIT_LOGGING_SYSTEM_PROPERTY = "org.xins.server.logging.init";
 
    /**
+    * The system/bootstrap/runtime property that controls if context IDs are
+    * generated. In Log4J terminology these are called NDCs (Nested Diagnostic
+    * Context identifiers).
+    */
+   static final String CONTEXT_ID_PUSH_PROPERTY = "org.xins.server.contextID.push";
+
+   /**
     * Flag that determines if the Log4J logging subsystem should be initialized.
     */
    private static boolean INIT_LOGGING;
@@ -175,36 +182,109 @@ final class ConfigManager {
    }
 
    /**
+    * Initializes this class.
+    */
+   static void systemStartup() {
+
+      // Determine if the logging subsystem should be initialized
+      INIT_LOGGING = getBoolSystemProperty(INIT_LOGGING_SYSTEM_PROPERTY, true);
+
+      // Determine if context IDs should be set
+      PUSH_CONTEXT_ID = getBoolSystemProperty(CONTEXT_ID_PUSH_PROPERTY, true);
+
+      // Configure logger fallback
+      configureLoggerFallback();
+   }
+
+   /**
+    * Retrieves the value of the specified system property and converts it to 
+    * a boolean. If the value cannot be determined, then a default fallback 
+    * will be used.
+    *
+    * @param propName
+    *    the name of the system property, cannot be <code>null</code>.
+    *
+    * @param fallback
+    *    the fallback default.
+    *
+    * @return
+    *    the boolean value to use.
+    *
+    * @throws IllegalArgumentException
+    *    if <code>propName == null</code>.
+    */
+   private static boolean getBoolSystemProperty(String propName, boolean fallback) {
+
+      // TODO: Separate Logdoc entries
+
+      // Check preconditions
+      MandatoryArgumentChecker.check("propName", propName);
+
+      String setting;
+      try {
+         setting = System.getProperty(propName);
+      } catch (Throwable exception) {
+         Utils.logError("Failed to retrieve system property " + quote(propName) + ". Assuming \"" + fallback + "\".", exception);
+         return fallback;
+      }
+
+      boolean value;
+      if (fuzzyEquals("true", setting)) {
+         value = true;
+      } else if (fuzzyEquals("false", setting)) {
+         value = false;
+      } else if (isEmpty(setting)) {
+         Utils.logInfo("System property \"" + propName + "\" is unset or empty. Assuming \"" + fallback + "\".");
+         value = fallback;
+      } else {
+         Utils.logWarning("System property \"" + propName + "\" has invalid value " + quote(setting) + ". Expected either \"true\" or \"false\". Assuming default, which is \"" + fallback + "\".");
+         value = fallback;
+      }
+
+      return value;
+   }
+
+   /**
+    * Flag that indicates if context IDs should be generated.
+    */
+   static boolean PUSH_CONTEXT_ID = true;
+
+   /**
+    * Sets if context IDs should be set.
+    *
+    * @param flag
+    *    <code>true</code> if context IDs should be pushed,
+    *    <code>false</code> if not.
+    */
+   static synchronized void setPushContextID(boolean flag) {
+      PUSH_CONTEXT_ID = flag;
+   }
+
+   /**
+    * Determines if context IDs should be set.
+    *
+    * @return
+    *    <code>true</code> if context IDs should be pushed,
+    *    <code>false</code> if not.
+    */
+   static synchronized boolean isPushContextID() {
+      return PUSH_CONTEXT_ID;
+   }
+
+   /**
     * Initializes the logging subsystem with fallback default settings,
     * if applicable.
     */
    static void configureLoggerFallback() {
 
-      String setting;
-      try {
-         setting = System.getProperty(INIT_LOGGING_SYSTEM_PROPERTY);
-      } catch (SecurityException exception) {
-         Utils.logError("Failed to retrieve system property " + quote(INIT_LOGGING_SYSTEM_PROPERTY) + " due to SecurityException.", exception); // TODO: Separate Logdoc log entry
-         setting = null;
-      }
-
-      // Analyze the string value to produce a boolean
-      boolean value;
-      if (isEmpty(setting) || fuzzyEquals("true", setting)) {
-         INIT_LOGGING = true;
-      } else if (fuzzyEquals("false", setting)) {
-         INIT_LOGGING = true;
-      } else {
-         INIT_LOGGING = true;
-         Utils.logWarning("System property \"" + INIT_LOGGING_SYSTEM_PROPERTY + "\" has invalid value " + quote(setting) + ". Expected either \"true\" or \"false\". Assuming default, which is \"true\"."); // TODO: Separate Logdoc log entry
-      }
+      // TODO: Separate Logdoc entries
 
       // Do initialize the logging subsystem
       if (INIT_LOGGING) {
          configureLoggerFallbackImpl();
-         Utils.logInfo("Initialized Log4J configuration."); // TODO: Separate Logdoc log entry
+         Utils.logInfo("Initialized Log4J configuration.");
       } else {
-         Utils.logInfo("Skipped Log4J initialization."); // TODO: Separate Logdoc log entry
+         Utils.logInfo("Skipped Log4J initialization.");
       }
    }
 

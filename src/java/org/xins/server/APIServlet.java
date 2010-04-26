@@ -87,18 +87,21 @@ import org.xins.common.MandatoryArgumentChecker;
 public class APIServlet extends HttpServlet {
 
    /**
+    * Serial version UID. Used for serialization.
+    */
+   private static final long serialVersionUID = 4002348764498221122L;
+
+   /**
     * XINS server engine. Initially <code>null</code> but set to a
     * non-<code>null</code> value in the {@link #init(ServletConfig)} method.
     */
    private Engine _engine;
 
    /**
-    * Initializes the loggers to log to the console using a simple format
-    * and no threshold. This is done by calling
-    * {@link Engine#configureLoggerFallback()}.
+    * Allows the config manager to self-initialize.
     */
    static {
-      ConfigManager.configureLoggerFallback();
+      ConfigManager.systemStartup();
    }
 
    /**

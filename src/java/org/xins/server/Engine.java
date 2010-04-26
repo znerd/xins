@@ -452,7 +452,7 @@ final class Engine {
       }
 
       // Associate the current diagnostic context identifier with this thread
-      // This method will call NDC.push(contextID)
+      // This method will call NDC.push(contextID) if appropriate
       pushContextID(request);
 
       // Handle the request
@@ -473,9 +473,11 @@ final class Engine {
 
    /**
     * Determines the applicable diagnostic context identifier and then pushes
-    * it to the stack.
+    * it to the stack, if appropriate. If the setting of context IDs is 
+    * disabled altogether (see {@link ConfigManager#isPushContextID()},
+    * this method will immediately return.
     *
-    * <p>If the request already specifies a valid diagnostic context
+    * <p>If the request specifies a valid diagnostic context
     * identifier, then that will be used. Otherwise a new one will be
     * generated.
     *
@@ -483,6 +485,11 @@ final class Engine {
     *    the HTTP servlet request, should not be <code>null</code>.
     */
    private void pushContextID(HttpServletRequest request) {
+
+      // Short-circuit if context IDs should be left alone
+      if (! _configManager.isPushContextID()) {
+         return;
+      }
 
       // XXX: Store "_context" in a constant
 

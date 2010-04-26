@@ -99,6 +99,8 @@ XINS/Java Server Framework:
 * Not initializing logging subsystem if system property
   "org.xins.server.logging.init" is set to "false".
 * Default runtime config file reload interval is now 5 instead of 60 seconds.
+* Not setting context IDs if system property "org.xins.server.contextID.push"
+  is set to false.
 
 Libraries:
 * Upgraded to Juxy 0.8.
