@@ -103,7 +103,7 @@ public class TransactionLogger {
     * @param resultParams
     *    the outgoing result parameters, or <code>null</code> if none.
     *
-    * @param requestDataElement
+    * @param resultDataElement
     *    the output data section, or <code>null</code> if none.
     *
     * @param ip
