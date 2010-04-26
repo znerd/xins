@@ -317,7 +317,7 @@ ${apis.list}]]></echo>
 
 	<target name="-run">
 		<property name="org.xins.server.config" value="" />
-		<property name="org.xins.server.logging" value="" />
+		<property name="org.xins.server.logging.init" value="" />
 		<property name="jmx.port" value="1090" />
 		<property name="servlet.port" value="8080" />
 		<java classname="org.xins.common.servlet.container.HTTPServletStarter" fork="true">
