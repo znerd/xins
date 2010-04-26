@@ -596,6 +596,7 @@ public abstract class Manageable {
     * @since XINS 1.0.0
     */
    public static final class State {
+
       /**
        * Constructs a new <code>State</code> object.
        *
