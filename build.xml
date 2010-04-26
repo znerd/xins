@@ -111,6 +111,7 @@
 		<mkdir dir="${classes.outputdir}" />
 		<copy todir="${classes.outputdir}">
 			<fileset dir="${project.sourcedir}">
+				<exclude name="**/*.swp" />
 				<exclude name="**/*.java" />
 				<exclude name="**/package.html" />
 			</fileset>
