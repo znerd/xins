@@ -24,7 +24,7 @@
 			<param name="date" nullable="false" type="object" />
 		</entry>
 		<entry id="10003" level="NOTICE" exception="true">
-			<description><em>Test</em> for error Test.</description>
+			<description>Test for error Test.</description>
 		</entry>
 	</group>
 </log>
