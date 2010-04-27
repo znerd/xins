@@ -1,0 +1,3 @@
+This file details the incompatible changes between XINS 2- and the 3-branch.
+
+* Pattern types now require a start-of-line and an end-of-line character.
