@@ -27,7 +27,7 @@ fi
 
 # Recognize '-version' (or 'version') option
 if [ "$1" = "-version" ] || [ "$1" = "version" ]; then
-	ant -q -f ${XINS_HOME}/build.xml version
+	ant -q -f "${XINS_HOME}/build.xml" version
 	exit 0
 fi
 
@@ -38,14 +38,19 @@ if [ "${first_target}" == "" ]; then
 fi
 
 # Create the build file if needed (by invoking Ant)
-ant -Dxins_home=${XINS_HOME} -Dfirst_target=${first_target} -q -f ${BOOT_XML}
+if [ "${XINS_ANT_VERBOSE}" = "true" ]; then
+	echo Executing: ant --execdebug -Dxins_home=\"${XINS_HOME}\" -Dfirst_target=${first_target} -q -f \"${BOOT_XML}\"
+	ant --execdebug -Dxins_home=\"${XINS_HOME}\" -Dfirst_target=${first_target} -q -f \"${BOOT_XML}\"
+else
+	ant -Dxins_home=\"${XINS_HOME}\" -Dfirst_target=${first_target} -q -f \"${BOOT_XML}\"
+fi
 
 # If Ant returned successfully, then invoke Ant against the generated build file
 if [ "$?" = "0" ]; then
 	if [ "${XINS_ANT_VERBOSE}" = "true" ]; then
-		echo Executing: ant -Dxins_home=${XINS_HOME} --execdebug -logger org.apache.tools.ant.NoBannerLogger -f build/build.xml $*
-		ant -Dxins_home=${XINS_HOME} --execdebug -logger org.apache.tools.ant.NoBannerLogger -f build/build.xml $*
+		echo Executing: ant --execdebug -Dxins_home=\"${XINS_HOME}\" -logger org.apache.tools.ant.NoBannerLogger -f build/build.xml $*
+		ant --execdebug -Dxins_home=\"${XINS_HOME}\" -logger org.apache.tools.ant.NoBannerLogger -f build/build.xml $*
 	else
-		ant -Dxins_home=${XINS_HOME} -logger org.apache.tools.ant.NoBannerLogger -f build/build.xml $*
+		ant -Dxins_home=\"${XINS_HOME}\" -logger org.apache.tools.ant.NoBannerLogger -f build/build.xml $*
 	fi
 fi

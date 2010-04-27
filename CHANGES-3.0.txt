@@ -144,3 +144,4 @@ Other:
 * Added supported for XINS_ANT_VERBOSE to xins shell script.
 * XINS own build(-dev).xml now passes Xlint compilerarg to javac.
 * Allowing JMX port to be specified, e.g. "xins run-XXX -Djmx.port=2090"
+* Shell script now allows space(s) in the XINS home directory.
