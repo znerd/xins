@@ -544,6 +544,7 @@
 				</path>
 				<antcall target="-run">
 					<reference refid="run.classpath" />
+					<reference refid="xins.classpath" />
 					<propertyset refid="{$api}.properties" />
 					<param name="implName2" value="{$implName2}" />
 				</antcall>

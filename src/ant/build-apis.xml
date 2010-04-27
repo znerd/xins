@@ -236,6 +236,7 @@ ${apis.list}]]></echo>
 	<target name="-prepare-classes" depends="-load-properties">
 		<!-- If not set by the user set the default properties. -->
 		<property name="build.deprecation"  value="true" />
+		<property name="build.includeantruntime" value="true" />
 		<property name="build.java.version" value="${ant.java.version}" />
 		<property name="build.generics"     value="true" />
 		<path id="xins.classpath">
@@ -560,10 +561,10 @@ ${apis.list}]]></echo>
 		<property name="classes.api.dir" value="${builddir}/classes-api/${api}" />
 		<mkdir dir="${builddir}/classes-tests/${api}" />
 		<javac
-		includeAntRuntime="false"
 		destdir="${builddir}/classes-tests/${api}"
 		debug="true"
 		deprecation="${build.deprecation}"
+		includeantruntime="false"
 		source="${build.java.version}"
 		target="${build.java.version}">
 			<src path="${apis_dir}/${api}/test" />
@@ -644,11 +645,11 @@ ${apis.list}]]></echo>
 	<target name="-jar" depends="-load-version, -prepare-classes, -stubs-capi">
 		<mkdir dir="${builddir}/classes-capi/${api}" />
 		<javac
-		includeAntRuntime="false"
 		srcdir="${builddir}/java-capi/${api}/"
 		destdir="${builddir}/classes-capi/${api}"
 		debug="true"
 		deprecation="${build.deprecation}"
+		includeantruntime="${build.includeantruntime}"
 		source="${build.java.version}"
 		target="${build.java.version}">
 			<classpath>
@@ -990,11 +991,11 @@ ${apis.list}]]></echo>
 
 		<mkdir dir="${typeClassesDir}" />
 		<javac
-		includeAntRuntime="false"
 		srcdir="${javaDestDir}"
 		destdir="${typeClassesDir}"
 		debug="true"
 		deprecation="${build.deprecation}"
+		includeantruntime="${build.includeantruntime}"
 		source="${build.java.version}"
 		target="${build.java.version}">
 			<classpath>
@@ -1105,10 +1106,10 @@ ${apis.list}]]></echo>
 		<!-- Compile all classes -->
 		<mkdir dir="${classesDestDir}" />
 		<javac
-		includeAntRuntime="false"
 		destdir="${classesDestDir}"
 		debug="true"
 		deprecation="${build.deprecation}"
+		includeantruntime="${build.includeantruntime}"
 		source="${build.java.version}"
 		target="${build.java.version}">
 			<src path="${javaDestDir}" />
