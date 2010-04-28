@@ -62,11 +62,11 @@
 							var result = document.getElementById('result');
 							var resultMessage = '';
 							try {
-								resultMessage = 'The string <b style="color:blue">' + input + '</b> ';
-								resultMessage += input.match(pattern) ? '<b style="color:blue">matches</b>' : '<b style="color:red">does not match</b>';
+								resultMessage = 'The string <b>' + input + '</b> ';
+								resultMessage += input.match('^' + pattern + '$') ? '<b style="color:green">matches</b>' : '<b style="color:red">does not match</b>';
 								resultMessage += ' the pattern.';
 						  } catch (ex) {
-								resultMessage = 'The pattern <b style="color:blue">' + pattern + '</b> ';
+								resultMessage = 'The pattern <b>' + pattern + '</b> ';
 								resultMessage += 'is <b style="color:red">invalid</b>.';
 							}
 							result.innerHTML = resultMessage;
