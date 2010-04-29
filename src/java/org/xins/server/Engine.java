@@ -46,8 +46,6 @@ import org.xins.common.text.TextUtils;
 
 import static org.xins.server.ConfigManager.LOG_STACK_TRACE_AT_MESSAGE_LEVEL;
 
-import org.znerd.logdoc.LogCentral;
-
 /**
  * XINS server engine. The engine is a delegate of the {@link APIServlet} that
  * is responsible for initialization and request handling.
@@ -328,9 +326,9 @@ final class Engine {
       // Determine at what level should the stack traces be displayed
       String stackTraceAtMessageLevel = properties.get(LOG_STACK_TRACE_AT_MESSAGE_LEVEL);
       if ("true".equals(stackTraceAtMessageLevel)) {
-         LogCentral.setStackTraceAtMessageLevel(true);
+         org.znerd.logdoc.Library.setStackTraceAtMessageLevel(true);
       } else if ("false".equals(stackTraceAtMessageLevel)) {
-         LogCentral.setStackTraceAtMessageLevel(false);
+         org.znerd.logdoc.Library.setStackTraceAtMessageLevel(false);
       } else if (stackTraceAtMessageLevel != null) {
          // XXX: Report this error in some way
          _stateMachine.setState(EngineState.API_INITIALIZATION_FAILED);

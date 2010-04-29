@@ -39,7 +39,6 @@ import static org.xins.common.text.TextUtils.trim;
 import static org.xins.server.ConfigManager.LOG_FILTER_PROPERTY;
 import static org.xins.server.ConfigManager.LOG_LOCALE_PROPERTY;
 
-import org.znerd.logdoc.LogCentral;
 import org.znerd.logdoc.UnsupportedLocaleException;
 
 /**
@@ -810,11 +809,11 @@ final class ConfigManager {
 
       // If the log locale is set, apply it
       if (newLocale != null) {
-         String currentLocale = LogCentral.getLocale();
+         String currentLocale = org.znerd.logdoc.Library.getLocale();
          if (! currentLocale.equals(newLocale)) {
             Log.log_3306(currentLocale, newLocale);
             try {
-               LogCentral.setLocale(newLocale);
+               org.znerd.logdoc.Library.setLocale(newLocale);
                Log.log_3307(currentLocale, newLocale);
             } catch (UnsupportedLocaleException exception) {
                Log.log_3308(currentLocale, newLocale);
@@ -824,7 +823,7 @@ final class ConfigManager {
 
       // No property defines the locale, use the default
       } else {
-         LogCentral.useDefaultLocale();
+         org.znerd.logdoc.Library.useDefaultLocale();
       }
 
       return true;
@@ -853,10 +852,10 @@ final class ConfigManager {
       }
 
       // Property is set, use this log filter class
-      LogCentral.setLogFilterByClass(s);
+      org.znerd.logdoc.Library.setLogFilterByClass(s);
 
       // Check
-      return s.equals(LogCentral.getLogFilter().getClass().getName());
+      return s.equals(org.znerd.logdoc.Library.getLogFilter().getClass().getName());
    }
 
    /**
