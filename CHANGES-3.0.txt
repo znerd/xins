@@ -123,6 +123,9 @@ Serialization:
 * Added a serialVersionUID field to some classes, this may break compatibility
   with older XINS versions.
 
+Validation of definitions:
+* In 'index-specdocs' target: Validating project file using XSD.
+
 Generation of specdocs:
 * Visited links now also show underlined when hovered over.
 * Using term 'error code' instead of 'result code'.

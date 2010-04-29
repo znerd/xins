@@ -194,9 +194,9 @@ ${apis.list}]]></echo>
 
 	<target name="index-specdocs" depends="-load-properties" description="Generates the API index">
 		<mkdir dir="${builddir}/specdocs" />
-		<xmlvalidate file="${project_file}" warn="false">
+		<schemavalidate file="${project_file}" nonamespacefile="${xins_home}/src/xsd/project.xsd">
 			<xmlcatalog refid="all-dtds" />
-		</xmlvalidate>
+		</schemavalidate>
 		<xslt
 		in="${project_file}"
 		out="${builddir}/specdocs/index.html"
