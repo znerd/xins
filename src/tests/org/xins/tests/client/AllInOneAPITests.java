@@ -34,7 +34,7 @@ import org.xins.common.xml.ElementBuilder;
 
 import org.xins.tests.AllTests;
 
-import org.znerd.logdoc.LogCentral;
+import org.znerd.logdoc.Library;
 
 /**
  * Tests the functions in the <em>allinone</em> API using the generated CAPI
@@ -463,11 +463,11 @@ public class AllInOneAPITests extends TestCase {
    }
 
    public void testFrenchLogdoc() throws Exception {
-      LogCentral.setLocale("fr_FR");
-      LogCentral.setStackTraceAtMessageLevel(false);
+      Library.setLocale("fr_FR");
+      Library.setStackTraceAtMessageLevel(false);
       dataSectionTests("Bonjour");
-      LogCentral.setLocale("en_US");
-      LogCentral.setStackTraceAtMessageLevel(true);
+      Library.setLocale("en_US");
+      Library.setStackTraceAtMessageLevel(true);
    }
 
    /**
