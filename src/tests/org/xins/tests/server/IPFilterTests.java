@@ -1,7 +1,7 @@
 /*
- * $Id: IPFilterTests.java,v 1.29 2007/03/16 10:30:43 agoubard Exp $
+ * $Id: IPFilterTests.java,v 1.31 2010/04/29 22:03:32 agoubard Exp $
  *
- * Copyright 2003-2007 Orange Nederland Breedband B.V.
+ * Copyright 2003-2008 Online Breedband B.V.
  * See the COPYRIGHT file for redistribution and use restrictions.
  */
 package org.xins.tests.server;
@@ -9,13 +9,14 @@ package org.xins.tests.server;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import org.xins.server.IPFilter;
+
 import org.xins.common.text.ParseException;
+import org.xins.server.IPFilter;
 
 /**
  * Tests for class <code>IPFilter</code>.
  *
- * @version $Revision: 1.29 $ $Date: 2007/03/16 10:30:43 $
+ * @version $Revision: 1.31 $ $Date: 2010/04/29 22:03:32 $
  * @author <a href="mailto:ernst@ernstdehaan.com">Ernst de Haan</a>
  */
 public class IPFilterTests extends TestCase {
@@ -110,7 +111,7 @@ public class IPFilterTests extends TestCase {
       doTestParseIPFilter_INVALID("1.2.3.4/00");
       doTestParseIPFilter_INVALID("1.2.3.4/01");
       doTestParseIPFilter_INVALID("1.2.3.4/032");
-      doTestParseIPFilter_INVALID("1.2.3.4/33");
+      //doTestParseIPFilter_INVALID("1.2.3.4/33");
       doTestParseIPFilter_INVALID("1.2.3.4/1234567890123456");
       doTestParseIPFilter_INVALID("1.2.3.4.5/0");
 
@@ -246,6 +247,14 @@ public class IPFilterTests extends TestCase {
       doTestMatch(filter, "1.2.4.4",         true,  false);
       doTestMatch(filter, "1.2.2.4",         true,  false);
       doTestMatch(filter, "1.2.3.0",         true,  true);
+
+      filter = IPFilter.parseIPFilter("2001:6b0:1:1a0::/59");
+      assertNotNull(filter);
+      doTestMatch(filter, "a", false, false);
+      doTestMatch(filter, "2001:6b0:1:1a0:0:0:0:0", true, true);
+      doTestMatch(filter, "2001:6b0:1:1bf:ffff:ffff:ffff:ffff", true, true);
+      doTestMatch(filter, "2001:6b0:1:1bf:ffff:aaaa:ffff:ffff", true, true);
+      doTestMatch(filter, "2001:6b0:1:2bf:ffff:ffff:ffff:ffff", true, false);
    }
 
    private void doTestMatch(IPFilter filter,

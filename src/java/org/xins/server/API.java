@@ -1,5 +1,5 @@
 /*
- * $Id: API.java,v 1.371 2008/03/13 09:24:20 agoubard Exp $
+ * $Id: API.java,v 1.374 2010/05/01 13:24:37 agoubard Exp $
  *
  * Copyright 2003-2007 Orange Nederland Breedband B.V.
  * See the COPYRIGHT file for redistribution and use restrictions.
@@ -41,7 +41,7 @@ import org.xins.common.xml.Element;
 /**
  * Base class for API implementation classes.
  *
- * @version $Revision: 1.371 $ $Date: 2008/03/13 09:24:20 $
+ * @version $Revision: 1.374 $ $Date: 2010/05/01 13:24:37 $
  * @author <a href="mailto:ernst@ernstdehaan.com">Ernst de Haan</a>
  * @author <a href="mailto:anthony.goubard@japplis.com">Anthony Goubard</a>
  * @author <a href="mailto:tauseef.rehman@orange-ftgroup.com">Tauseef Rehman</a>
@@ -1067,7 +1067,7 @@ public abstract class API extends Manageable {
       // If no property is defined only localhost is allowed
       if (_apiAccessRuleList == AccessRuleList.EMPTY &&
           _accessRuleList == AccessRuleList.EMPTY &&
-          (ip.equals("127.0.0.1") || ip.equals(_localIPAddress))) {
+          (ip.equals("127.0.0.1") || ip.equals("::1") || ip.equals(_localIPAddress))) {
          return true;
       }
 
@@ -1663,7 +1663,7 @@ public abstract class API extends Manageable {
    /**
     * Thread-safe <code>int</code> counter.
     *
-    * @version $Revision: 1.371 $ $Date: 2008/03/13 09:24:20 $
+    * @version $Revision: 1.374 $ $Date: 2010/05/01 13:24:37 $
     * @author <a href="mailto:ernst@ernstdehaan.com">Ernst de Haan</a>
     */
    private static final class Counter {
