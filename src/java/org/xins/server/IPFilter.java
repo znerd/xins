@@ -50,7 +50,7 @@ import org.xins.common.text.ParseException;
  * @author Peter Troon
  * @author <a href="mailto:anthony.goubard@japplis.com">Anthony Goubard</a>
  *
- * @since XINS 2.3.0
+ * @since XINS 1.1.0
  */
 public final class IPFilter {
 
@@ -63,12 +63,12 @@ public final class IPFilter {
     * The IPv6 pattern.
     */
    private static final String IP_6_PATTERN = "((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|" + IP_4_PATTERN +
-           "|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:" + IP_4_PATTERN +
-           "|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:" + IP_4_PATTERN +
-           ")|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:" + IP_4_PATTERN +
-           ")|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:" + IP_4_PATTERN +
-           ")|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:" + IP_4_PATTERN +
-           ")|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:" + IP_4_PATTERN + ")|:)))(%.+)?";
+      "|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:" + IP_4_PATTERN +
+      "|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:" + IP_4_PATTERN +
+      ")|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:" + IP_4_PATTERN +
+      ")|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:" + IP_4_PATTERN +
+      ")|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:" + IP_4_PATTERN +
+      ")|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:" + IP_4_PATTERN + ")|:)))(%.+)?";
 
    /**
     * The character that delimits the IP address and the mask of the provided
@@ -108,17 +108,21 @@ public final class IPFilter {
     * the bits in the base IP address.
     *
     * @param ipString
-    *    the base IP address, as a character string, should not be
-    *    <code>null</code>.
+    *    the base IP address, as a character string,
+    *    should not be <code>null</code>.
+    *
+    * @param baseIP
+    *    the base IP address, as a {@link BitSet},
+    *    should not be <code>null</code>.
     *
     * @param mask
     *    the mask, between 0 and 128 (inclusive).
     */
    private IPFilter(String ipString, BitSet baseIP, int mask) {
-      _expression = ipString + IP_MASK_DELIMETER + mask;
+      _expression   = ipString + IP_MASK_DELIMETER + mask;
       _baseIPString = ipString;
-      _baseIP = baseIP;
-      _mask = mask;
+      _baseIP       = baseIP;
+      _mask         = mask;
       _isIPv6Filter = ipString.indexOf(':') != -1;
    }
 
@@ -145,7 +149,7 @@ public final class IPFilter {
     *    if <code>expression</code> does not match the specified format.
     */
    public static final IPFilter parseIPFilter(String expression)
-           throws IllegalArgumentException, ParseException {
+   throws IllegalArgumentException, ParseException {
 
       // Check preconditions
       MandatoryArgumentChecker.check("expression", expression);
@@ -164,10 +168,10 @@ public final class IPFilter {
 
          // Split the IP and the mask
          ipString = expression.substring(0, slashPosition);
-         mask = parseMask(expression.substring(slashPosition + 1));
+         mask     = parseMask(expression.substring(slashPosition + 1));
 
-         // If we don't have a slash, then parse the IP address only and assume
-         // the mask to be 32 bits
+      // If we don't have a slash, then parse the IP address only and assume
+      // the mask to be 32 bits
       } else {
          ipString = expression;
          if (ipString.indexOf(':') == -1) {
@@ -197,14 +201,14 @@ public final class IPFilter {
     *    leading zeroes.
     */
    private static final int parseMask(String maskString)
-           throws ParseException {
+   throws ParseException {
 
       // Convert to an int
       int mask;
       try {
          mask = Integer.parseInt(maskString);
 
-         // Catch conversion exception
+      // Catch conversion exception
       } catch (NumberFormatException nfe) {
          throw new ParseException("The mask string \"" + maskString + "\" is not a valid number.");
       }
@@ -276,7 +280,7 @@ public final class IPFilter {
     *    if <code>ip</code> does not match the specified format.
     */
    public final boolean match(String ipString)
-           throws IllegalArgumentException, ParseException {
+   throws IllegalArgumentException, ParseException {
 
       // Check preconditions
       MandatoryArgumentChecker.check("ipString", ipString);
