@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+	<!-- Type "Api" -->
+	<xsd:complexType name="Api">
+		<xsd:sequence>
+			<xsd:element name="description" type="ApiDescription" minOccurs="1" />
+			<xsd:element name="function"    type="FunctionRef"    minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="type"        type="TypeRef"        minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="name" type="ApiName" use="required" />
+	</xsd:complexType>
+
+	<!-- Type "ApiDescription" -->
+	<xsd:simpleType name="ApiDescription">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value=".*" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<!-- Type "ApiEnvironmentsFlag" -->
+	<xsd:complexType name="ApiEnvironmentsFlag" />
+
+	<!-- Type "ApiImplFlag" -->
+	<xsd:complexType name="ApiImplFlag" />
+
+	<!-- Type "ApiName" -->
+	<xsd:simpleType name="ApiName">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[A-Za-z][A-Za-z0-9_]*" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<!-- Type "ApiRef" -->
+	<xsd:complexType name="ApiRef">
+		<xsd:sequence>
+			<xsd:element name="impl"         type="ApiImplFlag"         minOccurs="0" />
+			<xsd:element name="environments" type="ApiEnvironmentsFlag" minOccurs="0" />
+		</xsd:sequence>
+		<xsd:attribute name="name" type="ApiName" use="required" />
+	</xsd:complexType>
+
+	<!-- Type "FunctionName" -->
+	<xsd:simpleType name="FunctionName">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[A-Z][A-Za-z0-9_]*" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<!-- Type "FunctionRef" -->
+	<xsd:complexType name="FunctionRef">
+		<xsd:attribute name="name" type="FunctionName" use="required" />
+	</xsd:complexType>
+
+	<!-- Type "InverseDomainName" -->
+	<xsd:simpleType name="InverseDomainName">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[A-Za-z0-9_-]+(\.[A-Za-z0-9_-]+)*" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<!-- Type "Path" -->
+	<xsd:simpleType name="Path">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[A-Za-z0-9_\-]+(/[A-Za-z0-9_\-]+)*" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<!-- Type "Project" -->
+	<xsd:complexType name="Project">
+		<xsd:sequence>
+			<xsd:element name="api" type="ApiRef" maxOccurs="unbounded" />
+		</xsd:sequence>
+
+		<xsd:attribute name="apisDir"    type="Path"              use="optional" />
+		<xsd:attribute name="domain"     type="InverseDomainName" use="required" />
+		<xsd:attribute name="name"       type="ProjectName"       use="required" />
+		<xsd:attribute name="rcsdate"    type="RcsDate"           use="optional" />
+		<xsd:attribute name="rcsversion" type="RcsVersion"        use="optional" />
+	</xsd:complexType>
+
+	<!-- Type "ProjectName" -->
+	<xsd:simpleType name="ProjectName">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[A-Za-z][A-Za-z0-9_]*" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<!-- Type "RcsDate" -->
+	<xsd:simpleType name="RcsDate">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="\$Date: \d{4}/\d\d/\d\d \d\d:\d\d:\d\d \$" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<!-- Type "RcsVersion" -->
+	<xsd:simpleType name="RcsVersion">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="\$Revision: \d+(\.\d+)+ \$" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<!-- Type "TypeName" -->
+	<xsd:simpleType name="TypeName">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[A-Z][A-Za-z0-9_]*" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<!-- Type "TypeRef" -->
+	<xsd:complexType name="TypeRef">
+		<xsd:attribute name="name" type="TypeName" use="required" />
+	</xsd:complexType>
+
+</xsd:schema>

@@ -947,9 +947,9 @@ ${apis.list}]]></echo>
 			</mapper>
 		</copy>
 
-		<xmlvalidate file="${api_file}" warn="false">
+		<schemavalidate file="${api_file}" nonamespacefile="${xins_home}/src/xsd/api.xsd">
 			<xmlcatalog refid="all-dtds" />
-		</xmlvalidate>
+		</schemavalidate>
 		<xslt
 		in="${api_file}"
 		out="${javaDestDir}/${typePackageAsDir}/package.html"
