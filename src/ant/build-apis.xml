@@ -181,6 +181,7 @@ ${apis.list}]]></echo>
 			<dtd publicId="-//XINS//DTD Implementation 2.2//EN"          location="impl_2_2.dtd" />
 			<dtd publicId="-//XINS//DTD Environments 2.2//EN"            location="environments_2_2.dtd" />
 
+			<!-- TODO FIXME: Remove before 3.0-final -->
 			<dtd publicId="-//XINS//DTD XINS Project 3.0//EN"            location="xins-project_3_0.dtd" />
 			<dtd publicId="-//XINS//DTD XINS API 3.0//EN"                location="api_3_0.dtd" />
 			<dtd publicId="-//XINS//DTD Function 3.0//EN"                location="function_3_0.dtd" />
@@ -926,21 +927,6 @@ ${apis.list}]]></echo>
 		<echo message="Generating the logdoc for ${api}${implName2}" />
 		<mkdir dir="${builddir}/logdoc/${api}${implName2}" />
 		<!-- TODO FIXME
-		<xmlvalidate file="${impl_dir}/log.xml" warn="false">
-			<xmlcatalog refid="all-dtds" />
-		</xmlvalidate>
-		<xslt
-		in="${impl_dir}/log.xml"
-		out="${builddir}/logdoc/${api}${implName2}/build.xml"
-		style="${xins_home}/src/xslt/logdoc/log_to_build.xslt">
-			<xmlcatalog refid="all-dtds" />
-			<param name="xins_home"       expression="${xins_home}" />
-			<param name="logdoc_xslt_dir" expression="${xins_home}/src/xslt/logdoc" />
-			<param name="sourcedir"       expression="${impl_dir}" />
-			<param name="html_destdir"    expression="${builddir}/specdocs/${api}/logdoc${implName2}" />
-			<param name="java_destdir"    expression="${javaDestFileDir}" />
-			<param name="package_name"    expression="${package}" />
-		</xslt>
 		<copy file="${xins_home}/src/css/logdoc/style.css" todir="${builddir}/specdocs/${api}/logdoc${implName2}" />
 		<ant dir="${builddir}/logdoc/${api}${implName2}" target="html" inheritall="false" />
 		-->
