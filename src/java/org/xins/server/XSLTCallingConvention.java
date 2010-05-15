@@ -110,6 +110,7 @@ public class XSLTCallingConvention extends StandardCallingConvention {
       _templateCache = new HashMap<String, Templates>(89);
    }
 
+   @Override
    protected void initImpl(PropertyReader runtimeProperties)
    throws MissingRequiredPropertyException,
           InvalidPropertyValueException,
