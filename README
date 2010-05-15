@@ -6,7 +6,7 @@ the accompanied COPYRIGHT file.
 
 BUILDING XINS
 
-To build XINS self, use Ant (1.7.1 or 1.8.0) and execute:
+To build XINS self, use Ant (1.7.1 or later) and execute:
 
    ant
 
