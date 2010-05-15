@@ -7,8 +7,12 @@
 			<xsd:element name="description" type="ApiDescription" minOccurs="1" />
 			<xsd:element name="function"    type="FunctionRef"    minOccurs="0" maxOccurs="unbounded" />
 			<xsd:element name="type"        type="TypeRef"        minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="resultcode"  type="ErrorCodeRef"   minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="category"    type="CategoryRef"    minOccurs="0" maxOccurs="unbounded" />
 		</xsd:sequence>
-		<xsd:attribute name="name" type="ApiName" use="required" />
+		<xsd:attribute name="name"       type="ApiName"    use="required" />
+		<xsd:attribute name="rcsdate"    type="RcsDate"    use="optional" />
+		<xsd:attribute name="rcsversion" type="RcsVersion" use="optional" />
 	</xsd:complexType>
 
 	<!-- Type "ApiDescription" -->
@@ -38,6 +42,30 @@
 			<xsd:element name="environments" type="ApiEnvironmentsFlag" minOccurs="0" />
 		</xsd:sequence>
 		<xsd:attribute name="name" type="ApiName" use="required" />
+	</xsd:complexType>
+
+	<!-- Type "CategoryName" -->
+	<xsd:simpleType name="CategoryName">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[A-Z][A-Za-z0-9_]*" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<!-- Type "CategoryRef" -->
+	<xsd:complexType name="CategoryRef">
+		<xsd:attribute name="name" type="CategoryName" use="required" />
+	</xsd:complexType>
+
+	<!-- Type "ErrorCodeName" -->
+	<xsd:simpleType name="ErrorCodeName">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[A-Z][A-Za-z0-9_]*" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<!-- Type "ErrorCodeRef" -->
+	<xsd:complexType name="ErrorCodeRef">
+		<xsd:attribute name="name" type="ErrorCodeName" use="required" />
 	</xsd:complexType>
 
 	<!-- Type "FunctionName" -->
@@ -89,14 +117,14 @@
 	<!-- Type "RcsDate" -->
 	<xsd:simpleType name="RcsDate">
 		<xsd:restriction base="xsd:string">
-			<xsd:pattern value="\$Date: \d{4}/\d\d/\d\d \d\d:\d\d:\d\d \$" />
+			<xsd:pattern value="\$Date(: [^$]+)?\$" />
 		</xsd:restriction>
 	</xsd:simpleType>
 
 	<!-- Type "RcsVersion" -->
 	<xsd:simpleType name="RcsVersion">
 		<xsd:restriction base="xsd:string">
-			<xsd:pattern value="\$Revision: \d+(\.\d+)+ \$" />
+			<xsd:pattern value="\$Revision(: [^$]+)?\$" />
 		</xsd:restriction>
 	</xsd:simpleType>
 
