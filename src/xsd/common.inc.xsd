@@ -26,7 +26,16 @@
 	<xsd:complexType name="ApiEnvironmentsFlag" />
 
 	<!-- Type "ApiImplFlag" -->
-	<xsd:complexType name="ApiImplFlag" />
+	<xsd:complexType name="ApiImplFlag">
+		<xsd:attribute name="name" type="ApiImplName" use="optional" />
+	</xsd:complexType>
+
+	<!-- Type "ApiImplName" -->
+	<xsd:simpleType name="ApiImplName">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[A-Za-z][A-Za-z0-9_-]*" />
+		</xsd:restriction>
+	</xsd:simpleType>
 
 	<!-- Type "ApiName" -->
 	<xsd:simpleType name="ApiName">
@@ -38,8 +47,9 @@
 	<!-- Type "ApiRef" -->
 	<xsd:complexType name="ApiRef">
 		<xsd:sequence>
-			<xsd:element name="impl"         type="ApiImplFlag"         minOccurs="0" />
+			<xsd:element name="impl"         type="ApiImplFlag"         minOccurs="0" maxOccurs="unbounded" />
 			<xsd:element name="environments" type="ApiEnvironmentsFlag" minOccurs="0" />
+			<!-- TODO: Make sure that if an <impl> has a name, it must be unique -->
 		</xsd:sequence>
 		<xsd:attribute name="name" type="ApiName" use="required" />
 	</xsd:complexType>
@@ -110,7 +120,7 @@
 	<!-- Type "ProjectName" -->
 	<xsd:simpleType name="ProjectName">
 		<xsd:restriction base="xsd:string">
-			<xsd:pattern value="[A-Za-z][A-Za-z0-9_]*" />
+			<xsd:pattern value="[A-Za-z][A-Za-z0-9_-]*" />
 		</xsd:restriction>
 	</xsd:simpleType>
 
