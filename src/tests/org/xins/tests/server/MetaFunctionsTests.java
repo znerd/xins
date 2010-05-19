@@ -83,12 +83,13 @@ public class MetaFunctionsTests extends TestCase {
       assertNull("The function returned a data element.", result.getDataElement());
       PropertyReader parameters = result.getParameters();
       assertNotNull("The function did not returned any parameters.", parameters);
+      assertNotNull("No Logdoc version specified.", parameters.get("logdoc.version"));
       assertNotNull("No java version specified.", parameters.get("java.version"));
       assertNotNull("No XINS version specified.", parameters.get("xins.version"));
       assertNotNull("No xmlenc version specified.", parameters.get("xmlenc.version"));
       assertNotNull("No API version specified.", parameters.get("api.version"));
       assertEquals("Wrong API version specified.", "1.6", parameters.get("api.version"));
-      assertEquals("Incorrect number of parameters.", 4, parameters.size());
+      assertEquals("Incorrect number of parameters.", 5, parameters.size());
    }
 
    /**
