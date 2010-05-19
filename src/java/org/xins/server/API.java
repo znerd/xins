@@ -1460,12 +1460,12 @@ public abstract class API extends Manageable {
 
          // Successful
          Element successful = stats.getSuccessfulElement();
-         functionElem.addChild(successful);
+         functionElem.add(successful);
 
          // Unsuccessful
          Element[] unsuccessful = stats.getUnsuccessfulElement(detailed);
          for(int j = 0; j < unsuccessful.length; j++) {
-            functionElem.addChild(unsuccessful[j]);
+            functionElem.add(unsuccessful[j]);
          }
 
          builder.add(functionElem);
@@ -1524,8 +1524,8 @@ public abstract class API extends Manageable {
          if (! isEmpty(value)) {
             Element property = new Element("property");
             property.setAttribute("name", key);
-            property.setText(value);
-            build.addChild(property);
+            property.add(value);
+            build.add(property);
          }
       }
       builder.add(build);
@@ -1537,8 +1537,8 @@ public abstract class API extends Manageable {
 
          Element property = new Element("property");
          property.setAttribute("name", key);
-         property.setText(value);
-         runtime.addChild(property);
+         property.add(value);
+         runtime.add(property);
       }
       builder.add(runtime);
 
@@ -1561,8 +1561,8 @@ public abstract class API extends Manageable {
           && value != null && value.trim().length() > 0) {
             Element property = new Element("property");
             property.setAttribute("name", key);
-            property.setText(value);
-            system.addChild(property);
+            property.add(value);
+            system.add(property);
          }
       }
       builder.add(system);
