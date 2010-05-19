@@ -1375,8 +1375,7 @@ public abstract class API extends Manageable {
     */
    private final FunctionResult doGetFunctionList() {
 
-      // Initialize a builder
-      FunctionResult builder = new FunctionResult();
+      FunctionResult result = new FunctionResult();
 
       // Loop over all functions
       int count = _functionList.size();
@@ -1384,21 +1383,21 @@ public abstract class API extends Manageable {
 
          // Get some details about the function
          Function function = _functionList.get(i);
-         String name    = function.getName();
-         String version = function.getVersion();
-         String enabled = function.isEnabled()
-                        ? "true"
-                        : "false";
+         String       name = function.getName();
+         String    version = function.getVersion();
+         String    enabled = function.isEnabled()
+                           ? "true"
+                           : "false";
 
          // Add an element describing the function
          Element functionElem = new Element("function");
          functionElem.setAttribute("name",    name   );
          functionElem.setAttribute("version", version);
          functionElem.setAttribute("enabled", enabled);
-         builder.add(functionElem);
+         result.add(functionElem);
       }
 
-      return builder;
+      return result;
    }
 
    /**
@@ -1418,16 +1417,15 @@ public abstract class API extends Manageable {
     */
    private final FunctionResult doGetStatistics(boolean detailed, String functionName) {
 
-      // Initialize a builder
-      FunctionResult builder = new FunctionResult();
+      FunctionResult result = new FunctionResult();
 
-      builder.param("startup",   DateConverter.toDateString(_timeZone, _startupTimestamp));
-      builder.param("lastReset", DateConverter.toDateString(_timeZone, _lastStatisticsReset));
-      builder.param("now",       DateConverter.toDateString(_timeZone, System.currentTimeMillis()));
+      result.param("startup",   DateConverter.toDateString(_timeZone, _startupTimestamp));
+      result.param("lastReset", DateConverter.toDateString(_timeZone, _lastStatisticsReset));
+      result.param("now",       DateConverter.toDateString(_timeZone, System.currentTimeMillis()));
 
       // Currently available processors
       Runtime rt = Runtime.getRuntime();
-      builder.param("availableProcessors", String.valueOf(rt.availableProcessors()));
+      result.param("availableProcessors", String.valueOf(rt.availableProcessors()));
 
       // Heap memory statistics
       Element heap = new Element("heap");
@@ -1441,7 +1439,7 @@ public abstract class API extends Manageable {
       heap.setAttribute("max", String.valueOf(max));
       double percentageUsed = (total - free) / (double) max;
       heap.setAttribute("percentageUsed", String.valueOf((int) (percentageUsed * 100)));
-      builder.add(heap);
+      result.add(heap);
 
       // Function-specific statistics
       int count = _functionList.size();
@@ -1468,10 +1466,10 @@ public abstract class API extends Manageable {
             functionElem.add(unsuccessful[j]);
          }
 
-         builder.add(functionElem);
+         result.add(functionElem);
       }
 
-      return builder;
+      return result;
    }
 
    /**
@@ -1482,15 +1480,15 @@ public abstract class API extends Manageable {
     */
    private final FunctionResult doGetVersion() {
 
-      FunctionResult builder = new FunctionResult();
+      FunctionResult result = new FunctionResult();
 
-      builder.param("java.version",   System.getProperty("java.version"));
-      builder.param("xmlenc.version", org.znerd.xmlenc.Library.getVersion());
-      builder.param("xins.version",   Library.getVersion());
-      builder.param("logdoc.version", org.znerd.logdoc.Library.getVersion());
-      builder.param("api.version",    _apiVersion);
+      result.param("java.version",   System.getProperty("java.version"));
+      result.param("xmlenc.version", org.znerd.xmlenc.Library.getVersion());
+      result.param("xins.version",   Library.getVersion());
+      result.param("logdoc.version", org.znerd.logdoc.Library.getVersion());
+      result.param("api.version",    _apiVersion);
 
-      return builder;
+      return result;
    }
 
    /**
@@ -1514,7 +1512,7 @@ public abstract class API extends Manageable {
     */
    private final FunctionResult doGetSettings() {
 
-      FunctionResult builder = new FunctionResult();
+      FunctionResult result = new FunctionResult();
 
       // Build settings
       Element  build = new Element("build");
@@ -1528,7 +1526,7 @@ public abstract class API extends Manageable {
             build.add(property);
          }
       }
-      builder.add(build);
+      result.add(build);
 
       // Runtime settings
       Element runtime = new Element("runtime");
@@ -1540,7 +1538,7 @@ public abstract class API extends Manageable {
          property.add(value);
          runtime.add(property);
       }
-      builder.add(runtime);
+      result.add(runtime);
 
       // System properties
       Properties sysProps;
@@ -1565,9 +1563,9 @@ public abstract class API extends Manageable {
             system.add(property);
          }
       }
-      builder.add(system);
+      result.add(system);
 
-      return builder;
+      return result;
    }
 
    /**
