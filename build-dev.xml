@@ -62,7 +62,6 @@ ${sf.file}</fail>
 	<target name="-init-release" depends="-init-release-properties,-load-sfproperties,-init" />
 
 	<target name="clean-release" depends="clean">
-		<delete dir="docs" />
 		<delete dir="demo" />
 	</target>
 
@@ -294,7 +293,7 @@ ${sf.file}</fail>
 		<!-- Create TAR GZ file for Javadoc -->
 		<echo message="Creating TAR GZ file for Javadoc HTML" />
 		<tar tarfile="build/javadoc.tar" longfile="gnu">
-			<tarfileset dir="docs/javadoc" mode="664" dirmode="775" prefix="javadoc/${version}" />
+			<tarfileset dir="${project.outputdir}/javadoc" mode="664" dirmode="775" prefix="javadoc/${version}" />
 		</tar>
 		<gzip src="build/javadoc.tar" destfile="build/javadoc.tgz" />
 		<delete file="build/javadoc.tar" />
@@ -425,6 +424,8 @@ ${sf.file}</fail>
 	</target>
 
 	<target name="copy-docs" depends="-init" unless="nodocs">
+		<!-- TODO: Check: Does this still work well now that documentation is under ${project.outputdir} instead of "docs" ? -->
+
 		<!-- Create and copy the documentation -->
 		<ant dir="../${name}-docs" target="manuals" inheritall="false">
 			<property name="version" value="${version.major}.${version.middle}${dot.version.minor}${version.build}" />

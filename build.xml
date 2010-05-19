@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" ?>
 <!-- $Id: build.xml,v 1.447 2007/09/05 09:11:13 agoubard Exp $ -->
 
 <project name="xins" default="all">
@@ -64,9 +64,7 @@
 		<property name="perftestclass" value="org.xins.perftests.AllTests" />
 
 		<!-- Class paths -->
-		<property name="logdoc.jar"       value="${basedir}/lib/logdoc.jar"       />
-		<property name="commons-io.jar"   value="${basedir}/lib/commons-io.jar"   />
-		<property name="commons-lang.jar" value="${basedir}/lib/commons-lang.jar" />
+		<property name="logdoc.jar" value="${basedir}/lib/logdoc.jar" />
 	</target>
 
 	<!-- Display relevant versions -->
@@ -80,7 +78,6 @@
 	<target name="clean" description="Removes all generated files">
 		<delete dir="${project.outputdir}" />
 		<delete dir="src/tests/build" />
-		<delete dir="docs" />
 
 		<!-- Logdoc-generated files -->
 		<delete file="src/java/org/xins/client/Log.java" />
@@ -145,7 +142,7 @@
 			<attribute name="title" />
 
 			<sequential>
-				<jar destfile="build/xins-@{name}.jar" basedir="build/classes/" includes="org/xins/@{name}/** META-INF/**">
+				<jar destfile="${project.outputdir}/xins-@{name}.jar" basedir="${project.outputdir}/classes/" includes="org/xins/@{name}/** META-INF/**">
 					<manifest>
 						<attribute name="Main-Class" value="org.xins.@{name}.Library" />
 						<section name="org/xins/@{name}/">
@@ -171,20 +168,18 @@
 	<target name="-logdoc-task" depends="-init" description="Initializes the Logdoc task">
 		<taskdef resource="org/znerd/logdoc/ant/antlib.xml">
 			<classpath>
-				<pathelement location="${logdoc.jar}"       />
-				<pathelement location="${commons-io.jar}"   />
-				<pathelement location="${commons-lang.jar}" />
+				<pathelement location="${logdoc.jar}" />
 			</classpath>
 		</taskdef>
 	</target>
 	<target name="logdoc-html" depends="-logdoc-task" description="Generates the HTML for the Logdoc documentation">
-		<logdoc-html in="src/logdoc/client" out="docs/logdoc/common" />
-		<logdoc-html in="src/logdoc/client" out="docs/logdoc/client" />
-		<logdoc-html in="src/logdoc/server" out="docs/logdoc/server" />
+		<logdoc-html in="src/logdoc/client" out="${project.outputdir}/logdoc/common" />
+		<logdoc-html in="src/logdoc/client" out="${project.outputdir}/logdoc/client" />
+		<logdoc-html in="src/logdoc/server" out="${project.outputdir}/logdoc/server" />
 
-		<copy file="src/css/logdoc/style.css" todir="docs/logdoc/common/html" />
-		<copy file="src/css/logdoc/style.css" todir="docs/logdoc/client/html" />
-		<copy file="src/css/logdoc/style.css" todir="docs/logdoc/server/html" />
+		<copy file="src/css/logdoc/style.css" todir="${project.outputdir}/logdoc/common/html" />
+		<copy file="src/css/logdoc/style.css" todir="${project.outputdir}/logdoc/client/html" />
+		<copy file="src/css/logdoc/style.css" todir="${project.outputdir}/logdoc/server/html" />
 	</target>
 
 	<!-- Generate Javadoc -->
@@ -229,10 +224,10 @@
 		</macrodef>
 	</target>
 	<target name="javadoc-public" depends="-javadoc-macro" description="Generates public Javadoc API documentation" unless="nodocs">
-		<generate-javadoc private="no" destdir="docs/javadoc" title="${project.title} ${project.version}" footer="See &lt;a target=&quot;_top&quot; href='${project.url}'&gt;${project.url}&lt;/a&gt;." />
+		<generate-javadoc private="no" destdir="${project.outputdir}/javadoc" title="${project.title} ${project.version}" footer="See &lt;a target=&quot;_top&quot; href='${project.url}'&gt;${project.url}&lt;/a&gt;." />
 	</target>
 	<target name="javadoc-private" depends="-javadoc-macro" description="Generates private Javadoc API documentation" unless="nodocs">
-		<generate-javadoc private="yes" destdir="docs/javadoc-private" title="${project.title} ${project.version}" footer="See &lt;a target=&quot;_top&quot; href='${project.url}'&gt;${project.url}&lt;/a&gt;.&lt;br /&gt;This Javadoc API documentation set contains private and package private members as well." />
+		<generate-javadoc private="yes" destdir="${project.outputdir}/javadoc-private" title="${project.title} ${project.version}" footer="See &lt;a target=&quot;_top&quot; href='${project.url}'&gt;${project.url}&lt;/a&gt;.&lt;br /&gt;This Javadoc API documentation set contains private and package private members as well." />
 	</target>
 	<target name="javadoc" depends="javadoc-public,javadoc-private" description="Generates all Javadoc API documentation" unless="nodocs" />
 
