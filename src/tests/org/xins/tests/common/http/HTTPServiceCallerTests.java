@@ -1,7 +1,7 @@
 /*
- * $Id: HTTPServiceCallerTests.java,v 1.40 2007/09/18 11:20:49 agoubard Exp $
+ * $Id: HTTPServiceCallerTests.java,v 1.42 2008/10/23 17:53:40 agoubard Exp $
  *
- * Copyright 2003-2007 Orange Nederland Breedband B.V.
+ * Copyright 2003-2008 Online Breedband B.V.
  * See the COPYRIGHT file for redistribution and use restrictions.
  */
 package org.xins.tests.common.http;
@@ -19,6 +19,7 @@ import org.xins.common.http.HTTPCallRequest;
 import org.xins.common.http.HTTPCallResult;
 import org.xins.common.http.HTTPMethod;
 import org.xins.common.http.HTTPServiceCaller;
+
 import org.xins.common.service.CallException;
 import org.xins.common.service.ConnectionRefusedCallException;
 import org.xins.common.service.Descriptor;
@@ -26,12 +27,11 @@ import org.xins.common.service.GroupDescriptor;
 import org.xins.common.service.SocketTimeOutCallException;
 import org.xins.common.service.TargetDescriptor;
 import org.xins.common.service.UnsupportedProtocolException;
-import org.xins.common.text.TextUtils;
 
 /**
  * Tests for class <code>HTTPServiceCallerTests</code>.
  *
- * @version $Revision: 1.40 $ $Date: 2007/09/18 11:20:49 $
+ * @version $Revision: 1.42 $ $Date: 2008/10/23 17:53:40 $
  * @author <a href="mailto:anthony.goubard@japplis.com">Anthony Goubard</a>
  * @author <a href="mailto:ernst@ernstdehaan.com">Ernst de Haan</a>
  */
@@ -127,67 +127,58 @@ public class HTTPServiceCallerTests extends TestCase {
       // TODO: Add tests for 2-argument constructor
    }
 
-   public void testW3URL() throws Exception {
+   public void testAntURL() throws Exception {
       HTTPCallRequest request = new HTTPCallRequest(HTTPMethod.GET);
-      Descriptor descriptor = new TargetDescriptor("http://www.w3.org/Consortium/Legal/2002/copyright-documents-20021231", TOTAL_TO, CONN_TO, SOCKET_TO);
+      Descriptor descriptor = new TargetDescriptor("http://ant.apache.org/manual/index.html", TOTAL_TO, CONN_TO, SOCKET_TO);
       HTTPServiceCaller caller = new HTTPServiceCaller(descriptor);
       HTTPCallResult result = caller.call(request);
       assertEquals("Received incorrect status code.", 200, result.getStatusCode());
       assertEquals("Incorrect succeeded descriptor.", descriptor, result.getSucceededTarget());
       assertTrue("Incorrect duration.", result.getDuration() >= 0);
       String text = result.getString();
-      boolean correctStart = text.startsWith("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"\n      \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n  <title>W3C Document License</title>");
-      assertTrue("Unexpected HTML received.", correctStart);
-      assertEquals(456039016L, checksum(text));
+      boolean correctContent = text.indexOf("Licensed to the Apache Software Foundation (ASF)") != -1;
+      assertTrue("Unexpected HTML received.", correctContent);
    }
 
+   /* Disabled as patterntest.php doesn't work anymore
    public void testPostParameters() throws Exception {
       BasicPropertyReader parameters = new BasicPropertyReader();
       parameters.set("pattern", "^([A-Za-z]([A-Za-z\\- ]{0,26}[A-Za-z])?)$");
       parameters.set("string", "Janwillem");
       parameters.set("submit", "submit");
-
       // XXX GET method doesn't work
-
-      HTTPCallRequest  request = new HTTPCallRequest(HTTPMethod.POST, parameters);
-      String               url = "http://www.japplis.com/patterntest.php";
-      Descriptor    descriptor = new TargetDescriptor(url, TOTAL_TO, CONN_TO, SOCKET_TO);
+      HTTPCallRequest request = new HTTPCallRequest(HTTPMethod.POST, parameters);
+      Descriptor descriptor = new TargetDescriptor("http://xins.sourceforge.net/patterntest.php", TOTAL_TO, CONN_TO, SOCKET_TO);
       HTTPServiceCaller caller = new HTTPServiceCaller(descriptor);
-      HTTPCallResult    result = caller.call(request);
-
+      HTTPCallResult result = caller.call(request);
       assertEquals("Received incorrect status code.", 200, result.getStatusCode());
       assertEquals("Incorrect succeeded descriptor.", descriptor, result.getSucceededTarget());
       assertTrue("Incorrect duration.", result.getDuration() >= 0);
-
       String text = result.getString();
-      assertTrue("Incorrect content returned from " + TextUtils.quote(url) + ". Received: " + TextUtils.quote(text), text.indexOf("\"Janwillem\" <span style='color:blue'>matches</span>") != -1);
+      assertTrue("Incorect content.", text.indexOf("\"Janwillem\" <span style='color:blue'>matches</span>") != -1);
    }
 
-   public void testGetParameters() throws Exception {
+    public void testGetParameters() throws Exception {
       BasicPropertyReader parameters = new BasicPropertyReader();
       parameters.set("pattern", "^([A-Za-z]([A-Za-z\\- ]{0,26}[A-Za-z])?)$");
       parameters.set("string", "Janwillem");
       parameters.set("submit", "submit");
-
-      HTTPCallRequest  request = new HTTPCallRequest(HTTPMethod.GET, parameters);
-      String               url = "http://www.japplis.com/patterntest.php";
-      Descriptor    descriptor = new TargetDescriptor(url, TOTAL_TO, CONN_TO, SOCKET_TO);
+      HTTPCallRequest request = new HTTPCallRequest(HTTPMethod.GET, parameters);
+      Descriptor descriptor = new TargetDescriptor("http://xins.sourceforge.net/patterntest.php", TOTAL_TO, CONN_TO, SOCKET_TO);
       HTTPServiceCaller caller = new HTTPServiceCaller(descriptor);
-      HTTPCallResult    result = caller.call(request);
-
+      HTTPCallResult result = caller.call(request);
       assertEquals("Received incorrect status code.", 200, result.getStatusCode());
       assertEquals("Incorrect succeeded descriptor.", descriptor, result.getSucceededTarget());
       assertTrue("Incorrect duration.", result.getDuration() >= 0);
-
       String text = result.getString();
-      assertTrue("Incorrect content returned from " + TextUtils.quote(url) + ". Received: " + TextUtils.quote(text), text.indexOf("\"Janwillem\" <span style='color:blue'>matches</span>") != -1);
-   }
+      assertTrue("Incorect content.", text.indexOf("\"Janwillem\" <span style='color:blue'>matches</span>") != -1);
+   }*/
 
    public void testWrongURL() throws Exception {
       BasicPropertyReader parameters = new BasicPropertyReader();
       parameters.set("hello", "world");
       HTTPCallRequest request = new HTTPCallRequest(HTTPMethod.GET, parameters);
-      Descriptor descriptor = new TargetDescriptor("http://www.w3.org/nOnExIsTeNt.html", TOTAL_TO, CONN_TO, SOCKET_TO);
+      Descriptor descriptor = new TargetDescriptor("http://ant.apache.org/manual/nOnExIsTeNt.html", TOTAL_TO, CONN_TO, SOCKET_TO);
       HTTPServiceCaller caller = new HTTPServiceCaller(descriptor);
 
       HTTPCallResult result = caller.call(request);
@@ -198,7 +189,7 @@ public class HTTPServiceCallerTests extends TestCase {
    public void testFailOverGet() throws Exception {
       HTTPCallRequest request = new HTTPCallRequest(HTTPMethod.GET, null, false, null);
       TargetDescriptor failedTarget = new TargetDescriptor("http://anthony.xins.org", TOTAL_TO, CONN_TO, SOCKET_TO);
-      TargetDescriptor succeededTarget = new TargetDescriptor("http://www.w3.org/StyleSheets/TR/W3C-REC.css", TOTAL_TO, CONN_TO, SOCKET_TO);
+      TargetDescriptor succeededTarget = new TargetDescriptor("http://ant.apache.org/manual/index.html", TOTAL_TO, CONN_TO, SOCKET_TO);
       TargetDescriptor[] descriptors = {failedTarget, succeededTarget};
       GroupDescriptor descriptor = new GroupDescriptor(GroupDescriptor.ORDERED_TYPE, descriptors);
       HTTPServiceCaller caller = new HTTPServiceCaller(descriptor);
@@ -208,7 +199,7 @@ public class HTTPServiceCallerTests extends TestCase {
       assertTrue("Incorrect duration.", result.getDuration() >= 0);
       assertEquals("Incorrect succeeded target.", succeededTarget, result.getSucceededTarget());
       String text = result.getString();
-      assertTrue("Incorrect content.", text.indexOf("Copyright 1997-") > 0);
+      assertTrue("Incorrect content.", text.indexOf("Apache Ant User Manual") > 0);
 
       // Check that the request does not have side effect on the HTTPServiceCaller object
       assertEquals("Incorrect HTTP method.", HTTPMethod.POST, caller.getHTTPCallConfig().getMethod());
@@ -248,22 +239,17 @@ public class HTTPServiceCallerTests extends TestCase {
       }
    }
 
-   /**
-    * Tests the correct linking of call exceptions
-    */
    public void testCallExceptionLinking() throws Exception {
 
       // Define targets
-      // 1st target should fail because of a refused connection
-      // 2nd target should fail because of a socket time-out
-      TargetDescriptor target1   = new TargetDescriptor("http://127.0.0.1:5/",            TOTAL_TO, CONN_TO, SOCKET_TO);
-      TargetDescriptor target2   = new TargetDescriptor("http://xins.sourceforge.net:80", TOTAL_TO, CONN_TO,         1);
-      Descriptor       members[] = new Descriptor[] { target1, target2 };
-      GroupDescriptor  group     = new GroupDescriptor(GroupDescriptor.ORDERED_TYPE, members);
+      TargetDescriptor target1 = new TargetDescriptor("http://127.0.0.1:5/", 7000, 5500, 5500);
+      TargetDescriptor target2 = new TargetDescriptor("http://xins.sf.net/", 2000, 1500, 1);
+      Descriptor members[] =  new Descriptor[] { target1, target2 };
+      GroupDescriptor group = new GroupDescriptor(GroupDescriptor.ORDERED_TYPE, members);
 
       // Construct a caller and a request
-      HTTPServiceCaller caller  = new HTTPServiceCaller(group);
-      HTTPCallRequest   request = new HTTPCallRequest();
+      HTTPServiceCaller caller = new HTTPServiceCaller(group);
+      HTTPCallRequest request = new HTTPCallRequest();
 
       // Perform the call
       CallException exception;
