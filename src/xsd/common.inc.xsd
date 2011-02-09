@@ -49,9 +49,14 @@
 		<xsd:sequence>
 			<xsd:element name="impl"         type="ApiImplFlag"         minOccurs="0" maxOccurs="unbounded" />
 			<xsd:element name="environments" type="ApiEnvironmentsFlag" minOccurs="0" />
+			<xsd:element name="test"         type="ApiTestFlag"         minOccurs="0" />
 			<!-- TODO: Make sure that if an <impl> has a name, it must be unique -->
 		</xsd:sequence>
 		<xsd:attribute name="name" type="ApiName" use="required" />
+	</xsd:complexType>
+
+	<!-- Type "ApiTestFlag" -->
+	<xsd:complexType name="ApiTestFlag">
 	</xsd:complexType>
 
 	<!-- Type "CategoryName" -->
@@ -100,7 +105,7 @@
 	<!-- Type "Path" -->
 	<xsd:simpleType name="Path">
 		<xsd:restriction base="xsd:string">
-			<xsd:pattern value="[A-Za-z0-9_\-]+(/[A-Za-z0-9_\-]+)*" />
+			<xsd:pattern value="\.|([A-Za-z0-9_\-]+(/[A-Za-z0-9_\-]+)*)" />
 		</xsd:restriction>
 	</xsd:simpleType>
 
@@ -110,11 +115,12 @@
 			<xsd:element name="api" type="ApiRef" maxOccurs="unbounded" />
 		</xsd:sequence>
 
-		<xsd:attribute name="apisDir"    type="Path"              use="optional" />
-		<xsd:attribute name="domain"     type="InverseDomainName" use="required" />
-		<xsd:attribute name="name"       type="ProjectName"       use="required" />
-		<xsd:attribute name="rcsdate"    type="RcsDate"           use="optional" />
-		<xsd:attribute name="rcsversion" type="RcsVersion"        use="optional" />
+		<xsd:attribute name="apisDir"         type="Path"              use="optional" />
+		<xsd:attribute name="domain"          type="InverseDomainName" use="required" />
+		<xsd:attribute name="dependenciesdir" type="Path"              use="optional" />
+		<xsd:attribute name="name"            type="ProjectName"       use="required" />
+		<xsd:attribute name="rcsdate"         type="RcsDate"           use="optional" />
+		<xsd:attribute name="rcsversion"      type="RcsVersion"        use="optional" />
 	</xsd:complexType>
 
 	<!-- Type "ProjectName" -->
