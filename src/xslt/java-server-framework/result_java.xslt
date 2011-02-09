@@ -94,7 +94,7 @@ implements Result {
 			<xsl:apply-templates select="../../element[@name=$elementName]" mode="addMethod" />
 		</xsl:for-each>
 
-		<xsl:text>
+		<xsl:text><![CDATA[
 
    /**
     * Checks the output parameters. If an error was detected, then an
@@ -106,7 +106,7 @@ implements Result {
     *    an {@link org.xins.server.InvalidResponseResult InvalidResponseResult} on
     *    error, or <code>null</code> on success.
 	*/
-   public org.xins.server.InvalidResponseResult checkOutputParameters() {</xsl:text>
+   public org.xins.server.InvalidResponseResult checkOutputParameters() {]]></xsl:text>
 		<xsl:apply-templates select="." mode="checkParams">
 			<xsl:with-param name="side" select="'server'" />
 		</xsl:apply-templates>
