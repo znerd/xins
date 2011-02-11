@@ -1,0 +1,3 @@
+Adapt api_to_wsdl.xslt to support the _decimal type.
+
+Add unit tests for _decimal type.
