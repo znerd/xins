@@ -16,6 +16,7 @@ import org.xins.common.types.Type;
  *
  * @version $Revision: 1.19 $ $Date: 2007/12/17 13:35:57 $
  * @author <a href="mailto:anthony.goubard@japplis.com">Anthony Goubard</a>
+ * @author <a href="mailto:ernst@ernstdehaan.com">Ernst de Haan</a>
  *
  * @since XINS 1.3.0
  */
@@ -196,6 +197,8 @@ public final class ParameterSpec {
          return org.xins.common.types.standard.Set.SINGLETON;
       } else if (typeName.equals("_xml")) {
          return org.xins.common.types.standard.XML.SINGLETON;
+      } else if (typeName.equals("_decimal")) {
+         return org.xins.common.types.standard.Decimal.SINGLETON;
       } else if (typeName.charAt(0) != '_') {
          String className = _reference.getName();
          int truncatePos = className.lastIndexOf(".capi.CAPI");

@@ -35,6 +35,7 @@
 			<xsl:when test="$type = '_set'">Set of any text.</xsl:when>
 			<xsl:when test="$type = '_xml'">XML fragment.</xsl:when>
 			<xsl:when test="$type = '_dir'">Directory on a file system.</xsl:when>
+			<xsl:when test="$type = '_decimal'">Decimal number.</xsl:when>
 			<xsl:otherwise>
 				<xsl:message terminate="yes">
 					<xsl:text>The type '</xsl:text>
@@ -70,6 +71,7 @@
 					<xsl:when test="$type = '_set'">org.xins.common.types.standard.Set.Value</xsl:when>
 					<xsl:when test="$type = '_xml'">org.xins.common.xml.Element</xsl:when>
 					<xsl:when test="$type = '_dir'">java.io.File</xsl:when>
+					<xsl:when test="$type = '_decimal'">java.math.BigDecimal</xsl:when>
 					<xsl:otherwise>
 						<xsl:message terminate="yes">
 							<xsl:text>The type '</xsl:text>
@@ -99,6 +101,7 @@
 					<xsl:when test="$type = '_list'">org.xins.common.types.standard.List.Value</xsl:when>
 					<xsl:when test="$type = '_xml'">org.xins.common.xml.Element</xsl:when>
 					<xsl:when test="$type = '_dir'">java.io.File</xsl:when>
+					<xsl:when test="$type = '_decimal'">java.math.BigDecimal</xsl:when>
 					<xsl:otherwise>
 						<xsl:message terminate="yes">
 							<xsl:text>The type '</xsl:text>
@@ -116,6 +119,7 @@
 		<xsl:choose>
 			<xsl:when test="$type = '_date'">org.xins.common.types.standard.Date</xsl:when>
 			<xsl:when test="$type = '_timestamp'">org.xins.common.types.standard.Timestamp</xsl:when>
+			<xsl:when test="$type = '_decimal'">java.math.BigDecimal</xsl:when>
 			<xsl:when test="$type = '_base64'" />
 			<xsl:otherwise>
 				<xsl:call-template name="javatype_for_standardtype">

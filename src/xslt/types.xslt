@@ -710,6 +710,7 @@
 			<xsl:when test="$paramtype = '_set'">string</xsl:when>
 			<xsl:when test="$paramtype = '_xml'">string</xsl:when>
 			<xsl:when test="$paramtype = '_dir'">string</xsl:when>
+			<xsl:when test="$paramtype = '_decimal'">decimal</xsl:when>
 			<xsl:otherwise>
 				<xsl:message terminate="yes">
 					<xsl:text>Unrecognized type datatype '</xsl:text>
@@ -751,6 +752,7 @@
 			<xsl:when test="$xsdtype = 'anyURI'">_url</xsl:when>
 			<xsl:when test="$xsdtype = 'date'">_date</xsl:when>
 			<xsl:when test="$xsdtype = 'dateTime'">_timestamp</xsl:when>
+			<xsl:when test="$xsdtype = 'decimal'">_decimal</xsl:when>
 			<xsl:otherwise>_text</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

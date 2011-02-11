@@ -16,7 +16,7 @@ import org.xins.common.MandatoryArgumentChecker;
  * Standard type <em>_decimal</em>, for decimal numbers. A value of this type
  * represents a decimal number, an instance of the {@link BigDecimal} class.
  *
- * @version $Revision: 1.37 $ $Date: 2007/09/18 11:21:02 $
+ * @version $Revision$ $Date$
  * @author <a href="mailto:ernst@ernstdehaan.com">Ernst de Haan</a>
  *
  * @since XINS 3.0
@@ -26,7 +26,7 @@ public class Decimal extends Type {
    /**
     * The only instance of this class. This field is never <code>null</code>.
     */
-   public static final Decimal SINGLETON = new Date();
+   public static final Decimal SINGLETON = new Decimal();
 
    /**
     * Constructs a new <code>Decimal</code> instance.
@@ -34,7 +34,7 @@ public class Decimal extends Type {
     * used.
     */
    private Decimal() {
-      super("_decimal", Value.class);
+      super("_decimal", BigDecimal.class);
    }
 
    /**
@@ -70,14 +70,14 @@ public class Decimal extends Type {
     *    the string to convert, can be <code>null</code>.
     *
     * @return
-    *    the {@link Value}, or <code>null</code> if
+    *    the {@link BigDecimal}, or <code>null</code> if
     *    <code>string == null</code>.
     *
     * @throws TypeValueException
     *    if the specified string does not represent a valid value for this
     *    type.
     */
-   public static Value fromStringForOptional(String string)
+   public static BigDecimal fromStringForOptional(String string)
    throws TypeValueException {
       try {
          return (string == null) ? null : new BigDecimal(string);
@@ -87,7 +87,7 @@ public class Decimal extends Type {
    }
 
    /**
-    * Converts the specified <code>Date.Value</code> to a string.
+    * Converts the specified <code>BigDecimal</code> to a string.
     *
     * @param value
     *    the value to convert, can be <code>null</code>.
@@ -113,9 +113,9 @@ public class Decimal extends Type {
    protected final Object fromStringImpl(String string)
    throws TypeValueException {
       try {
-         return new BigDecimal(value);
+         return new BigDecimal(string);
       } catch (NumberFormatException cause) {
-         throw new TypeValueException(this, value, cause);
+         throw new TypeValueException(this, string, cause);
       }
    }
 

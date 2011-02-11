@@ -149,3 +149,4 @@ Other:
 * Allowing JMX port to be specified, e.g. "xins run-XXX -Djmx.port=2090"
 * Shell script now allows space(s) in the XINS home directory.
 * Generated documentation now goes to build/ instead of docs/.
+* Added support for the _decimal type.
