@@ -186,7 +186,7 @@ one of them should be defined as the default one.</xsl:text>
 					</init-param>
 				</xsl:for-each>
 				<xsl:for-each select="bootstrap-properties/bootstrap-property">
-					<xsl:if test="starts-with(@name, 'org.xins.') and @name != 'org.xins.server.config' and @name != 'org.xins.logdoc.stackTraceAtMessageLevel'">
+					<xsl:if test="starts-with(@name, 'org.xins.') and @name != 'org.xins.server.config' and @name != 'org.xins.logdoc.stackTraceAtMessageLevel' and @name != 'org.xins.server.contextID.push'">
 						<xsl:message terminate="yes">
 							<xsl:text>Invalid defined bootstrap property &quot;</xsl:text>
 							<xsl:value-of select="@name" />

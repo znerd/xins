@@ -48,9 +48,21 @@
 		<xsl:text><![CDATA[;
 
 /**
- * Stub for the <em>]]></xsl:text>
+ * Client-side API (CAPI) for the remote <em>]]></xsl:text>
 		<xsl:value-of select="$api" />
-		<xsl:text><![CDATA[</em> API.]]></xsl:text>
+		<xsl:text><![CDATA[</em> API.
+ *
+ * <p>An instance of this class can be created as follows:
+ *
+ * <blockquote><pre>String            url = "http://127.0.0.1:8080/]]></xsl:text>
+		<xsl:value-of select="$api" />
+ 		<xsl:text><![CDATA[/";
+int      totalTimeOut = 12000; // 12 seconds
+int connectionTimeOut = 4000;  //  4 seconds
+int     socketTimeOut = 6000;  //  6 seconds
+TargetDescriptor   td = new TargetDescriptor(url, totalTimeOut, connectionTimeOut, socketTimeOut);
+
+CAPI capi = new CAPI(td);</pre></blockquote>]]></xsl:text>
 
 		<!-- Display the specdocs URL if it is specified -->
 		<xsl:if test="$hasSpecdocsURL">

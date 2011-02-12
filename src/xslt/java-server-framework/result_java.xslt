@@ -94,9 +94,19 @@ implements Result {
 			<xsl:apply-templates select="../../element[@name=$elementName]" mode="addMethod" />
 		</xsl:for-each>
 
-		<xsl:text>
+		<xsl:text><![CDATA[
 
-   public org.xins.server.InvalidResponseResult checkOutputParameters() {</xsl:text>
+   /**
+    * Checks the output parameters. If an error was detected, then an
+    * {@link org.xins.server.InvalidResponseResult InvalidResponseResult} is
+    * returned, otherwise (in case of success) <code>null</code> is returned
+    * instead.
+    *
+    * @return
+    *    an {@link org.xins.server.InvalidResponseResult InvalidResponseResult} on
+    *    error, or <code>null</code> on success.
+	*/
+   public org.xins.server.InvalidResponseResult checkOutputParameters() {]]></xsl:text>
 		<xsl:apply-templates select="." mode="checkParams">
 			<xsl:with-param name="side" select="'server'" />
 		</xsl:apply-templates>
