@@ -79,6 +79,7 @@ XINS/Java Common Library:
 * Changed FunctionSpec/APISpec methods to return unmodifiable collections/maps.
 * Fixed NPE in FormattedParameters.
 * Fixed issue in PatternType.
+* Added PropertyReaderResource.java to spring package.
 
 XINS/Java Client Framework:
 * Library class now loads version from JAR manifest, once, at class init.
