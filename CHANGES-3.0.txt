@@ -116,8 +116,8 @@ Libraries:
   that is now integrated in the regular saxon9he.jar file.
 * Removed Xerces library (xercesImpl.jar, xml-apis.jar), relying on the
   Xerces distribution as part of Java SE platform.
-* Put spring.jar (Spring Framework 2.0.8) in lib directory.
-* Put commons-lang.jar in lib directory.
+* Added Spring 3.0.5 JAR files to the lib directory.
+* Added commons-lang.jar to the lib directory.
 
 Serialization:
 * Added a serialVersionUID field to some classes, this may break compatibility
