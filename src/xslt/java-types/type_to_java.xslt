@@ -52,6 +52,7 @@
 				<xsl:when test="hex">hex</xsl:when>
 				<xsl:when test="list">list</xsl:when>
 				<xsl:when test="set">set</xsl:when>
+				<xsl:when test="decimal">decimal</xsl:when>
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="superclass">
@@ -69,6 +70,7 @@
 				<xsl:when test="$kind = 'hex'">org.xins.common.types.standard.Hex</xsl:when>
 				<xsl:when test="$kind = 'list'">org.xins.common.types.List</xsl:when>
 				<xsl:when test="$kind = 'set'">org.xins.common.types.List</xsl:when>
+				<xsl:when test="$kind = 'decimal'">org.xins.common.types.Decimal</xsl:when>
 			</xsl:choose>
 		</xsl:variable>
 
@@ -284,6 +286,25 @@ public final class ]]></xsl:text>
 				</xsl:choose>
 			</xsl:when>
 			<xsl:when test="$kind = 'float64'">
+				<xsl:choose>
+					<xsl:when test="float64/@min">
+						<xsl:value-of select="float64/@min" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>Double.MIN_VALUE</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:text>, </xsl:text>
+				<xsl:choose>
+					<xsl:when test="float64/@max">
+						<xsl:value-of select="float64/@max" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>Double.MAX_VALUE</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:when test="$kind = 'decimal'">
 				<xsl:choose>
 					<xsl:when test="float64/@min">
 						<xsl:value-of select="float64/@min" />
