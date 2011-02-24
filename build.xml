@@ -64,7 +64,8 @@
 		<property name="perftestclass" value="org.xins.perftests.AllTests" />
 
 		<!-- Class paths -->
-		<property name="logdoc.jar" value="${basedir}/lib/logdoc.jar" />
+		<property name="logdoc-base.jar"      value="${basedir}/lib/logdoc-base.jar" />
+		<property name="logdoc-ant-tasks.jar" value="${basedir}/lib/logdoc-ant-tasks.jar" />
 	</target>
 
 	<!-- Display relevant versions -->
@@ -168,7 +169,8 @@
 	<target name="-logdoc-task" depends="-init" description="Initializes the Logdoc task">
 		<taskdef resource="org/znerd/logdoc/ant/antlib.xml">
 			<classpath>
-				<pathelement location="${logdoc.jar}" />
+				<pathelement location="${logdoc-base.jar}" />
+				<pathelement location="${logdoc-ant-tasks.jar}" />
 			</classpath>
 		</taskdef>
 	</target>

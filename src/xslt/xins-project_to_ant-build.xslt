@@ -489,8 +489,8 @@
 				destfile="{$builddir}/webapps/{$api}{$implName2}/{$api}{$implName2}.war"
 				manifest="{$builddir}/webapps/{$api}{$implName2}/MANIFEST.MF"
 				duplicate="fail">
-					<lib dir="{$xins_home}/build" includes="logdoc.jar xins-common.jar xins-server.jar xins-client.jar" />
-					<lib dir="{$xins_home}/lib"   includes="commons-codec.jar commons-httpclient.jar commons-logging.jar jakarta-oro.jar log4j.jar xmlenc.jar json.jar" />
+					<lib dir="{$xins_home}/build" includes="xins-common.jar xins-server.jar xins-client.jar" />
+					<lib dir="{$xins_home}/lib"   includes="commons-codec.jar commons-httpclient.jar commons-logging.jar jakarta-oro.jar log4j.jar logdoc-base.jar xmlenc.jar json.jar" />
 					<xsl:apply-templates select="$impl_node/dependency" mode="lib" />
 					<classes dir="${{classes.api.dir}}" includes="**/*.class" />
 					<xsl:if test="$apiHasTypes">

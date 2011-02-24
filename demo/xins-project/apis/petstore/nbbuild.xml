@@ -20,8 +20,8 @@
 		<fail message="Please set the XINS_HOME variable correctly" unless="xins.home" />
 
 		<path id="api.classpath">
-			<fileset includes="logdoc.jar xins-common.jar xins-client.jar xins-server.jar" dir="${xins.home}/build"/>
-			<fileset includes="commons-codec.jar commons-httpclient.jar commons-logging.jar commons-net.jar jakarta-oro.jar log4j.jar servlet.jar xmlenc.jar" dir="${xins.home}/lib"/>
+			<fileset includes="xins-common.jar xins-client.jar xins-server.jar" dir="${xins.home}/build"/>
+			<fileset includes="commons-codec.jar commons-httpclient.jar commons-logging.jar commons-net.jar jakarta-oro.jar log4j.jar logdoc-base.jar servlet.jar xmlenc.jar" dir="${xins.home}/lib"/>
 			<path location="build/classes-api/${api.name}"/>
 			<path location="build/classes-types/${api.name}"/>
 		</path>

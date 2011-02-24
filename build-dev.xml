@@ -128,7 +128,6 @@ ${sf.file}</fail>
 			<pathelement location="build/xins-common.jar" />
 			<pathelement location="build/xins-server.jar" />
 			<pathelement location="build/xins-client.jar" />
-			<pathelement location="build/logdoc.jar" />
 			<pathelement location="src/tests/build/capis/allinone-capi.jar" />
 			<pathelement location="src/tests/build/classes-api/allinone" />
 			<pathelement location="src/tests/build/classes-types/allinone" />
@@ -838,8 +837,8 @@ http://sourceforge.net/project/showfiles.php?group_id=21935&amp;package_id=16608
 	<target name="profile-perftests">
 		<antcall target="compile-tests" />
 		<path id="api.classpath">
-			<fileset includes="logdoc.jar xins-common.jar xins-client.jar xins-server.jar" dir="build"/>
-			<fileset includes="commons-codec.jar commons-httpclient.jar commons-logging.jar commons-net.jar jakarta-oro.jar log4j.jar servlet.jar xmlenc.jar junit.jar" dir="lib"/>
+			<fileset includes="xins-common.jar xins-client.jar xins-server.jar" dir="build"/>
+			<fileset includes="commons-codec.jar commons-httpclient.jar commons-logging.jar commons-net.jar jakarta-oro.jar log4j.jar logdoc-base.jar servlet.jar xmlenc.jar junit.jar" dir="lib"/>
 			<fileset includes="allinone-capi.jar" dir="src/tests/build/capis"/>
 			<path location="src/tests/build/classes-api/allinone"/>
 			<path location="src/tests/build/classes-types/allinone"/>

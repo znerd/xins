@@ -241,7 +241,6 @@ ${apis.list}]]></echo>
 		<property name="build.java.version" value="${ant.java.version}" />
 		<property name="build.generics"     value="true" />
 		<path id="xins.classpath">
-			<pathelement path="${xins_home}/build/logdoc.jar" />
 			<pathelement path="${xins_home}/build/xins-common.jar" />
 			<pathelement path="${xins_home}/build/xins-server.jar" />
 			<pathelement path="${xins_home}/build/xins-client.jar" />
@@ -985,7 +984,7 @@ ${apis.list}]]></echo>
 		source="${build.java.version}"
 		target="${build.java.version}">
 			<classpath>
-				<pathelement path="${xins_home}/build/logdoc.jar" />
+				<pathelement path="${xins_home}/lib/logdoc-base.jar" />
 				<pathelement path="${xins_home}/build/xins-common.jar" />
 			</classpath>
 		</javac>
@@ -1147,14 +1146,16 @@ ${apis.list}]]></echo>
 	</target>
 	
 	<target name="-logdoc-task">
-		<property name="logdoc.jar"       value="${xins_home}/lib/logdoc.jar"       />
-		<property name="commons-io.jar"   value="${xins_home}/lib/commons-io.jar"   />
-		<property name="commons-lang.jar" value="${xins_home}/lib/commons-lang.jar" />
+		<property name="logdoc-base.jar"      value="${xins_home}/lib/logdoc-base.jar"      />
+		<property name="logdoc-ant-tasks.jar" value="${xins_home}/lib/logdoc-ant-tasks.jar" />
+		<property name="commons-io.jar"       value="${xins_home}/lib/commons-io.jar"       />
+		<property name="commons-lang.jar"     value="${xins_home}/lib/commons-lang.jar"     />
 		<taskdef resource="org/znerd/logdoc/ant/antlib.xml">
 			<classpath>
-				<pathelement location="${logdoc.jar}"       />
-				<pathelement location="${commons-io.jar}"   />
-				<pathelement location="${commons-lang.jar}" />
+				<pathelement location="${logdoc-base.jar}"      />
+				<pathelement location="${logdoc-ant-tasks.jar}" />
+				<pathelement location="${commons-io.jar}"       />
+				<pathelement location="${commons-lang.jar}"     />
 			</classpath>
 		</taskdef>
 	</target>
