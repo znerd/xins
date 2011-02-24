@@ -175,9 +175,9 @@
 		</taskdef>
 	</target>
 	<target name="logdoc-html" depends="-logdoc-task" description="Generates the HTML for the Logdoc documentation">
-		<logdoc-html in="src/logdoc/client" out="${project.outputdir}/logdoc/common" />
-		<logdoc-html in="src/logdoc/client" out="${project.outputdir}/logdoc/client" />
-		<logdoc-html in="src/logdoc/server" out="${project.outputdir}/logdoc/server" />
+		<logdoc-html in="src/logdoc/client" out="${project.outputdir}/logdoc/common/html" />
+		<logdoc-html in="src/logdoc/client" out="${project.outputdir}/logdoc/client/html" />
+		<logdoc-html in="src/logdoc/server" out="${project.outputdir}/logdoc/server/html" />
 
 		<copy file="src/css/logdoc/style.css" todir="${project.outputdir}/logdoc/common/html" />
 		<copy file="src/css/logdoc/style.css" todir="${project.outputdir}/logdoc/client/html" />
