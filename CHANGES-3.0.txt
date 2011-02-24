@@ -121,6 +121,7 @@ Libraries:
 * Added Spring 3.0.5 JAR files to the lib directory.
 * Added commons-lang.jar to the lib directory.
 * Added commons-fileupload.jar to lib directory.
+* Added ant.jar to lib directory.
 
 Serialization:
 * Added a serialVersionUID field to some classes, this may break compatibility
