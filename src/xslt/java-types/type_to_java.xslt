@@ -70,7 +70,7 @@
 				<xsl:when test="$kind = 'hex'">org.xins.common.types.standard.Hex</xsl:when>
 				<xsl:when test="$kind = 'list'">org.xins.common.types.List</xsl:when>
 				<xsl:when test="$kind = 'set'">org.xins.common.types.List</xsl:when>
-				<xsl:when test="$kind = 'decimal'">org.xins.common.types.Decimal</xsl:when>
+				<xsl:when test="$kind = 'decimal'">org.xins.common.types.standard.Decimal</xsl:when>
 			</xsl:choose>
 		</xsl:variable>
 
@@ -306,20 +306,33 @@ public final class ]]></xsl:text>
 			</xsl:when>
 			<xsl:when test="$kind = 'decimal'">
 				<xsl:choose>
-					<xsl:when test="float64/@min">
-						<xsl:value-of select="float64/@min" />
+					<xsl:when test="decimal/@min">
+						<xsl:text>new java.math.BigDecimal("</xsl:text>
+						<xsl:value-of select="decimal/@min" />
+						<xsl:text>")</xsl:text>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:text>Double.MIN_VALUE</xsl:text>
+						<xsl:text>null</xsl:text>
 					</xsl:otherwise>
 				</xsl:choose>
 				<xsl:text>, </xsl:text>
 				<xsl:choose>
-					<xsl:when test="float64/@max">
-						<xsl:value-of select="float64/@max" />
+					<xsl:when test="decimal/@max">
+						<xsl:text>new java.math.BigDecimal("</xsl:text>
+						<xsl:value-of select="decimal/@max" />
+						<xsl:text>")</xsl:text>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:text>Double.MAX_VALUE</xsl:text>
+						<xsl:text>null</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:text>, </xsl:text>
+				<xsl:choose>
+					<xsl:when test="decimal/@maxDecimals">
+						<xsl:value-of select="decimal/@maxDecimals" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>java.lang.Integer.MAX_VALUE</xsl:text>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>

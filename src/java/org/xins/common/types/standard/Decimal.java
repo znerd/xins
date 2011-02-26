@@ -34,8 +34,43 @@ public class Decimal extends Type {
     * used.
     */
    private Decimal() {
-      super("_decimal", BigDecimal.class);
+      this("_decimal", null, null, Integer.MAX_VALUE);
    }
+
+   /**
+    * Constructs a new <code>Decimal</code> object (constructor for
+    * subclasses).
+    *
+    * @param name
+    *    the name of this type, cannot be <code>null</code>.
+    *
+    * @param minimum
+    *    the minimum for the value.
+    *
+    * @param maximum
+    *    the maximum for the value.
+    */
+   protected Decimal(String name, BigDecimal minimum, BigDecimal maximum, int maxDecimals) {
+      super(name, BigDecimal.class);
+
+      _minimum = minimum;
+      _maximum = maximum;
+      _maxDecimals = maxDecimals;
+   }
+
+   /**
+    * The minimum value that this type can have.
+    * If it is <code>null</code>, then there is no minimum.
+    */
+   private final BigDecimal _minimum;
+
+   /**
+    * The maximum value that this type can have.
+    * If it is <code>null</code>, then there is no maximum.
+    */
+   private final BigDecimal _maximum;
+
+   private final int _maxDecimals;
 
    /**
     * Constructs a <code>BigDecimal</code> from the specified string
@@ -107,6 +142,10 @@ public class Decimal extends Type {
       } catch (NumberFormatException cause) {
          throw new TypeValueException(this, value, cause);
       }
+
+      // FIXME TODO: Check _maximum
+      // FIXME TODO: Check _minimum
+      // FIXME TODO: Check _maxDecimals
    }
 
    @Override
