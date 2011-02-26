@@ -296,7 +296,7 @@
 	* @return
 	*    the base type for the specified type, always starting with an
 	*    underscore; either _boolean, _int8, _int16, _int32, _int64, _float32,
-	*    _float64, _base64 _hex or _text.
+	*    _float64, _base64 _hex, _text (etc.)
 	-->
 	<xsl:template name="basetype_for_type">
 		<xsl:param name="specsdir" />
@@ -352,6 +352,9 @@
 					</xsl:when>
 					<xsl:when test="$type_node/set">
 						<xsl:text>_set</xsl:text>
+					</xsl:when>
+					<xsl:when test="$type_node/decimal">
+						<xsl:text>_decimal</xsl:text>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:text>_text</xsl:text>

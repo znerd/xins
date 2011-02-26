@@ -125,6 +125,7 @@
 				<xsl:apply-templates select="hex"        />
 				<xsl:apply-templates select="list"       />
 				<xsl:apply-templates select="set"        />
+				<xsl:apply-templates select="decimal"    />
 
 				<xsl:call-template name="footer">
 					<xsl:with-param name="xins_version" select="$xins_version" />
@@ -210,7 +211,7 @@
 		<xsl:text> type.</xsl:text>
 	</xsl:template>
 
-	<xsl:template match="int8 | int16 | int32 | int64 | float32 | float64">
+	<xsl:template match="int8 | int16 | int32 | int64 | float32 | float64 | decimal">
 		<p />
 		This is a <em>
 		<xsl:value-of select="name()" />
@@ -223,6 +224,11 @@
 		<xsl:if test="@max">
 			<xsl:text>The maximum value is </xsl:text>
 			<xsl:value-of select="@max" />
+			<xsl:text>.</xsl:text><br />
+		</xsl:if>
+		<xsl:if test="@maxDecimals">
+			<xsl:text>The maximum number of fractional digits is </xsl:text>
+			<xsl:value-of select="@maxDecimals" />
 			<xsl:text>.</xsl:text><br />
 		</xsl:if>
 	</xsl:template>
