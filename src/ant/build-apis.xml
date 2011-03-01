@@ -920,15 +920,25 @@ ${apis.list}]]></echo>
 		</xslt>
 	</target>
 
-	<target name="-specdocs-impl-logdoc">
+	<target name="-logdoc-taskdef">
+		<property name="logdoc-base.jar"      value="${xins_home}/lib/logdoc-base.jar" />
+		<property name="logdoc-ant-tasks.jar" value="${xins_home}/lib/logdoc-ant-tasks.jar" />
+		<taskdef resource="org/znerd/logdoc/ant/antlib.xml">
+			<classpath>
+				<pathelement location="${logdoc-base.jar}" />
+				<pathelement location="${logdoc-ant-tasks.jar}" />
+			</classpath>
+		</taskdef>
+	</target>
+
+	<target name="-specdocs-impl-logdoc" depends="-logdoc-taskdef">
 		<property name="impl_dir" value="${apis_dir}/${api}/impl${implName2}" />
 		<property name="javaDestFileDir" value="${builddir}/java-fundament/${api}${implName2}/${packageAsDir}" />
 		<echo message="Generating the logdoc for ${api}${implName2}" />
 		<mkdir dir="${builddir}/logdoc/${api}${implName2}" />
-		<!-- TODO FIXME
 		<copy file="${xins_home}/src/css/logdoc/style.css" todir="${builddir}/specdocs/${api}/logdoc${implName2}" />
-		<ant dir="${builddir}/logdoc/${api}${implName2}" target="html" inheritall="false" />
-		-->
+		<logdoc-doc in="${apis_dir}/${api}/impl" out="${builddir}/specdocs/${api}/logdoc" />
+		<!-- TODO: Test with multiple implementations -->
 	</target>
 
 	<target name="-classes-types" depends="-prepare-classes" if="typeIncludesAll">
