@@ -219,7 +219,7 @@ ${apis.list}]]></echo>
 		<condition property="api.version" value="${api.version.major}.${api.version.middle}.${api.version.minor}${api.version.suffix}">
 			<isset property="api.version.middle" />
 		</condition>
-		<condition property="api.version" value="${api.version.major}.${api.version.minor}">
+		<condition property="api.version" value="${api.version.major}.${api.version.minor}${api.version.suffix}">
 			<isset property="api.version.major" />
 		</condition>
 
